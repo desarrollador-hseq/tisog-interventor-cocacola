@@ -29,8 +29,7 @@ export default async function MainLayout({
       >
         <Navbar
           name={user?.name || ""}
-          //   role={user.role || "USER"}
-          isAdmin={true}
+          isAdmin={user.role === "ADMIN"}
         />
         <div className=" md:pl-48 min-h-screen xl:flex justify-center items-start xl:w-full relative">
           <div className="mt-[48px] max-w-[1200px] w-full mx-auto bg-white min-h-[calc(100vh-48px)]">

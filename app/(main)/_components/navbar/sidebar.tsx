@@ -57,12 +57,12 @@ export const Sidebar = ({
       <div className="fixed left-0 top-[48px]">
         <Sheet open={openSidebar} onOpenChange={setOpenSidebar}>
           <SheetContent side="left" className="p-0 w-56">
-            <SidebarContent routes={isAdmin ? adminRoutes : dashRoutes} />
+            <SidebarContent routes={isAdmin ? adminRoutes : dashRoutes} isAdmin={isAdmin} />
           </SheetContent>
         </Sheet>
 
         <div className="w-48 h-full min-h-screen hidden md:flex fixed left-0 top-[48px] z-40">
-          <SidebarContent routes={isAdmin ? adminRoutes : dashRoutes} />
+          <SidebarContent routes={isAdmin ? adminRoutes : dashRoutes} isAdmin={isAdmin} />
         </div>
       </div>
     </>

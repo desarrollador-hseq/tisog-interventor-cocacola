@@ -11,15 +11,13 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
     if (session.user.role === "ADMIN") {
       redirect("/admin/");
     } else if (session.user.role === "USER") {
-      redirect("/dashboard/");
+      redirect("/interventor/");
     } else {
       signOut();
     }
   }
   return (
     <div className="w-full">
-      {/* <AuthNavbar /> */}
-
       <div className=" w-full">{children}</div>
     </div>
   );

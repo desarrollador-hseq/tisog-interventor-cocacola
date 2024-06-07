@@ -44,8 +44,7 @@ export const Navbar = ({
           </div>
 
           <div className="flex gap-5 items-center">
-            {isAdmin && <span>Administrador</span>}
-            <DropdownUser name={name} />
+            <DropdownUser name={name} isAdmin={isAdmin} />
           </div>
         </div>
       </div>
