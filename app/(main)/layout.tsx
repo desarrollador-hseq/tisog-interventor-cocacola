@@ -1,8 +1,7 @@
-import { Roboto } from "next/font/google";
+
 import { getServerSession } from "next-auth";
 import { ScrollUp } from "@/components/scroll-up";
 import { cn } from "@/lib/utils";
-import { db } from "@/lib/db";
 import { RedirectAfterLogin } from "./_components/redirect-after-login";
 import { authOptions } from "@/lib/auth-options";
 import { Navbar } from "./_components/navbar/navbar";

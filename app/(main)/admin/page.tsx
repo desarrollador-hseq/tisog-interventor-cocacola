@@ -3,10 +3,10 @@ import { HeaderDateFilter } from "./_components/header-date-filter";
 import { db } from "@/lib/db";
 import { Card, CardContent } from "@/components/ui/card";
 import { Building, LucideIcon, User } from "lucide-react";
-import { TableDefault } from "@/components/table-default";
+
 
 const AdminPage = async () => {
-  const companies = await db.company.findMany({
+  const contractors = await db.contractor.findMany({
     where: {
       active: true,
     },
@@ -21,9 +21,9 @@ const AdminPage = async () => {
 
   return (
     <div className="">
-      <HeaderDateFilter companies={companies} />
+      <HeaderDateFilter companies={contractors} />
       <div className="mt-6 flex gap-3 w-full justify-center flex-wrap">
-        <KpiCard name="Empresas" number={companies.length} icon={Building} />
+        <KpiCard name="Empresas" number={contractors.length} icon={Building} />
         <KpiCard name="Interventores" number={controllers.length} icon={User} />
       </div>
 

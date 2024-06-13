@@ -31,7 +31,7 @@ const CreateControllerPage = async ({
     },
   });
 
-  const companies = await db.company.findMany({
+  const contractors = await db.contractor.findMany({
     where: {
       active: true,
     },
@@ -51,7 +51,7 @@ const CreateControllerPage = async ({
     >
       <AddControllerForm
         cities={cities}
-        companies={companies}
+        contractors={contractors}
         controller={controller}
       />
     </CardPage>

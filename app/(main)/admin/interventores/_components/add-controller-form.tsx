@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { City, Company, User } from "@prisma/client";
+import { City, Contractor, User } from "@prisma/client";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
@@ -37,7 +37,7 @@ import { cn } from "@/lib/utils";
 interface AddControllerFormProps {
   controller?: User | null;
   cities: City[] | null;
-  companies: Company[] | null;
+  contractors: Contractor[] | null;
 }
 
 const formSchema = z.object({
@@ -47,7 +47,7 @@ const formSchema = z.object({
   numDoc: z.string().min(1, {
     message: "Número de documento requerido",
   }),
-  companyId: z.string().min(1, {
+  contractorId: z.string().min(1, {
     message: "Empresa es requerida",
   }),
   email: z.string().email({
@@ -57,7 +57,7 @@ const formSchema = z.object({
 
 export const AddControllerForm = ({
   controller,
-  companies,
+  contractors,
 }: AddControllerFormProps) => {
   const router = useRouter();
   const isEdit = useMemo(() => !!controller, [controller]);
@@ -72,7 +72,7 @@ export const AddControllerForm = ({
     defaultValues: {
       name: controller?.name || "",
       numDoc: controller?.numDoc || "",
-      companyId: controller?.companyId || "",
+      contractorId: controller?.contractorId || "",
       email: controller?.email,
       // cityId: driver?.cityId || "",
     },
@@ -89,6 +89,7 @@ export const AddControllerForm = ({
       } else {
         const { data } = await axios.post(`/api/user-controller/`, values);
         router.push(`/admin/interventores/`);
+        await axios.post(`/api/user/first-password`, values);
         toast.success("Interventor creado correctamente");
       }
       // router.push(`/admin/colaboradores`);
@@ -145,7 +146,7 @@ export const AddControllerForm = ({
           />
           <FormField
             control={form.control}
-            name="companyId"
+            name="contractorId"
             render={({ field }) => (
               <FormItem className="flex flex-col w-full">
                 <FormLabel>Empresa:</FormLabel>
@@ -161,8 +162,8 @@ export const AddControllerForm = ({
                         )}
                       >
                         {field.value
-                          ? companies?.find(
-                              (company) => company.id === field.value
+                          ? contractors?.find(
+                              (contractor) => contractor.id === field.value
                             )?.name
                           : "Selecciona una empresa"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -175,12 +176,12 @@ export const AddControllerForm = ({
                       <CommandEmpty>Ciudad no encontrada</CommandEmpty>
                       <CommandGroup>
                         <CommandList>
-                          {companies?.map((company) => (
+                          {contractors?.map((contractor) => (
                             <CommandItem
-                              value={`${company.name}`}
-                              key={company.id}
+                              value={`${contractor.name}`}
+                              key={contractor.id}
                               onSelect={() => {
-                                form.setValue("companyId", company.id, {
+                                form.setValue("contractorId", contractor.id, {
                                   shouldValidate: true,
                                 });
                               }}
@@ -188,12 +189,12 @@ export const AddControllerForm = ({
                               <Check
                                 className={cn(
                                   "mr-2 h-4 w-4",
-                                  company.id === field.value
+                                  contractor.id === field.value
                                     ? "opacity-100"
                                     : "opacity-0"
                                 )}
                               />
-                              {company.name}
+                              {contractor.name}
                             </CommandItem>
                           ))}
                         </CommandList>

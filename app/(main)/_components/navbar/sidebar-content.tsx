@@ -1,11 +1,11 @@
 import { LucideIcon } from "lucide-react";
 import { SidebarItems } from "./sidebar-items";
 import { LogoMain } from "@/components/logo-main";
-import { LogoGHseq } from "@/components/logo-ghseq";
+
 
 interface SidebarContentProps {
   routes: { href: string; icon: LucideIcon; label: string }[];
-  isAdmin: boolean
+  isAdmin: boolean;
 }
 
 export const SidebarContent = ({ routes, isAdmin }: SidebarContentProps) => (
@@ -25,7 +25,11 @@ export const SidebarContent = ({ routes, isAdmin }: SidebarContentProps) => (
     </div>
     <div className="w-full flex justify-center">
       {/* <LogoGHseq /> */}
-      {isAdmin && <span className="font-extrabold text-lg text-slate-300">Administrador</span>}
+      {isAdmin && (
+        <span className="font-extrabold text-lg text-slate-300">
+          Administrador
+        </span>
+      )}
     </div>
   </div>
 );

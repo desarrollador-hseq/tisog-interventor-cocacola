@@ -6,7 +6,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const userTableColumns: ColumnDef<
-  User & { company: { name: string | null } | null }
+  User & { contractor: { name: string | null } | null }
 >[] = [
   {
     accessorKey: "name",
@@ -49,8 +49,8 @@ export const userTableColumns: ColumnDef<
     },
   },
   {
-    accessorKey: "company",
-    accessorFn: (value) => value.company?.name,
+    accessorKey: "contractor",
+    accessorFn: (value) => value.contractor?.name,
     header: ({ column }) => {
       return (
         <Button
@@ -58,13 +58,13 @@ export const userTableColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
         >
-          Empresa
+          Contratista
           <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const name = row.original?.company?.name;
+      const name = row.original?.contractor?.name;
       return <div className="">{name}</div>;
     },
   },

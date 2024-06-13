@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +25,7 @@ export const SidebarItems = ({ icon: Icon, label, href }: SidebarItemProps) => {
   const isActive = useMemo(
     () =>
       pathname === href ||
-      (href !== "/dashboard" &&
+      (href !== "/interventor" &&
         pathname?.startsWith(`${href}`) &&
         href !== "/admin" &&
         pathname?.startsWith(`${href}`)),
@@ -37,7 +36,6 @@ export const SidebarItems = ({ icon: Icon, label, href }: SidebarItemProps) => {
     router.push(href);
   };
 
-  const isAdmin = href.includes("admin");
 
   return (
     <ContextMenu>
@@ -75,16 +73,6 @@ export const SidebarItems = ({ icon: Icon, label, href }: SidebarItemProps) => {
         </button>
       </ContextMenuTrigger>
       <ContextMenuContent className="w-full h-full">
-        {!isAdmin &&
-          href !== "/dashboard" &&
-          href !== "/dashboard/entrenamiento/certificados" && (
-            <ContextMenuItem
-              asChild
-              className="bg-slate-100 hover:bg-slate-200"
-            >
-              <Link href={`${href}/crear`}>Crear</Link>
-            </ContextMenuItem>
-          )}
         <ContextMenuItem className="bg-slate-100 hover:bg-slate-200">
           <a target="_blank" href={href} rel="noopener noreferrer">
             Abrir en otra pestaña

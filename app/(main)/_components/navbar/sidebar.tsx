@@ -3,40 +3,36 @@
 import React, { Dispatch, SetStateAction } from "react";
 import {
   Building2,
-  BookOpenText,
   ClipboardCheck,
-  UsersRound,
-  ScrollText,
   Home,
-  Contact2,
   Users,
 } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { SidebarContent } from "./sidebar-content";
 
 const dashRoutes = [
-  { icon: Home, label: "Inicio", href: "/dashboard" },
+  { icon: Home, label: "Inicio", href: "/analistas" },
   {
     icon: ClipboardCheck,
     label: "reportes",
-    href: "/admin/interventores",
+    href: "/analistas/reportes",
   },
 ];
 const adminRoutes = [
   { icon: Home, label: "Inicio", href: "/admin" },
   {
     icon: Building2,
-    label: "Empresas",
-    href: "/admin/empresas",
+    label: "Contratistas",
+    href: "/admin/contratistas",
   },
   {
     icon: Users,
-    label: "Interventores",
-    href: "/admin/interventores",
+    label: "Analistas",
+    href: "/admin/analistas",
   },
   {
     icon: ClipboardCheck,
-    label: "reportes de hallazgos",
+    label: "Reportes de hallazgos",
     href: "/admin/reportes",
   },
 ];

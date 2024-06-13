@@ -30,8 +30,8 @@ model User {
 
   role Role @default(USER)
 
-  companyId String?
-  company   Company? @relation(fields: [companyId], references: [id])
+  // contractorId String?
+  // contractor   Contractor? @relation(fields: [contractorId], references: [id])
 
   active Boolean @default(true)
 
@@ -44,7 +44,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([companyId])
+  // @@index([contractorId])
 }
 
 model PasswordResetToken {
@@ -60,7 +60,7 @@ model PasswordResetToken {
   @@index([userId])
 }
 
-model Company {
+model Contractor {
   id String @id @default(uuid())
 
   name String
@@ -69,9 +69,9 @@ model Company {
   cityId String?
   city   City?   @relation(fields: [cityId], references: [id])
 
-  logoImgUrl String?
-
-  supervisors User[]
+  // supervisors User[]
+  controls ControlReport[]
+  areas    businessAreas[]
 
   active Boolean @default(true)
 
@@ -81,13 +81,171 @@ model Company {
   @@index([cityId])
 }
 
+model FindingReport {
+  id String @id @default(uuid())
+
+  controlReportId String?
+  controlReport   ControlReport? @relation(fields: [controlReportId], references: [id])
+
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([controlReportId])
+}
+
+model ControlReport {
+  id String @id @default(uuid())
+
+  description String? @db.Text
+  workArea    String?
+
+  tool Tool[]
+
+  findingReport FindingReport?
+
+  contractorId String?
+  contractor   Contractor? @relation(fields: [contractorId], references: [id])
+
+  generalAspects ChecklistItem[]
+
+  date DateTime?
+
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([contractorId])
+}
+
+model SecurityCategory {
+  id String @id @default(uuid())
+
+  name String @unique
+
+  questions SecurityQuestion[]
+
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SecurityQuestion {
+  id String @id @default(uuid())
+
+  question String @db.Text
+
+  categoryId String?
+  category   SecurityCategory? @relation(fields: [categoryId], references: [id])
+
+  checklistItems ChecklistItem[]
+
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+}
+
+enum QualificationCriteria {
+  C
+  NC
+  NA
+}
+
+model ChecklistItem {
+  id String @id @default(uuid())
+
+  controlReportId String?
+  controlReport   ControlReport? @relation(fields: [controlReportId], references: [id])
+
+  securityQuestionId String?
+  securityQuestion   SecurityQuestion? @relation(fields: [securityQuestionId], references: [id])
+
+  day1 QualificationCriteria @default(NA)
+  day2 QualificationCriteria @default(NA)
+  day3 QualificationCriteria @default(NA)
+  day4 QualificationCriteria @default(NA)
+  day5 QualificationCriteria @default(NA)
+  day6 QualificationCriteria @default(NA)
+  day7 QualificationCriteria @default(NA)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([controlReportId])
+  @@index([securityQuestionId])
+}
+
+model Tool {
+  id String @id @default(uuid())
+
+  name String
+
+  toolDefaultId String?
+  toolDefault   DefaultTool? @relation(fields: [toolDefaultId], references: [id])
+
+  controlReportId String?
+  controlReport   ControlReport? @relation(fields: [controlReportId], references: [id])
+
+  @@index([controlReportId])
+  @@index([toolDefaultId])
+}
+
+model TypeTool {
+  id String @id @default(uuid())
+
+  name String @unique
+
+  defaultTool DefaultTool[]
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DefaultTool {
+  id   String  @id @default(uuid())
+  name String
+  desc String?
+
+  typeToolId String
+  typeTool   TypeTool @relation(fields: [typeToolId], references: [id])
+
+  active Boolean @default(true)
+
+  tools Tool[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([typeToolId])
+}
+
+model businessAreas {
+  id String @id @default(uuid())
+
+  name String @unique
+
+  contractorId String?
+  contractor   Contractor? @relation(fields: [contractorId], references: [id])
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([contractorId])
+}
+
 model City {
   id String @id @default(uuid())
 
   realName  String
   formatted String?
 
-  companies Company[]
+  contractors Contractor[]
 
   active Boolean @default(true)
 

@@ -42,7 +42,7 @@ export const ModalLogout = () => {
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild className="p-0 m-0">
+      <AlertDialogTrigger asChild className="p-0 m-0 cursor-pointer">
         <div
           className={cn(
             buttonVariants(),

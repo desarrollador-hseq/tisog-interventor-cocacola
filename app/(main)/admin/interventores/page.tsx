@@ -10,14 +10,14 @@ import Link from "next/link";
 
 const bcrumb = [{ label: "interventores", path: "/admin/empresas" }];
 
-const CompanyPage = async () => {
+const ControllersPage = async () => {
   const users = await db.user.findMany({
     where: {
       active: true,
       role: "USER",
     },
     include: {
-      company: {
+      contractor: {
         select: {
           name: true,
         },
@@ -47,4 +47,4 @@ const CompanyPage = async () => {
   );
 };
 
-export default CompanyPage;
+export default ControllersPage;
