@@ -1,10 +1,17 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
-import { Contractor, ControlReport, DefaultTool, SecurityQuestion, Tool } from "@prisma/client";
+import {
+  Contractor,
+  ControlReport,
+  DefaultTool,
+  SecurityQuestion,
+  Tool,
+} from "@prisma/client";
 import { HeaderForm } from "./header-form";
 import { ToolsList } from "./toolList";
 import { AspectsList } from "./asptect-list";
+import { CheckPrimeOptions } from "crypto";
 
 export const EditControlReport = ({
   areas,
@@ -20,7 +27,7 @@ export const EditControlReport = ({
   control: ControlReport;
   tools: Tool[] | null;
   areas: any;
-  aspects: SecurityQuestion[];
+  aspects: SecurityQuestion & { checklistItems: CheckPrimeOptions | null }[];
   contractors: Contractor[];
   companyId: string;
   defaultsToolsWithType: any[];
@@ -49,7 +56,6 @@ export const EditControlReport = ({
     setControlData(control);
   }, [control]);
 
-
   return (
     <div className="w-full flex flex-col gap-3 relative">
       <div className="bg-white rounded-lg overflow-hidden p-3">
@@ -71,10 +77,11 @@ export const EditControlReport = ({
         />
       </div>
       <div className="bg-slate-200 rounded-lg overflow-hidden m-4">
-       <AspectsList 
-        aspects={aspects}
-        disabled={false}
-       />
+        <AspectsList
+          aspects={aspects}
+          disabled={false}
+          controlId={control.id}
+        />
       </div>
     </div>
   );

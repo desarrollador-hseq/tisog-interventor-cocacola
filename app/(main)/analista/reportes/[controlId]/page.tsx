@@ -1,8 +1,8 @@
+import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import React from "react";
 
 import { db } from "@/lib/db";
-import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth-options";
 import { EditControlReport } from "../_components/edit-control-report";
 
@@ -66,7 +66,7 @@ const EditJobAnalysisPage = async ({
       },
       checklistItems: {
         where: {
-          controlReportId: control.id
+          controlReportId: control.id,
         }
       },
     },
