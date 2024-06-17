@@ -13,6 +13,7 @@ import { HeaderForm } from "./header-form";
 import { ToolsList } from "./toolList";
 import { AspectsList } from "./asptect-list";
 import { CheckPrimeOptions } from "crypto";
+import { UnsafeActForm } from "./unsafe-act-form";
 
 export const EditControlReport = ({
   areas,
@@ -95,6 +96,9 @@ export const EditControlReport = ({
           controlId={control.id}
           controlCreationDate={control.createdAt}
         />
+      </div>
+      <div className="bg-slate-200 rounded-lg overflow-hidden">
+        <UnsafeActForm control={control} disabled={false} />
       </div>
     </div>
   );

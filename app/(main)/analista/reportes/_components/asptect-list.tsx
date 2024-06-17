@@ -52,7 +52,7 @@ export const AspectsList = ({
         return;
       }
 
-      const daysDifference = differenceInCalendarDays(creation, currentDate);
+      const daysDifference = differenceInCalendarDays(currentDate, creation);
       setDaysElapsed(daysDifference);
     };
 
@@ -78,7 +78,8 @@ export const AspectsList = ({
                           )
                         : [{ securityQuestionId: aspect.id }] // Pasar un valor predeterminado si no hay registros
                     }
-                    creationDate={daysElapsed}
+                   
+                    numDateCreated={daysElapsed}
                   />
                 </div>
               </div>
