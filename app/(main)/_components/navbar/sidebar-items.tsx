@@ -25,7 +25,7 @@ export const SidebarItems = ({ icon: Icon, label, href }: SidebarItemProps) => {
   const isActive = useMemo(
     () =>
       pathname === href ||
-      (href !== "/interventor" &&
+      (href !== "/analista" &&
         pathname?.startsWith(`${href}`) &&
         href !== "/admin" &&
         pathname?.startsWith(`${href}`)),

@@ -8,7 +8,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-const bcrumb = [{ label: "interventores", path: "/admin/empresas" }];
+const bcrumb = [{ label: "analistas", path: "/admin/empresas" }];
 
 const ControllersPage = async () => {
   const users = await db.user.findMany({
@@ -16,22 +16,15 @@ const ControllersPage = async () => {
       active: true,
       role: "USER",
     },
-    include: {
-      contractor: {
-        select: {
-          name: true,
-        },
-      },
-    },
   });
 
   return (
     <CardPage
       pageHeader={
-        <TitleOnPage text="Listado de interventores" bcrumb={bcrumb}>
+        <TitleOnPage text="Listado de analistas" bcrumb={bcrumb}>
           <Link
             className={cn(buttonVariants({ variant: "secondary" }))}
-            href={`/admin/interventores/crear`}
+            href={`/admin/analistas/crear`}
           >
             Agregar
           </Link>
@@ -41,7 +34,7 @@ const ControllersPage = async () => {
       <TableDefault
         data={users}
         columns={userTableColumns}
-        editHref={{ btnText: "Editar", href: `/admin/interventores` }}
+        editHref={{ btnText: "Editar", href: `/admin/analistas` }}
       />
     </CardPage>
   );

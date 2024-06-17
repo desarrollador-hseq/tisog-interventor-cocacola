@@ -46,9 +46,9 @@ const formSchema = z.object({
   nit: z.string().min(1, {
     message: "Número de documento requerido",
   }),
-  cityId: z.string().min(1, {
-    message: "Empresa es requerida",
-  }),
+  // cityId: z.string().min(1, {
+  //   message: "Empresa es requerida",
+  // }),
 });
 
 export const AddContractorForm = ({ contractor, cities }: AddContractorFormProps) => {
@@ -65,7 +65,7 @@ export const AddContractorForm = ({ contractor, cities }: AddContractorFormProps
     defaultValues: {
       name: contractor?.name || "",
       nit: contractor?.nit || "",
-      cityId: contractor?.cityId || "",
+      // cityId: contractor?.cityId || "",
     },
   });
   const { isSubmitting, isValid } = form.formState;
@@ -130,7 +130,7 @@ export const AddContractorForm = ({ contractor, cities }: AddContractorFormProps
             className="w-full"
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="cityId"
             render={({ field }) => (
@@ -190,7 +190,7 @@ export const AddContractorForm = ({ contractor, cities }: AddContractorFormProps
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <Button
             disabled={isSubmitting || !isValid}

@@ -1,9 +1,7 @@
-
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { db } from "@/lib/db";
 import { authOptions } from "@/lib/auth-options";
-
 
 export async function PATCH(req: Request, { params }: { params: { controlId: string } }) {
     const session = await getServerSession(authOptions)
@@ -13,11 +11,13 @@ export async function PATCH(req: Request, { params }: { params: { controlId: str
     if (!params.controlId) return new NextResponse("Bad request", { status: 400 })
     if (!values.securityQuestionId) return new NextResponse("Bad request", { status: 400 })
     try {
-
+        const { securityQuestionId, ...days } = values;
+        // Actualizar o crear ChecklistItem
         const checkListItemDB = await db.checklistItem.findFirst({
             where: {
                 securityQuestionId: values.securityQuestionId,
                 controlReportId: params.controlId,
+                
             }
         })
 
@@ -28,31 +28,37 @@ export async function PATCH(req: Request, { params }: { params: { controlId: str
                 },
                 data: {
                     controlReportId: params.controlId,
-                    ...values,
+                    ...days,
                 }
             })
         } else {
             await db.checklistItem.create({
                 data: {
                     controlReportId: params.controlId,
-                    ...values,
+                    securityQuestionId: securityQuestionId,
+                    ...days,
                 }
             })
         }
 
-        if (values.day1 === "NC" || values.day2 === "NC" || values.day3 === "NC" ||
-            values.day4 === "NC" || values.day5 === "NC" || values.day6 === "NC" || values.day7 === "NC") {
+        const ncDays = Object.entries(days).filter(([key, value]) => value === "NC");
+
+        for (const [dayName, value] of ncDays) {
             const existingFindingReport = await db.findingReport.findFirst({
                 where: {
                     controlReportId: params.controlId,
+                    securityQuestionId: securityQuestionId,
+                    // day: dayName,
                 }
             });
 
             if (!existingFindingReport) {
-                // Crear un nuevo FindingReport
                 await db.findingReport.create({
                     data: {
                         controlReportId: params.controlId,
+                        securityQuestionId: securityQuestionId,
+                        // day: dayName,
+                        // finding: "No cumple", // Ajusta el mensaje según tus necesidades
                     }
                 });
             }
@@ -60,11 +66,10 @@ export async function PATCH(req: Request, { params }: { params: { controlId: str
 
         console.log({ ...values })
 
-
         return NextResponse.json({ ok: true })
 
     } catch (error) {
         console.log("[ASPECTS-PATCH]", error)
-        return new NextResponse("Internal Errorr " + error, { status: 500 })
+        return new NextResponse("Internal Error " + error, { status: 500 })
     }
 }

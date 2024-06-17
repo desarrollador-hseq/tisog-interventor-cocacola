@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import {
+  BusinessAreas,
   Contractor,
   ControlReport,
   DefaultTool,
@@ -26,7 +27,7 @@ export const EditControlReport = ({
 }: {
   control: ControlReport;
   tools: Tool[] | null;
-  areas: any;
+  areas: BusinessAreas[];
   aspects: SecurityQuestion & { checklistItems: CheckPrimeOptions | null }[];
   contractors: Contractor[];
   companyId: string;
@@ -56,19 +57,20 @@ export const EditControlReport = ({
     setControlData(control);
   }, [control]);
 
+  console.log({ create: control.createdAt });
+
   return (
-    <div className="w-full flex flex-col gap-3 relative">
-      <div className="bg-white rounded-lg overflow-hidden p-3">
+    <div className="w-full flex flex-col gap-3 relative m-3">
+      <div className="bg-white rounded-lg overflow-hidden">
         <HeaderForm
           control={controlData}
           areas={areas}
           contractors={contractors}
-          companyId={companyId}
           disabled={disabled}
         />
       </div>
 
-      <div className="bg-slate-200 rounded-lg overflow-hidden m-4">
+      <div className="bg-slate-200 rounded-lg overflow-hidden">
         <ToolsList
           currents={tools || []}
           controlId={control.id}
@@ -76,11 +78,22 @@ export const EditControlReport = ({
           groupedToolsByType={groupedToolsByType}
         />
       </div>
-      <div className="bg-slate-200 rounded-lg overflow-hidden m-4">
+      <div className="bg-slate-200 rounded-lg overflow-hidden">
+        <div className="p-2">
+          <h2 className="font-bold  text-center text-2xl">
+            Listado de aspectos
+          </h2>
+          <span className="text-sm w-full text-center block">
+            Para la revisión de cada uno de los ítems se deberá calificar de
+            acuerdo a lo siguientes criterios C: Cumple; NC: No Cumple; NA: No
+            aplica
+          </span>
+        </div>
         <AspectsList
           aspects={aspects}
           disabled={false}
           controlId={control.id}
+          controlCreationDate={control.createdAt}
         />
       </div>
     </div>

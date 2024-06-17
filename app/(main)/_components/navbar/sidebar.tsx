@@ -11,11 +11,11 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { SidebarContent } from "./sidebar-content";
 
 const dashRoutes = [
-  { icon: Home, label: "Inicio", href: "/analistas" },
+  { icon: Home, label: "Inicio", href: "/analista" },
   {
     icon: ClipboardCheck,
     label: "reportes",
-    href: "/analistas/reportes",
+    href: "/analista/reportes",
   },
 ];
 const adminRoutes = [
@@ -31,9 +31,14 @@ const adminRoutes = [
     href: "/admin/analistas",
   },
   {
+    icon: Users,
+    label: "Herramientas",
+    href: "/admin/herramientas",
+  },
+  {
     icon: ClipboardCheck,
     label: "Reportes de hallazgos",
-    href: "/admin/reportes",
+    href: "/admin/hallazgos",
   },
 ];
 

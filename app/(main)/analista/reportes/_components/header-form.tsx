@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import debounce from "lodash/debounce";
-import { Contractor, ControlReport } from "@prisma/client";
+import { Contractor, ControlReport, BusinessAreas } from "@prisma/client";
 import { useLoading } from "@/components/providers/loading-provider";
 import { TextAreaForm } from "@/components/textarea-form";
 import { Button } from "@/components/ui/button";
@@ -39,10 +39,10 @@ import { cn } from "@/lib/utils";
 import { CalendarInputForm } from "@/components/calendar-input-form";
 
 const formSchema = z.object({
-  description: z.string().optional(),
-  workArea: z.string().optional(),
-  contractorId: z.string().optional(),
-  date: z.date().optional(),
+  description: z.string().min(1, { message: "Campo es requerido" }),
+  businessAreaId: z.string().min(1, { message: "Campo es requerido" }),
+  contractorId: z.string().min(1, { message: "Campo es requerido" }),
+  date: z.date(),
 });
 
 export const HeaderForm = ({
@@ -52,23 +52,19 @@ export const HeaderForm = ({
   disabled,
 }: {
   control?: ControlReport;
-  areas: any[];
+  areas: BusinessAreas[];
   contractors: Contractor[];
-  companyId: string;
-  disabled: boolean;
+  disabled?: boolean;
 }) => {
   const { setLoadingApp } = useLoading();
   const router = useRouter();
-  const [areasDefaults, setAreasDefaults] = useState(
-    areas.map((area) => area.name)
-  );
   const isEdit = useMemo(() => !!control, [control]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       description: control?.description || "",
-      workArea: control?.workArea || "",
+      businessAreaId: control?.businessAreaId || "",
       contractorId: control?.contractorId || "",
       date: control?.date || new Date(),
     },
@@ -83,11 +79,7 @@ export const HeaderForm = ({
         try {
           if (isEdit) {
             await axios.patch(`/api/controls/${control?.id}`, values);
-          } else {
-            const { data } = await axios.post(`/api/job-analysis/`, values);
-            toast.info("Control actualizado");
-            router.push(`/interventor/reporte/${data.id}`);
-          }
+          } 
           router.refresh();
         } catch (error) {
           toast.error("Ocurrió un error");
@@ -114,9 +106,12 @@ export const HeaderForm = ({
         await axios.patch(`/api/controls/${control?.id}`, values);
         toast.info("Actualizado correctamente");
       } else {
-        const { data } = await axios.post(`/api/controls/`, values);
-        toast.info("Control creado");
-        router.push(`/interventor/reportes/${data.id}#steps`);
+        const { data } = await axios.post(
+          `/api/controls/`,
+          values
+        );
+        toast.info("Control Creado");
+        router.push(`/analista/reportes/${data.id}`);
       }
       router.refresh();
     } catch (error) {
@@ -129,14 +124,15 @@ export const HeaderForm = ({
   console.log({ contractors });
 
   return (
-    <Form {...form}>
+   <div className="w-auto min-w-min">
+     <Form {...form} >
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full grid  md:grid-cols-3 items-start gap-6 p-2 borde"
+        className="w-full grid md:grid-cols-3 items-start borde"
       >
         <FormField
           control={form.control}
-          name="workArea"
+          name="businessAreaId"
           disabled={disabled}
           render={({ field }) => (
             <FormItem className="flex flex-col w-full">
@@ -156,7 +152,7 @@ export const HeaderForm = ({
                       )}
                     >
                       {field.value
-                        ? areasDefaults?.find((area) => area === field.value)
+                        ? areas?.find((area) => area.id === field.value)?.name
                         : "Selecciona un area"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -168,12 +164,12 @@ export const HeaderForm = ({
                     <CommandEmpty>Area no encontrada!</CommandEmpty>
                     <CommandGroup>
                       <CommandList>
-                        {areasDefaults?.map((area, index) => (
+                        {areas?.map((area, index) => (
                           <CommandItem
                             value={`${area}`}
-                            key={area + index}
+                            key={area.id + index}
                             onSelect={() => {
-                              setValue("workArea", area, {
+                              setValue("businessAreaId", area.id, {
                                 shouldValidate: true,
                               });
                             }}
@@ -181,12 +177,12 @@ export const HeaderForm = ({
                             <Check
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                area === field.value
+                                area.id === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
                             />
-                            {area}
+                            {area.name}
                           </CommandItem>
                         ))}
                       </CommandList>
@@ -282,5 +278,6 @@ export const HeaderForm = ({
         {!isEdit && <Button type="submit">Seguir</Button>}
       </form>
     </Form>
+   </div>
   );
 };

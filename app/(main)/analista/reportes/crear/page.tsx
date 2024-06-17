@@ -1,37 +1,28 @@
-import { AtSign } from "lucide-react";
 import React from "react";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { AtSign } from "lucide-react";
 import { CardPage } from "@/components/card-page";
-import { TitleIcon } from "@/components/title-icon";
-import { AtsHeaderForm } from "../[jobAnalysisId]/_components/ats-header-form";
+
 import { db } from "@/lib/db";
-import { getCompany } from "@/actions/user/get-company";
+import { HeaderForm } from "../_components/header-form";
+import { TitleOnPage } from "@/components/title-on-page";
 
 const CreateAts = async () => {
-  const company = await getCompany();
-
-  if (!company) {
-    redirect("/auth/login");
-  }
-
   const businessAreas = await db.businessAreas.findMany({
     where: {
-      companyId: company.id,
       active: true,
     },
   });
 
-  console.log({businessAreas})
+  const contractors = await db.contractor.findMany({
+    where: {
+      active: true,
+    },
+  });
 
   return (
-    <div>
-      <TitleIcon icon={AtSign} text="df" />
-
-      <CardPage>
-        <AtsHeaderForm areas={businessAreas} companyId={company.id} />
-      </CardPage>
-    </div>
+    <CardPage pageHeader={<TitleOnPage text="Crear Reporte de control" />}>
+      <HeaderForm areas={businessAreas} contractors={contractors} />
+    </CardPage>
   );
 };
 

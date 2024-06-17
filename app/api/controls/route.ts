@@ -13,22 +13,11 @@ export async function POST(
         if (!session || !session.user.email)
             return new NextResponse("Unauthorized", { status: 401 });
         const values = await req.json();
-        const tool = await db.tool.findFirst({
-            where: {
-                name: values.name,
-                controlReportId: params.controlId,
-            }
-        })
 
-        if (tool) {
-            return new NextResponse("Ya existe un registro con ese nombre", { status: 400 });
-        }
 
-        const newTool = await db.tool.create({
+        const newTool = await db.controlReport.create({
             data: {
-                controlReportId: params.controlId,
-                name: values.name,
-                toolDefaultId: values.toolDefaultId ? values.toolDefaultId : null,
+                ...values
             }
         })
 

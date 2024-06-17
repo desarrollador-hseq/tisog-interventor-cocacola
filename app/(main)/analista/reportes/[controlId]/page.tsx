@@ -5,8 +5,11 @@ import React from "react";
 import { db } from "@/lib/db";
 import { authOptions } from "@/lib/auth-options";
 import { EditControlReport } from "../_components/edit-control-report";
+import { CardPage } from "@/components/card-page";
+import { TitleOnPage } from "@/components/title-on-page";
 
-const EditJobAnalysisPage = async ({
+
+const EditControlPage = async ({
   params,
 }: {
   params: { controlId: string };
@@ -54,6 +57,11 @@ const EditJobAnalysisPage = async ({
       active: true,
     },
   });
+  const businessAreas = await db.businessAreas.findMany({
+    where: {
+      active: true,
+    },
+  });
   const aspects = await db.securityQuestion.findMany({
     where: {
       active: true,
@@ -73,19 +81,23 @@ const EditJobAnalysisPage = async ({
   });
 
   return (
-    <EditControlReport
+   <CardPage pageHeader={
+    <TitleOnPage text={`Reporte de control`} />
+   }>
+     <EditControlReport
       companyId=""
       control={control!}
       contractors={contractors}
       aspects={aspects}
-      areas={[]}
+      areas={businessAreas}
       //   areas={businessAreas.map((area) => area)}
       tools={tools}
       toolDefaults={toolDefaults}
       defaultsToolsWithType={toolDefaults}
       disabled={false}
     />
+   </CardPage>
   );
 };
 
-export default EditJobAnalysisPage;
+export default EditControlPage;

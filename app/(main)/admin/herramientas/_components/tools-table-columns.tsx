@@ -1,12 +1,12 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { User } from "@prisma/client";
+import { DefaultTool, Tool, TypeTool } from "@prisma/client";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export const userTableColumns: ColumnDef<
-  User & { contractor: { name: string | null } | null }
+export const toolsTableColumns: ColumnDef<
+  DefaultTool & { typeTool: TypeTool | null }
 >[] = [
   {
     accessorKey: "name",
@@ -18,7 +18,7 @@ export const userTableColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
         >
-          Nombre completo
+          Nombre
           <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
@@ -29,8 +29,8 @@ export const userTableColumns: ColumnDef<
     },
   },
   {
-    accessorKey: "nit",
-    accessorFn: (value) => value.numDoc,
+    accessorKey: "typeTool",
+    accessorFn: (value) => value.typeTool?.name,
     header: ({ column }) => {
       return (
         <Button
@@ -38,33 +38,13 @@ export const userTableColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
         >
-          Documento
+          Tipo
           <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const numDoc = row.original?.numDoc;
-      return <div className="">{numDoc}</div>;
-    },
-  },
-  {
-    accessorKey: "contractor",
-    accessorFn: (value) => value.contractor?.name,
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
-        >
-          Contratista
-          <ArrowUpDown className="ml-2 h-3 w-3" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const name = row.original?.contractor?.name;
+      const name = row.original?.typeTool?.name;
       return <div className="">{name}</div>;
     },
   },

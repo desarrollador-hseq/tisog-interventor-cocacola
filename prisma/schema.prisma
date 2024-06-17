@@ -71,7 +71,6 @@ model Contractor {
 
   // supervisors User[]
   controls ControlReport[]
-  areas    businessAreas[]
 
   active Boolean @default(true)
 
@@ -87,22 +86,28 @@ model FindingReport {
   controlReportId String?
   controlReport   ControlReport? @relation(fields: [controlReportId], references: [id])
 
+  securityQuestionId String
+  securityQuestion   SecurityQuestion @relation(fields: [securityQuestionId], references: [id])
+
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([controlReportId])
+  @@index([controlReportId])
+  @@unique([securityQuestionId])
 }
 
 model ControlReport {
   id String @id @default(uuid())
 
   description String? @db.Text
-  workArea    String?
+
+  businessAreaId String?
+  businessArea   BusinessAreas? @relation(fields: [businessAreaId], references: [id])
 
   tool Tool[]
 
-  findingReport FindingReport?
+  findingReport FindingReport[]
 
   contractorId String?
   contractor   Contractor? @relation(fields: [contractorId], references: [id])
@@ -116,6 +121,7 @@ model ControlReport {
   updatedAt DateTime @updatedAt
 
   @@index([contractorId])
+  @@index([businessAreaId])
 }
 
 model SecurityCategory {
@@ -133,12 +139,14 @@ model SecurityCategory {
 model SecurityQuestion {
   id String @id @default(uuid())
 
-  question String @db.Text
+  question         String @db.Text
+  negativeQuestion String @db.Text
 
   categoryId String?
   category   SecurityCategory? @relation(fields: [categoryId], references: [id])
 
   checklistItems ChecklistItem[]
+  findingReports FindingReport[]
 
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -188,6 +196,11 @@ model Tool {
   controlReportId String?
   controlReport   ControlReport? @relation(fields: [controlReportId], references: [id])
 
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([controlReportId])
   @@index([toolDefaultId])
 }
@@ -195,7 +208,7 @@ model Tool {
 model TypeTool {
   id String @id @default(uuid())
 
-  name String @unique
+  name String
 
   defaultTool DefaultTool[]
 
@@ -223,20 +236,17 @@ model DefaultTool {
   @@index([typeToolId])
 }
 
-model businessAreas {
+model BusinessAreas {
   id String @id @default(uuid())
 
   name String @unique
 
-  contractorId String?
-  contractor   Contractor? @relation(fields: [contractorId], references: [id])
+  controlReport ControlReport[]
 
   active Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([contractorId])
 }
 
 model City {

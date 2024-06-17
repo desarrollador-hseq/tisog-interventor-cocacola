@@ -6,7 +6,7 @@ import { AddControllerForm } from "../_components/add-controller-form";
 import { DeleteUserController } from "../_components/delete-user-controller";
 
 const bcrumb = [
-  { label: "Interventores", path: "/admin/interventores" },
+  { label: "Analistas", path: "/admin/analistas" },
   { label: "Editar", path: "/admin/editar" },
 ];
 
@@ -22,38 +22,19 @@ const CreateControllerPage = async ({
     },
   });
 
-  const cities = await db.city.findMany({
-    where: {
-      active: true,
-    },
-    orderBy: {
-      realName: "desc",
-    },
-  });
-
-  const contractors = await db.contractor.findMany({
-    where: {
-      active: true,
-    },
-  });
-
   if (!controller) {
-    return <CardPage>Interventor no encontrado</CardPage>;
+    return <CardPage>Analista no encontrado</CardPage>;
   }
 
   return (
     <CardPage
       pageHeader={
-        <TitleOnPage text={`Editar Interventor`} bcrumb={bcrumb}>
+        <TitleOnPage text={`Editar analista`} bcrumb={bcrumb}>
           <DeleteUserController controller={controller} />
         </TitleOnPage>
       }
     >
-      <AddControllerForm
-        cities={cities}
-        contractors={contractors}
-        controller={controller}
-      />
+      <AddControllerForm controller={controller} />
     </CardPage>
   );
 };

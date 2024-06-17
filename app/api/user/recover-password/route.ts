@@ -13,13 +13,6 @@ export async function POST(req: Request) {
 
         const existingCompany = await db.user.findUnique({
             where: { email: values.email, active: true, },
-            include: {
-                company: {
-                    select: {
-                        logoImgUrl: true
-                    }
-                }
-            }
         });
 
         if (!existingCompany) {

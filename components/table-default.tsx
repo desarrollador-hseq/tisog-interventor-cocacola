@@ -35,23 +35,33 @@ import {
 
 import TableColumnFiltering from "@/components/table-column-filtering";
 import { TablePagination } from "./table-pagination";
+import { SimpleModal } from "./simple-modal";
+import { toast } from "sonner";
+
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   editHref?: { btnText: string; href: string };
+  deleteHref?: string;
 }
 
 export function TableDefault<TData, TValue>({
   data,
   columns,
   editHref,
+  deleteHref,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [filtering, setFiltering] = useState("");
+
+  const router = useRouter();
+  const [isLoading, setisLoading] = useState(false);
 
   const table = useReactTable({
     data,
@@ -74,6 +84,21 @@ export function TableDefault<TData, TValue>({
       globalFilter: filtering,
     },
   });
+
+  const onAceptDelete = async (id: string) => {
+    setisLoading(true);
+    try {
+      await axios.delete(`${deleteHref}/${id}`);
+      toast.success("Elemento eliminado");
+      // router.push("/admin/herramientas/");
+      // router.refresh()
+    } catch (error) {
+      toast.error("ocurrió un error al momento de eliminar el elemento");
+    } finally {
+      router.refresh();
+      setisLoading(false);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -152,6 +177,21 @@ export function TableDefault<TData, TValue>({
                               {editHref.btnText}
                             </Link>
                           </DropdownMenuItem>
+                          {!!deleteHref && (
+                            <DropdownMenuItem
+                              asChild
+                              className="cursor-pointer"
+                            >
+                              <SimpleModal
+                                textBtn="eliminar"
+                                title="Eliminar el elemento"
+                                onAcept={() => onAceptDelete(row.original.id)}
+                                large={false}
+                              >
+                                ¿Desea eliminar el elemento definitivamente?
+                              </SimpleModal>
+                            </DropdownMenuItem>
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>

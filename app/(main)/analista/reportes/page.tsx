@@ -1,17 +1,16 @@
-import { getServerSession } from "next-auth";
 import React from "react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-
-
+import { getServerSession } from "next-auth";
+import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { CardPage } from "@/components/card-page";
-// import { ButtonCreateAts } from "./_components/button-create-ats";
 import { buttonVariants } from "@/components/ui/button";
 import { TitleOnPage } from "@/components/title-on-page";
 import { authOptions } from "@/lib/auth-options";
-import { findingReportColumns } from "./_components/finding-report-columns";
+import { TableDefault } from "@/components/table-default";
+import { controlReportColumns } from "./_components/control-report-columns";
+import { db } from "@/lib/db";
 
 const ControlPage = async () => {
   const session = await getServerSession(authOptions);
@@ -20,32 +19,31 @@ const ControlPage = async () => {
     redirect("/auth/login");
   }
 
+  const controlReports = await db.controlReport.findMany({
+    where: {
+      active: true,
+    },
+  });
+
   return (
     <CardPage>
-      <TitleOnPage text="Analisis de trabajo seguro">
-        {/* <Link
-          className={cn(buttonVariants())}
-          href={`/dashboard/analisis-de-trabajo-seguro/`}
-        >
-          Crear
-        </Link> */}
-        {/* <ButtonCreateAts /> */}
+      <TitleOnPage text="Reportes de control">
         <Link
-          href={"/dashboard/analisis-de-trabajo-seguro/crear"}
+          href={"/analista/reportes/crear"}
           className={cn(buttonVariants())}
         >
           Crear
         </Link>
       </TitleOnPage>
 
-      {/* <TableDefault
-        columns={findingReportColumns}
-        data={findingReports}
+      <TableDefault
+        columns={controlReportColumns}
+        data={controlReports}
         editHref={{
           btnText: "editar",
-          href: `/dashboard/analisis-de-trabajo-seguro/`,
+          href: `/analista/reportes/`,
         }}
-      /> */}
+      />
     </CardPage>
   );
 };

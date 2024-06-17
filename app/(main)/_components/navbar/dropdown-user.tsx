@@ -37,7 +37,7 @@ export function DropdownUser({ name, isAdmin }: { name?: string; isAdmin: boolea
 
         <DropdownMenuItem
           className="cursor-pointer border-none hover:bg-secondary hover:text-white"
-          onClick={() => router.push(`/${isAdmin ? "admin" : "interventor"}/perfil/`)}
+          onClick={() => router.push(`/${isAdmin ? "admin" : "analista"}/perfil/`)}
         >
           Perfil
         </DropdownMenuItem>

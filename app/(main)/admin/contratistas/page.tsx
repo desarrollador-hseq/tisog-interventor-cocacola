@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
-import { companyTableColumns } from "./_components/company-table-columns";
+import { contractorTableColumns } from "./_components/contractor-table-columns";
 import { db } from "@/lib/db";
 import { CardPage } from "@/components/card-page";
 
@@ -40,7 +40,7 @@ const ContractorPage = async () => {
     >
       <TableDefault
         data={companies}
-        columns={companyTableColumns}
+        columns={contractorTableColumns}
         editHref={{ btnText: "Editar", href: `/admin/contratistas` }}
       />
     </CardPage>

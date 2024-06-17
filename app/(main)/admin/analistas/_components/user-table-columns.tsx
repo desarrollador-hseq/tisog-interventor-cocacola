@@ -1,14 +1,11 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-
+import { User } from "@prisma/client";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Contractor } from "@prisma/client";
 
-export const companyTableColumns: ColumnDef<
-  Contractor & { city: { realName: string | null } | null }
->[] = [
+export const userTableColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     accessorFn: (value) => value.name,
@@ -19,7 +16,7 @@ export const companyTableColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
         >
-          Razón social
+          Nombre completo
           <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
@@ -31,7 +28,7 @@ export const companyTableColumns: ColumnDef<
   },
   {
     accessorKey: "nit",
-    accessorFn: (value) => value.nit,
+    accessorFn: (value) => value.numDoc,
     header: ({ column }) => {
       return (
         <Button
@@ -39,19 +36,19 @@ export const companyTableColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
         >
-          NIT
+          Documento
           <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const nit = row.original?.nit;
-      return <div className="">{nit}</div>;
+      const numDoc = row.original?.numDoc;
+      return <div className="">{numDoc}</div>;
     },
   },
   {
-    accessorKey: "city",
-    accessorFn: (value) => value.name,
+    accessorKey: "email",
+    accessorFn: (value) => value.email,
     header: ({ column }) => {
       return (
         <Button
@@ -59,14 +56,34 @@ export const companyTableColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
         >
-          Ciudad
+          Correo electrónico
           <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const name = row.original?.city?.realName;
-      return <div className="">{name}</div>;
+      const numDoc = row.original?.email;
+      return <div className="">{numDoc}</div>;
     },
   },
+  // {
+  //   accessorKey: "contractor",
+  //   accessorFn: (value) => value.contractor?.name,
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //         className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
+  //       >
+  //         Contratista
+  //         <ArrowUpDown className="ml-2 h-3 w-3" />
+  //       </Button>
+  //     );
+  //   },
+  //   cell: ({ row }) => {
+  //     const name = row.original?.contractor?.name;
+  //     return <div className="">{name}</div>;
+  //   },
+  // },
 ];

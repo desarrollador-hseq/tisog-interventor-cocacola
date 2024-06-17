@@ -1,24 +1,17 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { City, Contractor, User } from "@prisma/client";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DefaultTool, Tool, TypeTool } from "@prisma/client";
 import axios from "axios";
 import { toast } from "sonner";
 import { z } from "zod";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { InputForm } from "@/components/input-form";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+
 import {
   Form,
   FormControl,
@@ -33,64 +26,62 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
-interface AddControllerFormProps {
-  controller?: User | null;
-  cities: City[] | null;
-  contractors: Contractor[] | null;
+import { useLoading } from "@/components/providers/loading-provider";
+
+interface AddToolFormProps {
+  tool?: DefaultTool | null;
+  typeTools: TypeTool[]
 }
 
 const formSchema = z.object({
   name: z.string().min(1, {
-    message: "Nombre requerido",
+    message: "Nombre es requerido",
   }),
-  numDoc: z.string().min(1, {
-    message: "Número de documento requerido",
-  }),
-  contractorId: z.string().min(1, {
-    message: "Empresa es requerida",
-  }),
-  email: z.string().email({
-    message: "Ingrese un correo electrónico válido",
+  typeToolId: z.string().min(1, {
+    message: "tipo es requerido",
   }),
 });
 
-export const AddControllerForm = ({
-  controller,
-  contractors,
-}: AddControllerFormProps) => {
+export const AddtoolForm = ({ tool, typeTools }: AddToolFormProps) => {
   const router = useRouter();
-  const isEdit = useMemo(() => !!controller, [controller]);
+  const { setLoadingApp } = useLoading();
 
-  if (isEdit && !controller) {
-    router.replace("/admin/interventores/");
-    toast.error("Interventor no encontrado, redirigiendo...");
+  const isEdit = useMemo(() => !!tool, [tool]);
+
+  if (isEdit && !tool) {
+    toast.error("Herramienta no encontrado, redirigiendo...");
+    router.replace("/admin/herramientas/");
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: controller?.name || "",
-      numDoc: controller?.numDoc || "",
-      contractorId: controller?.contractorId || "",
-      email: controller?.email,
-      // cityId: driver?.cityId || "",
+      name: tool?.name || "",
+      typeToolId: tool?.typeToolId || "",
     },
   });
-  
+
   const { isSubmitting, isValid } = form.formState;
-  const { setValue, setError } = form;
+  const { setError } = form;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (isEdit) {
-        await axios.patch(`/api/user-controller/${controller?.id}`, values);
-        toast.success("Interventor actualizado");
+        await axios.patch(`/api/tools/${tool?.id}`, values);
+        toast.success("Herramienta actualizado");
       } else {
-        const { data } = await axios.post(`/api/user-controller/`, values);
-        router.push(`/admin/interventores/`);
-        await axios.post(`/api/user/first-password`, values);
-        toast.success("Interventor creado correctamente");
+        const { data } = await axios.post(`/api/tools/`, values);
+        router.push(`/admin/herramientas/`);
+        toast.success("Herramienta agregado correctamente");
       }
       // router.push(`/admin/colaboradores`);
       router.refresh();
@@ -101,11 +92,11 @@ export const AddControllerForm = ({
           const errorMessage = serverResponse.data;
           if (
             typeof errorMessage === "string" &&
-            errorMessage.includes("Número de documento ya registrado")
+            errorMessage.includes("Herramienta ya se encuentra registrada")
           ) {
-            setError("numDoc", {
+            setError("name", {
               type: "manual",
-              message: "Número de documento ya registrado",
+              message: "Herramienta ya se encuentra registrada",
             });
           } else {
             toast.error(errorMessage);
@@ -119,8 +110,9 @@ export const AddControllerForm = ({
       }
     }
   };
+
   return (
-    <div className="max-w-[1500px] w-[50%] h-full mx-auto bg-slate-100 border overflow-y-hidden p-3 rounded-md shadow-sm">
+    <div className="max-w-[1500px] w-[50%] h-full mx-auto bg-white  overflow-y-hidden p-3">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -128,28 +120,19 @@ export const AddControllerForm = ({
         >
           <InputForm
             control={form.control}
-            label="Nombre completo"
+            label="Nombre"
             name="name"
             className="w-full"
           />
-          <InputForm
-            control={form.control}
-            label="Número de documento"
-            name="numDoc"
-            className="w-full"
-          />
-          <InputForm
-            control={form.control}
-            label="Correo electrónico"
-            name="email"
-            className="w-full"
-          />
+
           <FormField
             control={form.control}
-            name="contractorId"
+            name="typeToolId"
             render={({ field }) => (
               <FormItem className="flex flex-col w-full">
-                <FormLabel>Empresa:</FormLabel>
+                <FormLabel className="text-primary font-semibold">
+                  Tipo:
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -162,26 +145,26 @@ export const AddControllerForm = ({
                         )}
                       >
                         {field.value
-                          ? contractors?.find(
-                              (contractor) => contractor.id === field.value
+                          ? typeTools?.find(
+                              (type) => type.id === field.value
                             )?.name
-                          : "Selecciona una empresa"}
+                          : "Selecciona un tipo de herramienta"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="w-full p-0">
                     <Command className="w-full">
-                      <CommandInput placeholder="Buscar ciudad" />
-                      <CommandEmpty>Ciudad no encontrada</CommandEmpty>
+                      <CommandInput placeholder="Buscar empresa" />
+                      <CommandEmpty>Tipo de herramienta no encontrado</CommandEmpty>
                       <CommandGroup>
                         <CommandList>
-                          {contractors?.map((contractor) => (
+                          {typeTools?.map((type) => (
                             <CommandItem
-                              value={`${contractor.name}`}
-                              key={contractor.id}
+                              value={`${type.name}`}
+                              key={type.id}
                               onSelect={() => {
-                                form.setValue("contractorId", contractor.id, {
+                                form.setValue("typeToolId", type.id, {
                                   shouldValidate: true,
                                 });
                               }}
@@ -189,12 +172,12 @@ export const AddControllerForm = ({
                               <Check
                                 className={cn(
                                   "mr-2 h-4 w-4",
-                                  contractor.id === field.value
+                                  type.id === field.value
                                     ? "opacity-100"
                                     : "opacity-0"
                                 )}
                               />
-                              {contractor.name}
+                              {type.name}
                             </CommandItem>
                           ))}
                         </CommandList>
