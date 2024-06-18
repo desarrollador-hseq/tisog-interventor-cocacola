@@ -1,9 +1,9 @@
 import React from "react";
+import { Building, User } from "lucide-react";
 import { HeaderDateFilter } from "./_components/header-date-filter";
 import { db } from "@/lib/db";
-import { Card, CardContent } from "@/components/ui/card";
-import { Building, LucideIcon, User } from "lucide-react";
-
+import { FindingIndicators } from "./_components/finding-indicators";
+import { KpiCard } from "@/components/kpi-card";
 
 const AdminPage = async () => {
   const contractors = await db.contractor.findMany({
@@ -18,15 +18,34 @@ const AdminPage = async () => {
     },
   });
 
+  const filteredReports = await db.findingReport.findMany({
+    where: {
+      NOT: {
+        status: "CANCELED"
+      }
+    },
+    include: {
+      controlReport: {
+        include: {
+          contractor: {
+            select: {
+              name: true
+            }
+          }
+        }
+      }
+    }
+  })
 
   return (
-    <div className="">
+    <div className="bg-blue-100">
       <HeaderDateFilter companies={contractors} />
-      <div className="mt-6 flex gap-3 w-full justify-center flex-wrap">
-        <KpiCard name="Empresas" number={contractors.length} icon={Building} />
+      <div className="my-6 flex gap-3 w-full justify-center flex-wrap ">
+        <KpiCard name="Contratistas" number={contractors.length} icon={Building} />
         <KpiCard name="Interventores" number={controllers.length} icon={User} />
       </div>
 
+      <FindingIndicators findingReports={filteredReports} />
       {/* <TableDefault 
         columns={}
         data={}
@@ -38,26 +57,3 @@ const AdminPage = async () => {
 
 export default AdminPage;
 
-export const KpiCard = ({
-  name,
-  number,
-  icon: Icon,
-}: {
-  name: string;
-  number: number;
-  icon: LucideIcon;
-}) => {
-  return (
-    <Card className="shadow-sm border border-gray-200 rounded-lg max-w-[300px] w-full text-gray-600">
-      <CardContent className="p-4 w-full">
-        <div className="flex justify-between items-center">
-          <Icon className="w-7 h-7" />
-          <span className="font-medium text-xl text-gray-600">{name}</span>
-        </div>
-        <span className="block mt-1 font-bold text-2xl w-full text-right">
-          {number}
-        </span>
-      </CardContent>
-    </Card>
-  );
-};

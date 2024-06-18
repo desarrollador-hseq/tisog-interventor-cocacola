@@ -13,5 +13,5 @@ export default async function DashboardLayout({
     return <UserNotAuthorized />;
   }
 
-  return <div >{children}</div>;
+  return <div>{children}</div>;
 }

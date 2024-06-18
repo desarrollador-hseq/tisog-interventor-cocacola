@@ -1,22 +1,26 @@
-
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { db } from "@/lib/db";
 import { authOptions } from "@/lib/auth-options";
 
-export async function PATCH(req: Request, { params }: { params: { findingId: string } }) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: { findingId: string } }
+) {
   const session = await getServerSession(authOptions);
   try {
     const values = await req.json();
 
-    if (!session) return new NextResponse("Unauthorized", { status: 401 })
+    if (!session) return new NextResponse("Unauthorized", { status: 401 });
 
     const existingFindingReport = await db.findingReport.findUnique({
-      where: { id: params.findingId, active: true },
+      where: {
+        id: params.findingId,
+        //  active: true
+      },
     });
 
-    console.log({values})
-
+    console.log({ values });
 
     if (!existingFindingReport) {
       return new NextResponse("Empresa no encontrada", {
@@ -26,7 +30,7 @@ export async function PATCH(req: Request, { params }: { params: { findingId: str
 
     const findingReport = await db.findingReport.update({
       where: {
-        id: existingFindingReport.id
+        id: existingFindingReport.id,
       },
       data: {
         ...values,
@@ -40,28 +44,29 @@ export async function PATCH(req: Request, { params }: { params: { findingId: str
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { contractorId: string } }) {
-
+export async function DELETE(
+  req: Request,
+  { params }: { params: { contractorId: string } }
+) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
     const { contractorId } = params;
 
-    if (!session) return new NextResponse("Unauthorized", { status: 401 })
-    if (!contractorId) return new NextResponse("Not Found", { status: 404 })
+    if (!session) return new NextResponse("Unauthorized", { status: 401 });
+    if (!contractorId) return new NextResponse("Not Found", { status: 404 });
 
     const contractorDeleted = await db.contractor.update({
       where: {
         id: contractorId,
       },
       data: {
-        active: false
-      }
-    })
+        active: false,
+      },
+    });
 
-    return NextResponse.json(contractorDeleted)
-
+    return NextResponse.json(contractorDeleted);
   } catch (error) {
-    console.log("[DELETED_ID_FINDING_REPORT]", error)
-    return new NextResponse("Internal Errorr " + error, { status: 500 })
+    console.log("[DELETED_ID_FINDING_REPORT]", error);
+    return new NextResponse("Internal Errorr " + error, { status: 500 });
   }
 }

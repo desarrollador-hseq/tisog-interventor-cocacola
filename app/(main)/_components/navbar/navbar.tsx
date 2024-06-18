@@ -24,7 +24,7 @@ export const Navbar = ({
     >
       <div className="mx-auto w-full mt-1">
         <div className="mx-3 flex items-center justify-between">
-          <div className="p-2 flex gap-1 relative">
+          <div className="p-2 flex gap-1 relative items-center">
             <Button
               className="md:hidden"
               variant="ghost"
@@ -37,10 +37,12 @@ export const Navbar = ({
               openSidebar={openSidebar}
               setOpenSidebar={setOpenSidebar}
             />
-
             <div className="bg-white rounded-sm p-0.5 px-2">
               <LogoMain goRoot width={65} />
             </div>
+           <span className="font-semibold text-lg">
+           Interventoría
+           </span>
           </div>
 
           <div className="flex gap-5 items-center">

@@ -16,13 +16,13 @@ import { z } from "zod";
 import { Form } from "@/components/ui/form";
 
 import { CalendarInputForm } from "@/components/calendar-input-form";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import { InputForm } from "@/components/input-form";
 import { useEffect, useMemo, useState } from "react";
 import { HeaderForm } from "@/app/(main)/analista/reportes/_components/header-form";
 import { debounce } from "lodash";
 import { useLoading } from "@/components/providers/loading-provider";
+import { UnsafeActForm } from "@/app/(main)/analista/reportes/_components/unsafe-act-form";
+import { TextAreaForm } from "@/components/textarea-form";
 
 interface AddFindingReportFormProps {
   findingReport?:
@@ -86,7 +86,7 @@ export const AddFindingReportForm = ({
 
   useEffect(() => {
     const subscription = watch((values) => {
-      debouncedSave(values);
+      debouncedSave(values as any);
     });
     return () => subscription.unsubscribe();
   }, [watch, debouncedSave]);
@@ -140,7 +140,7 @@ export const AddFindingReportForm = ({
           >
             <div className="space-y-4">
               <div>
-                <InputForm
+                <TextAreaForm
                   control={form.control}
                   label="Hallazgo"
                   name="findingDesc"
@@ -192,10 +192,12 @@ export const AddFindingReportForm = ({
           <div>
             {/* <InputForm control={form.control} label="" name="" /> */}
             <HeaderForm
-              control={findingReport?.controlReport}
+              control={findingReport?.controlReport!}
               contractors={contractors}
               areas={businessAreas}
             />
+
+            <UnsafeActForm control={findingReport?.controlReport!} />
           </div>
         </div>
       </div>

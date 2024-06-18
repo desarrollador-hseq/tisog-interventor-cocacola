@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import {
   BusinessAreas,
+  ChecklistItem,
   Contractor,
   ControlReport,
   DefaultTool,
+  SecurityCategory,
   SecurityQuestion,
   Tool,
 } from "@prisma/client";
@@ -29,7 +31,10 @@ export const EditControlReport = ({
   control: ControlReport;
   tools: Tool[] | null;
   areas: BusinessAreas[];
-  aspects: SecurityQuestion & { checklistItems: CheckPrimeOptions | null }[];
+  aspects: (SecurityQuestion & {
+    checklistItems: ChecklistItem[];
+    category: SecurityCategory | null;
+  })[];
   contractors: Contractor[];
   companyId: string;
   defaultsToolsWithType: any[];

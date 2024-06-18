@@ -91,15 +91,15 @@ export const SelectCompanyFilter = ({
                         ? companies?.find(
                             (company) => company.id === field.value
                           )?.name
-                        : "Empresa"}
+                        : "Contratista"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
                   <Command className="w-full">
-                    <CommandInput placeholder="Buscar empresa" />
-                    <CommandEmpty>Empresa no encontrada</CommandEmpty>
+                    <CommandInput placeholder="Buscar contratista" />
+                    <CommandEmpty>Contratista no encontrado</CommandEmpty>
                     <CommandGroup>
                       <CommandList>
                         {companies?.map((company) => (

@@ -80,6 +80,18 @@ model Contractor {
   @@index([cityId])
 }
 
+enum FindingStatus {
+  OPEN
+  CLOSED
+  CANCELED
+}
+
+enum FindingLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 model FindingReport {
   id String @id @default(uuid())
 
@@ -94,19 +106,26 @@ model FindingReport {
   proposedClosureDate DateTime?
   actualClosureDate   DateTime?
 
-  actionToTake String?
+  actionToTake    String?
   actionInmediate String?
 
-  active    Boolean  @default(true)
+  findingLevel FindingLevel? @default(LOW)
+
+  status FindingStatus @default(OPEN)
+
+
+  // active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([securityQuestionId])
+  @@index([securityQuestionId])
   @@index([controlReportId])
 }
 
 model ControlReport {
   id String @id @default(uuid())
+
+  source String?
 
   description String? @db.Text
 
@@ -126,6 +145,8 @@ model ControlReport {
   personDocUnsafe  String?
 
   date DateTime?
+
+
 
   active    Boolean  @default(true)
   createdAt DateTime @default(now())

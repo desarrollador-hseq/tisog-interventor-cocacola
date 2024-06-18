@@ -12,8 +12,21 @@ const FindingReportPage = async () => {
 
   const findingReports = await db.findingReport.findMany({
     where: {
-      active: true,
+      NOT: {
+        status: "CANCELED",
+      }
     },
+    include: {
+      controlReport: {
+        include: {
+          businessArea: {
+            select: {
+              name: true
+            }
+          }
+        }
+      }
+    }
   });
 
   return (

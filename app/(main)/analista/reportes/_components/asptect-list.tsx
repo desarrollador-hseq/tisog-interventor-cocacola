@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChecklistItem, SecurityQuestion } from "@prisma/client";
+import {
+  ChecklistItem,
+  SecurityCategory,
+  SecurityQuestion,
+} from "@prisma/client";
 import { toast } from "sonner";
 import axios from "axios";
 import {
@@ -20,7 +24,10 @@ export const AspectsList = ({
   controlId,
   controlCreationDate,
 }: {
-  aspects: (SecurityQuestion & { checklistItems: ChecklistItem[] })[];
+  aspects: (SecurityQuestion & {
+    checklistItems: ChecklistItem[];
+    category: SecurityCategory | null;
+  })[];
   disabled: boolean;
   controlId: string;
   controlCreationDate: Date;
@@ -59,6 +66,8 @@ export const AspectsList = ({
     calculateDaysElapsed();
   }, [controlCreationDate]);
 
+  console.log({ firstdd: aspects.map(d => d.checklistItems) });
+
   return (
     <div>
       <div className="space-y-4">
@@ -66,19 +75,30 @@ export const AspectsList = ({
           <div key={category}>
             <h3 className="bg-primary p-3 text-slate-100">{category}</h3>
             {groupedAspects[category].map((aspect, index) => (
-              <div key={index} className={cn("flex flex-col border border-slate-500 rounded-md p-2 items-center",daysElapsed === 0 && "flex-row gap-2")}>
-                <span className="h-full flex items-center">{aspect.question}</span>
+             
+              <div
+                key={index}
+                className={cn(
+                  "flex flex-col border border-slate-500 rounded-md p-2 items-center",
+                  daysElapsed === 0 && "flex-row gap-2"
+                )}
+              >
+               
+                <span className="h-full flex items-center">
+                  {aspect.question}
+                </span>
                 <div>
                   <DailyReport
                     controlId={controlId}
+                    questionId={aspect.id}
                     daily={
                       aspect.checklistItems.length > 0
                         ? aspect.checklistItems.filter(
                             (d) => d.securityQuestionId === aspect.id
                           )
-                        : [{ securityQuestionId: aspect.id }] // Pasar un valor predeterminado si no hay registros
+                        : [] // Pasar un valor predeterminado si no hay registros
                     }
-                   
+                    negativeQuestion={aspect.negativeQuestion}
                     numDateCreated={daysElapsed}
                   />
                 </div>
@@ -107,16 +127,19 @@ const translateDay = (day: string): string => {
 const DailyReport = ({
   daily,
   controlId,
+  questionId,
   numDateCreated,
+  negativeQuestion,
 }: {
   daily: ChecklistItem[];
   controlId: string;
+  questionId: string;
+  negativeQuestion: string;
   numDateCreated: number; // Fecha de creación del control en formato ISO string
 }) => {
   const router = useRouter();
   const { setLoadingApp } = useLoading();
   const days = ["day1", "day2", "day3", "day4", "day5", "day6", "day7"];
-
 
   const onChangeState = async (
     dayName: string,
@@ -124,7 +147,7 @@ const DailyReport = ({
     questionId: string
   ) => {
     if (!questionId) {
-      questionId = daily[0]?.securityQuestionId || ""; // Usar el primer valor de daily si questionId es null
+      questionId = questionId; // Usar el primer valor de daily si questionId es null
     }
     try {
       setLoadingApp(true);
@@ -133,6 +156,7 @@ const DailyReport = ({
         {
           securityQuestionId: questionId,
           [dayName]: value,
+          negativeQuestion: negativeQuestion,
         }
       );
       toast.success("Estado actualizado");
@@ -145,10 +169,17 @@ const DailyReport = ({
   };
 
   return (
-    <div className={cn("grid grid-cols-7 gap-4 justify-center items-center", numDateCreated === 0 && "grid grid-cols-1")}>
+    <div
+      className={cn(
+        "grid grid-cols-7 gap-4 justify-center items-center",
+        numDateCreated === 0 && "grid grid-cols-1"
+      )}
+    >
       {days.map((day, index) => (
         <div key={index} className={cn(index > numDateCreated && "hidden")}>
-          <span className={cn(numDateCreated === 0 && "hidden")}>
+          <span
+          // className={cn(numDateCreated === 0 && "hidden")}
+          >
             {translateDay(day)}
           </span>
           <Select
@@ -156,7 +187,8 @@ const DailyReport = ({
               onChangeState(
                 day,
                 value,
-                daily[0]?.securityQuestionId || daily[0]?.aspectId
+                // daily[0]?.securityQuestionId ||
+                questionId
               )
             }
             defaultValue={daily.length > 0 ? daily[0][day] || "NA" : "NA"}

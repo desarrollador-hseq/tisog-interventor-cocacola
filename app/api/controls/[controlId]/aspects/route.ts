@@ -11,7 +11,7 @@ export async function PATCH(req: Request, { params }: { params: { controlId: str
     if (!params.controlId) return new NextResponse("Bad request", { status: 400 })
     if (!values.securityQuestionId) return new NextResponse("Bad request", { status: 400 })
     try {
-        const { securityQuestionId, ...days } = values;
+        const { securityQuestionId,negativeQuestion, ...days } = values;
         // Actualizar o crear ChecklistItem
         const checkListItemDB = await db.checklistItem.findFirst({
             where: {
@@ -57,6 +57,7 @@ export async function PATCH(req: Request, { params }: { params: { controlId: str
                     data: {
                         controlReportId: params.controlId,
                         securityQuestionId: securityQuestionId,
+                        findingDesc: values.negativeQuestion
                         // day: dayName,
                         // finding: "No cumple", // Ajusta el mensaje según tus necesidades
                     }

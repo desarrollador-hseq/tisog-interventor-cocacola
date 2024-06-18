@@ -30,6 +30,7 @@ export const UnsafeActForm = ({
   const { setLoadingApp } = useLoading();
   const router = useRouter();
   const isEdit = useMemo(() => !!control, [control]);
+  const [isClient, setIsClient] = useState(false)
 
   const [wasUnsafeAct, setWasUnsafeAct] = useState(
     !!control.personNameUnsafe || !!control.personDocUnsafe
@@ -44,6 +45,11 @@ export const UnsafeActForm = ({
   });
 
   const { setValue, getValues, watch } = form;
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+  
 
   const debouncedSave = useMemo(
     () =>
@@ -73,7 +79,7 @@ export const UnsafeActForm = ({
   }, [watch, debouncedSave, isEdit]);
 
   useEffect(() => {
-    if (wasUnsafeAct) return;
+    if (wasUnsafeAct || !isClient) return;
     setValue("personNameUnsafe", "", { shouldValidate: true });
     setValue("personDocUnsafe", "", { shouldValidate: true });
   }, [wasUnsafeAct]);
