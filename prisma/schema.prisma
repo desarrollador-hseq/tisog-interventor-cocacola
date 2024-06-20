@@ -113,6 +113,7 @@ model FindingReport {
 
   status FindingStatus @default(OPEN)
 
+  imgUrl String?
 
   // active    Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -146,7 +147,7 @@ model ControlReport {
 
   date DateTime?
 
-
+  exactLocation String?
 
   active    Boolean  @default(true)
   createdAt DateTime @default(now())

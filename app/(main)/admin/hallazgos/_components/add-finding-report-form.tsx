@@ -1,14 +1,16 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import {
   BusinessAreas,
   Contractor,
   ControlReport,
   FindingReport,
 } from "@prisma/client";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+import { debounce } from "lodash";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -16,13 +18,12 @@ import { z } from "zod";
 import { Form } from "@/components/ui/form";
 
 import { CalendarInputForm } from "@/components/calendar-input-form";
-import { InputForm } from "@/components/input-form";
-import { useEffect, useMemo, useState } from "react";
 import { HeaderForm } from "@/app/(main)/analista/reportes/_components/header-form";
-import { debounce } from "lodash";
 import { useLoading } from "@/components/providers/loading-provider";
 import { UnsafeActForm } from "@/app/(main)/analista/reportes/_components/unsafe-act-form";
 import { TextAreaForm } from "@/components/textarea-form";
+import { AspectsList } from "@/app/(main)/analista/reportes/_components/aspect-list";
+import { UploadImageForm } from "@/components/upload-image-form";
 
 interface AddFindingReportFormProps {
   findingReport?:
@@ -30,6 +31,7 @@ interface AddFindingReportFormProps {
     | null;
   contractors: Contractor[];
   businessAreas: BusinessAreas[];
+  aspects: any[];
 }
 
 const formSchema = z.object({
@@ -50,6 +52,7 @@ export const AddFindingReportForm = ({
   findingReport,
   contractors,
   businessAreas,
+  aspects,
 }: AddFindingReportFormProps) => {
   const router = useRouter();
   const [findingReportData, setFindingReportData] = useState(findingReport);
@@ -131,51 +134,49 @@ export const AddFindingReportForm = ({
   };
 
   return (
-    <div className="max-w-[1500px] w-full h-full mx-auto bg-white rounded-md shadow-sm overflow-y-hidden p-3">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-1 mb-7 w-full">
+    <div className="max-w-[1500px] w-full h-full mx-auto bg-white rounded-md shadow-sm overflow-y-hidden">
+      <div className="grid lg:grid-cols-3 gap-1">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col items-center mt-8 p-2"
+            className="items-center mt-1 w-full grid grid-cols-2 gap-2 bg-slate-100 rounded-md p-3 col-span-2"
           >
-            <div className="space-y-4">
-              <div>
-                <TextAreaForm
-                  control={form.control}
-                  label="Hallazgo"
-                  name="findingDesc"
-                />
-              </div>
-              <div>
-                <InputForm
-                  control={form.control}
-                  label="Acción inmediata"
-                  name="actionInmediate"
-                />
-              </div>
-              <div>
-                <InputForm
-                  control={form.control}
-                  label="Acción a tomar"
-                  name="actionToTake"
-                />
-              </div>
-              <div>
-                <CalendarInputForm
-                  control={form.control}
-                  label="Fecha propuesta de Cierre"
-                  name="proposedClosureDate"
-                  disabled={false}
-                />
-              </div>
-              <div>
-                <CalendarInputForm
-                  control={form.control}
-                  label="Fecha Real de Cierre"
-                  name="actualClosureDate"
-                  disabled={false}
-                />
-              </div>
+            <div className="col-span-2">
+              <TextAreaForm
+                control={form.control}
+                label="Descripción del Hallazgo"
+                name="findingDesc"
+              />
+            </div>
+            <div>
+              <TextAreaForm
+                control={form.control}
+                label="Correción"
+                name="actionInmediate"
+              />
+            </div>
+            <div>
+              <TextAreaForm
+                control={form.control}
+                label="Acción correctiva"
+                name="actionToTake"
+              />
+            </div>
+            <div>
+              <CalendarInputForm
+                control={form.control}
+                label="Fecha propuesta de Cierre"
+                name="proposedClosureDate"
+                disabled={false}
+              />
+            </div>
+            <div>
+              <CalendarInputForm
+                control={form.control}
+                label="Fecha Real de Cierre"
+                name="actualClosureDate"
+                disabled={false}
+              />
             </div>
 
             {/* <Button
@@ -187,18 +188,40 @@ export const AddFindingReportForm = ({
             </Button> */}
           </form>
         </Form>
-        {/* 2 Column */}
-        <div className="space-y-4">
-          <div>
-            {/* <InputForm control={form.control} label="" name="" /> */}
-            <HeaderForm
-              control={findingReport?.controlReport!}
-              contractors={contractors}
-              areas={businessAreas}
-            />
 
-            <UnsafeActForm control={findingReport?.controlReport!} />
-          </div>
+        <div>
+          <UploadImageForm
+            apiUrl="/api/upload/file"
+            field="imgUrl"
+            file={`${findingReport?.imgUrl}`}
+            label="Registro fotográfico"
+            ubiPath="control/images"
+            update={`/api/finding-report/${findingReport?.id}/`}
+          />
+        </div>
+      </div>
+
+      {/* 2 Column */}
+      <div className="space-y-4 mt-3">
+        <div className="border-2 border-secondary rounded-md p-2">
+          {/* <InputForm control={form.control} label="" name="" /> */}
+          <h2 className="text-center py-2 font-bold text-md">
+            Datos del control
+          </h2>
+          <HeaderForm
+            control={findingReport?.controlReport!}
+            contractors={contractors}
+            areas={businessAreas}
+          />
+
+          <UnsafeActForm control={findingReport?.controlReport!} />
+          <AspectsList
+            aspects={aspects}
+            controlId={findingReport?.controlReport?.id}
+            controlCreationDate={findingReport?.controlReport?.createdAt!}
+            isAdmin={true}
+            
+          />
         </div>
       </div>
     </div>

@@ -1,5 +1,4 @@
 // import { CardPage } from "@/components/card-page";
-import Link from "next/link";
 import { TableDefault } from "@/components/table-default";
 import { TitleOnPage } from "@/components/title-on-page";
 import { db } from "@/lib/db";
@@ -7,6 +6,7 @@ import { CardPage } from "@/components/card-page";
 import { userTableColumns } from "./_components/user-table-columns";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const bcrumb = [{ label: "analistas", path: "/admin/empresas" }];
 

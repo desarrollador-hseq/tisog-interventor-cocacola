@@ -24,6 +24,7 @@ interface ConfirmModalProps {
   onClose?: () => void | undefined;
   btnAsChild?: boolean;
   close?: boolean;
+  openDefault?: boolean;
 }
 
 export const SimpleModal = ({
@@ -37,8 +38,9 @@ export const SimpleModal = ({
   large = true,
   btnAsChild,
   close,
+  openDefault
 }: ConfirmModalProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(openDefault);
   const [wasClosed, setWasClosed] = useState(close);
 
   const handleClose = () => {
@@ -49,6 +51,9 @@ export const SimpleModal = ({
   useEffect(() => {
     setWasClosed(close);
   }, [close]);
+  useEffect(() => {
+    setOpen(openDefault);
+  }, [openDefault]);
 
   useEffect(() => {
     console.log({ wasClosed });

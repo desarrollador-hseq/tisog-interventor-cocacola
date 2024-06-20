@@ -10,9 +10,7 @@ import { z } from "zod";
 import debounce from "lodash/debounce";
 import { ControlReport } from "@prisma/client";
 import { useLoading } from "@/components/providers/loading-provider";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
 import { InputForm } from "@/components/input-form";
 
 const formSchema = z.object({
@@ -30,26 +28,32 @@ export const UnsafeActForm = ({
   const { setLoadingApp } = useLoading();
   const router = useRouter();
   const isEdit = useMemo(() => !!control, [control]);
-  const [isClient, setIsClient] = useState(false)
+  const [isClient, setIsClient] = useState(false);
 
-  const [wasUnsafeAct, setWasUnsafeAct] = useState(
-    !!control.personNameUnsafe || !!control.personDocUnsafe
+  const [controlData, setControlData] = useState(control);
+
+  const wasUnsafeAct = useMemo(
+    () => controlData.source === "reporte-acto-inseguro",
+    [controlData]
   );
+
+  useEffect(() => {
+    setControlData(control);
+  }, [control]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      personNameUnsafe: control?.personNameUnsafe || "",
-      personDocUnsafe: control?.personDocUnsafe || "",
+      personNameUnsafe: controlData?.personNameUnsafe || "",
+      personDocUnsafe: controlData?.personDocUnsafe || "",
     },
   });
 
   const { setValue, getValues, watch } = form;
 
   useEffect(() => {
-    setIsClient(true)
-  }, [])
-  
+    setIsClient(true);
+  }, []);
 
   const debouncedSave = useMemo(
     () =>
@@ -66,13 +70,13 @@ export const UnsafeActForm = ({
           setLoadingApp(false);
         }
       }, 1000),
-    [control, isEdit, router, setLoadingApp]
+    [controlData, isEdit, router, setLoadingApp]
   );
 
   useEffect(() => {
     const subscription = watch((values) => {
       if (isEdit) {
-        debouncedSave(values);
+        debouncedSave(values as any);
       }
     });
     return () => subscription.unsubscribe();
@@ -105,22 +109,6 @@ export const UnsafeActForm = ({
 
   return (
     <div className="w-auto min-w-min">
-      <div className="items-top flex space-x-2 border-2 border-slate-300 my-3">
-        <Checkbox
-          id="notify"
-          checked={wasUnsafeAct}
-          onCheckedChange={(e) => setWasUnsafeAct(!!e)}
-        />
-        <div className="grid gap-1.5 leading-none">
-          <label
-            htmlFor="notify"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            ¿Hubo acto inseguro?
-          </label>
-        </div>
-      </div>
-
       {wasUnsafeAct && (
         <Form {...form}>
           <form

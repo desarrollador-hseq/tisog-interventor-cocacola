@@ -31,6 +31,10 @@ export const ChangeLevelFinding = ({
     try {
       await axios.patch(`/api/finding-report/${id}`, { findingLevel: e });
 
+      if(e === "HIGH") {
+        await axios.post(`/api/finding-report/${id}/mail`)
+      }
+
       toast.info("nivel de criticidad cambiado correctamente");
       router.refresh();
     } catch (error) {

@@ -11,18 +11,18 @@ export async function PATCH(req: Request, { params }: { params: { controlId: str
     if (!params.controlId) return new NextResponse("Bad request", { status: 400 })
     if (!values.securityQuestionId) return new NextResponse("Bad request", { status: 400 })
     try {
-        const { securityQuestionId,negativeQuestion, ...days } = values;
+        const { securityQuestionId, negativeQuestion, ...days } = values;
         // Actualizar o crear ChecklistItem
         const checkListItemDB = await db.checklistItem.findFirst({
             where: {
                 securityQuestionId: values.securityQuestionId,
                 controlReportId: params.controlId,
-                
+
             }
         })
-
+        let checkData;
         if (checkListItemDB) {
-            await db.checklistItem.update({
+            checkData = await db.checklistItem.update({
                 where: {
                     id: checkListItemDB.id
                 },
@@ -31,15 +31,18 @@ export async function PATCH(req: Request, { params }: { params: { controlId: str
                     ...days,
                 }
             })
+
         } else {
-            await db.checklistItem.create({
+            checkData = await db.checklistItem.create({
                 data: {
                     controlReportId: params.controlId,
                     securityQuestionId: securityQuestionId,
                     ...days,
                 }
             })
+
         }
+
 
         const ncDays = Object.entries(days).filter(([key, value]) => value === "NC");
 
@@ -53,7 +56,7 @@ export async function PATCH(req: Request, { params }: { params: { controlId: str
             });
 
             if (!existingFindingReport) {
-                await db.findingReport.create({
+                const finding = await db.findingReport.create({
                     data: {
                         controlReportId: params.controlId,
                         securityQuestionId: securityQuestionId,
@@ -62,6 +65,7 @@ export async function PATCH(req: Request, { params }: { params: { controlId: str
                         // finding: "No cumple", // Ajusta el mensaje según tus necesidades
                     }
                 });
+                return NextResponse.json(finding)
             }
         }
 

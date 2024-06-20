@@ -41,6 +41,24 @@ const CreateControllerPage = async ({
     },
   });
 
+  const aspects = await db.securityQuestion.findMany({
+    where: {
+      active: true,
+    },
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+      checklistItems: {
+        where: {
+          controlReportId: findingReport.controlReport?.id,
+        }
+      },
+    },
+  });
+
   return (
     <CardPage
       pageHeader={
@@ -72,6 +90,7 @@ const CreateControllerPage = async ({
         findingReport={findingReport}
         contractors={contractors}
         businessAreas={businessAreas}
+        aspects={aspects}
       />
     </CardPage>
   );

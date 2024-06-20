@@ -23,7 +23,7 @@ export async function PATCH(
     console.log({ values });
 
     if (!existingFindingReport) {
-      return new NextResponse("Empresa no encontrada", {
+      return new NextResponse("Reporte no encontrado", {
         status: 400,
       });
     }
@@ -46,21 +46,21 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { contractorId: string } }
+  { params }: { params: { findingId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
-    const { contractorId } = params;
+    const { findingId } = params;
 
     if (!session) return new NextResponse("Unauthorized", { status: 401 });
-    if (!contractorId) return new NextResponse("Not Found", { status: 404 });
+    if (!findingId) return new NextResponse("Not Found", { status: 404 });
 
-    const contractorDeleted = await db.contractor.update({
+    const contractorDeleted = await db.findingReport.update({
       where: {
-        id: contractorId,
+        id: findingId,
       },
       data: {
-        active: false,
+        // active: false,
       },
     });
 

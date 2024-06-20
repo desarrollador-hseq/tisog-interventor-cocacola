@@ -40,9 +40,7 @@ export const Navbar = ({
             <div className="bg-white rounded-sm p-0.5 px-2">
               <LogoMain goRoot width={65} />
             </div>
-           <span className="font-semibold text-lg">
-           Interventoría
-           </span>
+            <span className="font-semibold text-lg">Interventoría HSE</span>
           </div>
 
           <div className="flex gap-5 items-center">

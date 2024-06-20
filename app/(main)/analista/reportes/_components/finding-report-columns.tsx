@@ -48,6 +48,26 @@ export const findingReportColumns: ColumnDef<
     },
   },
   {
+    accessorKey: "id",
+    accessorFn: (value) => value.id,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-secondary/30 hover:text-secondary-foreground"
+        >
+          Área
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const turn = row.original?.id
+      return <div className="">{turn}</div>;
+    },
+  },
+  {
     accessorKey: "date",
     enableColumnFilter: false,
     accessorFn: (value) =>

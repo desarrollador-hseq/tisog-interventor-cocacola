@@ -13,7 +13,7 @@ import {
 } from "@prisma/client";
 import { HeaderForm } from "./header-form";
 import { ToolsList } from "./toolList";
-import { AspectsList } from "./asptect-list";
+import { AspectsList } from "./aspect-list";
 import { CheckPrimeOptions } from "crypto";
 import { UnsafeActForm } from "./unsafe-act-form";
 
@@ -27,6 +27,7 @@ export const EditControlReport = ({
   toolDefaults,
   disabled,
   control,
+  isAdmin
 }: {
   control: ControlReport;
   tools: Tool[] | null;
@@ -40,6 +41,7 @@ export const EditControlReport = ({
   defaultsToolsWithType: any[];
   toolDefaults: DefaultTool[];
   disabled: boolean;
+  isAdmin: boolean;
 }) => {
   const [controlData, setControlData] = useState(control);
 
@@ -76,6 +78,10 @@ export const EditControlReport = ({
         />
       </div>
 
+      <div className="border rounded-lg overflow-hidden shadow-md">
+        <UnsafeActForm control={controlData} disabled={false} />
+      </div>
+
       <div className="bg-slate-200 rounded-lg overflow-hidden">
         <ToolsList
           currents={tools || []}
@@ -98,13 +104,12 @@ export const EditControlReport = ({
         <AspectsList
           aspects={aspects}
           disabled={false}
-          controlId={control.id}
-          controlCreationDate={control.createdAt}
+          controlId={controlData.id}
+          controlCreationDate={controlData.createdAt}
+          isAdmin={isAdmin}
         />
       </div>
-      <div className="bg-slate-200 rounded-lg overflow-hidden">
-        <UnsafeActForm control={control} disabled={false} />
-      </div>
+    
     </div>
   );
 };

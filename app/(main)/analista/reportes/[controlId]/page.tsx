@@ -95,6 +95,7 @@ const EditControlPage = async ({
       toolDefaults={toolDefaults}
       defaultsToolsWithType={toolDefaults}
       disabled={false}
+      isAdmin={session.user.role === "ADMIN"}
     />
    </CardPage>
   );
