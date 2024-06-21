@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Company } from "@prisma/client";
+import { Contractor } from "@prisma/client";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -37,7 +37,7 @@ const formSchema = z.object({
 export const SelectCompanyFilter = ({
   companies,
 }: {
-  companies: Company[];
+  companies: Contractor[];
 }) => {
   const { setCompanyFilter, companyFilter } = useLoading();
 

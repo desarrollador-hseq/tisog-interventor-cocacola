@@ -5,6 +5,8 @@ import { AddFindingReportForm } from "../_components/add-finding-report-form";
 import { ChangeStatusFinding } from "../_components/change-status-finding";
 import { ChangeLevelFinding } from "../_components/change-level-finding";
 import { cn } from "@/lib/utils";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-options";
 
 const bcrumb = [
   { label: "Hallazgo", path: "/admin/hallazgos" },
@@ -16,6 +18,10 @@ const CreateControllerPage = async ({
 }: {
   params: { findingId: string };
 }) => {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return <div>Usuario no autorizado</div>;
+  }
   const findingReport = await db.findingReport.findUnique({
     where: {
       id: params.findingId,
@@ -59,6 +65,13 @@ const CreateControllerPage = async ({
     },
   });
 
+  const controllers = await db.user.findMany({
+    where: {
+      active: true,
+      role: "USER",
+    },
+  });
+
   return (
     <CardPage
       pageHeader={
@@ -91,6 +104,8 @@ const CreateControllerPage = async ({
         contractors={contractors}
         businessAreas={businessAreas}
         aspects={aspects}
+        controllers={controllers}
+        // actualUserId={session.user.id}
       />
     </CardPage>
   );

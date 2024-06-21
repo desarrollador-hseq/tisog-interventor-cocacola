@@ -1,12 +1,7 @@
 "use client";
 
 import React, { Dispatch, SetStateAction } from "react";
-import {
-  Building2,
-  ClipboardCheck,
-  Home,
-  Users,
-} from "lucide-react";
+import { Building2, ClipboardCheck, Home, Users } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { SidebarContent } from "./sidebar-content";
 
@@ -40,6 +35,11 @@ const adminRoutes = [
     label: "Reportes de hallazgos",
     href: "/admin/hallazgos",
   },
+  {
+    icon: ClipboardCheck,
+    label: "Accidentes",
+    href: "/admin/accidentes",
+  },
 ];
 
 interface SidebarProps {
@@ -55,15 +55,21 @@ export const Sidebar = ({
 }: SidebarProps) => {
   return (
     <>
-      <div className="fixed left-0 top-[48px]">
+      <div className="fixed left-0 top-[48px] ">
         <Sheet open={openSidebar} onOpenChange={setOpenSidebar}>
           <SheetContent side="left" className="p-0 w-56">
-            <SidebarContent routes={isAdmin ? adminRoutes : dashRoutes} isAdmin={isAdmin} />
+            <SidebarContent
+              routes={isAdmin ? adminRoutes : dashRoutes}
+              isAdmin={isAdmin}
+            />
           </SheetContent>
         </Sheet>
 
-        <div className="w-48 h-full min-h-screen hidden md:flex fixed left-0 top-[48px] z-40">
-          <SidebarContent routes={isAdmin ? adminRoutes : dashRoutes} isAdmin={isAdmin} />
+        <div className="w-48 h-full min-h-screen hidden md:flex fixed left-0 top-[48px] z-40 border-r border-slate-300">
+          <SidebarContent
+            routes={isAdmin ? adminRoutes : dashRoutes}
+            isAdmin={isAdmin}
+          />
         </div>
       </div>
     </>

@@ -80,7 +80,7 @@ export const AspectsList = ({
               <div
                 key={index}
                 className={cn(
-                  "flex flex-col border border-slate-500 rounded-md p-2 items-center",
+                  "flex flex-col border border-slate-500 rounded-md p-2 items-center bg-slate-200",
                   daysElapsed === 0 && "flex-row gap-2"
                 )}
               >
@@ -153,7 +153,12 @@ const DailyReport = ({
   const [isClient, setIsClient] = useState(false);
   const [controlCheckId, setControlCheckId] = useState<string | undefined>();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [selectedDay, setSelectedDay] = useState<{ dayName: string, value: string, questionId: string, previousValue: string } | null>(null);
+  const [selectedDay, setSelectedDay] = useState<{
+    dayName: string;
+    value: string;
+    questionId: string;
+    previousValue: string;
+  } | null>(null);
   const [dayValues, setDayValues] = useState<DayValues>(() => {
     const initialValues: DayValues = {};
     days.forEach((day) => {
@@ -166,9 +171,18 @@ const DailyReport = ({
     setIsClient(true);
   }, []);
 
-  const onChangeState = async (dayName: string, value: string, questionId: string) => {
+  const onChangeState = async (
+    dayName: string,
+    value: string,
+    questionId: string
+  ) => {
     if (value === "NC") {
-      setSelectedDay({ dayName, value, questionId, previousValue: dayValues[dayName] });
+      setSelectedDay({
+        dayName,
+        value,
+        questionId,
+        previousValue: dayValues[dayName],
+      });
       setShowConfirmModal(true);
     } else {
       await updateState(dayName, value, questionId);
@@ -176,14 +190,21 @@ const DailyReport = ({
     setDayValues((prev) => ({ ...prev, [dayName]: value }));
   };
 
-  const updateState = async (dayName: string, value: string, questionId: string) => {
+  const updateState = async (
+    dayName: string,
+    value: string,
+    questionId: string
+  ) => {
     try {
       setLoadingApp(true);
-      const { data } = await axios.patch(`/api/controls/${controlId}/aspects/`, {
-        securityQuestionId: questionId,
-        [dayName]: value,
-        negativeQuestion: negativeQuestion,
-      });
+      const { data } = await axios.patch(
+        `/api/controls/${controlId}/aspects/`,
+        {
+          securityQuestionId: questionId,
+          [dayName]: value,
+          negativeQuestion: negativeQuestion,
+        }
+      );
 
       if (value === "NC") {
         setControlCheckId(data.id);
@@ -226,25 +247,21 @@ const DailyReport = ({
       {isClient && (
         <div
           className={cn(
-            "w-full gap-2 justify-center items-center",
-            numDateCreated === 0 && "grid grid-cols-1"
+            "w-full gap-2 justify-center items-center border-2 border-primary rounded-md overflow-hidden flex-wrap flex",
+            numDateCreated === 0 && "flex"
           )}
-          style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${numDateCreated + 1}, 1fr)`,
-          }}
         >
           {days.map((day, index) => (
             <div
               key={index}
               className={cn(
-                "border px-3 py-1 flex flex-col items-center bg-slate-100",
+                "border px-1 py-1 flex gap-1 items-center bg-slate-400 my-0.5 ",
                 index > numDateCreated && "hidden"
               )}
             >
               <span
                 className={cn(
-                  "text-sm text-slate-700 font-semibold capitalize",
+                  "text-xs text-white font-semibold capitalize",
                   numDateCreated === 0 && "hidden"
                 )}
               >
@@ -255,12 +272,25 @@ const DailyReport = ({
                 value={dayValues[day]} // Usar el estado individual para cada día
                 disabled={!isAdmin && index !== numDateCreated} // Deshabilitar selectores de días futuros
               >
-                <SelectTrigger className="w-fit">
+                <SelectTrigger
+                  className={cn(
+                    "w-fit text-sm font-bold h-fit p-1",
+                    dayValues[day] === "NC"
+                      ? "bg-red-500 text-white"
+                      : dayValues[day] === "C"
+                      ? "bg-emerald-500 text-white"
+                      : "bg-slate-200 text-slate-600"
+                  )}
+                >
                   <SelectValue placeholder="Seleccione un valor" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="C">C</SelectItem>
-                  <SelectItem value="NC">NC</SelectItem>
+                  <SelectItem value="C" className="text-xs">
+                    C
+                  </SelectItem>
+                  <SelectItem value="NC" className="text-xs">
+                    NC
+                  </SelectItem>
                   <SelectItem value="NA">NA</SelectItem>
                 </SelectContent>
               </Select>

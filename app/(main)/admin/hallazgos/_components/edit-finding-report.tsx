@@ -10,6 +10,7 @@ import {
   FindingReport,
   SecurityQuestion,
   Tool,
+  User,
 } from "@prisma/client";
 import { AddFindingReportForm } from "./add-finding-report-form";
 
@@ -24,6 +25,8 @@ export const EditFindingReport = ({
   toolDefaults,
   disabled,
   findingReport,
+  controllers,
+  actualUserId
 }: {
   findingReport: FindingReport & {controlReport: ControlReport | null} | null;
   tools: Tool[] | null;
@@ -34,6 +37,9 @@ export const EditFindingReport = ({
   defaultsToolsWithType: any[];
   toolDefaults: DefaultTool[];
   disabled: boolean;
+  controllers: User[];
+  actualUserId: string;
+
 }) => {
   const [controlData, setControlData] = useState(findingReport);
 
@@ -43,6 +49,8 @@ export const EditFindingReport = ({
       <div className="bg-white rounded-lg overflow-hidden">
         <AddFindingReportForm
           findingReport={findingReport}
+          controllers={controllers}
+          actualUserId={actualUserId}
         />
       </div>
       <div className="bg-slate-200 rounded-lg overflow-hidden">

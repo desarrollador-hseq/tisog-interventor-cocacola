@@ -29,7 +29,7 @@ const AdminPage = async () => {
         include: {
           contractor: {
             select: {
-              name: true
+              name: true,
             }
           }
         }

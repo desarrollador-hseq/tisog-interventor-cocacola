@@ -23,7 +23,13 @@ const FindingReportPage = async () => {
             select: {
               name: true
             }
-          }
+          },
+          contractor: {
+            select: {
+              name: true
+            }
+          },
+          
         }
       }
     }

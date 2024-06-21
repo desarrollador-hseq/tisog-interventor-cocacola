@@ -45,6 +45,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   // @@index([contractorId])
+  controlReport ControlReport[]
 }
 
 model PasswordResetToken {
@@ -70,7 +71,8 @@ model Contractor {
   city   City?   @relation(fields: [cityId], references: [id])
 
   // supervisors User[]
-  controls ControlReport[]
+  controls  ControlReport[]
+  accidents Accidents[]
 
   active Boolean @default(true)
 
@@ -92,6 +94,11 @@ enum FindingLevel {
   HIGH
 }
 
+enum FindingTypeAction {
+  CORRECTIVE
+  IMPROVEMENT
+}
+
 model FindingReport {
   id String @id @default(uuid())
 
@@ -106,6 +113,7 @@ model FindingReport {
   proposedClosureDate DateTime?
   actualClosureDate   DateTime?
 
+  typeAction      FindingTypeAction? @default(CORRECTIVE)
   actionToTake    String?
   actionInmediate String?
 
@@ -140,6 +148,9 @@ model ControlReport {
   contractorId String?
   contractor   Contractor? @relation(fields: [contractorId], references: [id])
 
+  controllerId String?
+  controller   User?   @relation(fields: [controllerId], references: [id])
+
   generalAspects ChecklistItem[]
 
   personNameUnsafe String?
@@ -154,6 +165,7 @@ model ControlReport {
   updatedAt DateTime @updatedAt
 
   @@index([contractorId])
+  @@index([controllerId])
   @@index([businessAreaId])
 }
 
@@ -167,6 +179,65 @@ model SecurityCategory {
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum AccidentType {
+  ACCIDENT
+  INCIDENT
+}
+
+enum AccidentOrigin {
+  ACT
+  CONDITION
+}
+
+enum AccidentClassification {
+  FIRST_AID
+  MEDICAL_TREATMENT
+  LOST_WORKDAY
+  NEAR_MISS
+}
+
+enum AccidentStatus {
+  OPEN
+  CLOSED
+}
+
+model Accidents {
+  id String @id @default(uuid())
+
+  date DateTime
+  num  Int
+
+  type AccidentType @default(ACCIDENT)
+
+  contractorId String?
+  contractor   Contractor? @relation(fields: [contractorId], references: [id])
+
+  origin AccidentOrigin @default(ACT)
+
+  classification AccidentClassification @default(FIRST_AID)
+
+  level Int
+
+  name      String?
+  numDoc    String?
+  birthdate DateTime?
+  position  String?
+
+  areaId String?
+  area   BusinessAreas? @relation(fields: [areaId], references: [id])
+
+  desc       String?
+  typeInjury String?
+
+  status AccidentStatus @default(OPEN)
+
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([contractorId])
 }
 
 model SecurityQuestion {
@@ -275,6 +346,8 @@ model BusinessAreas {
   name String @unique
 
   controlReport ControlReport[]
+
+  accidents Accidents[]
 
   active Boolean @default(true)
 

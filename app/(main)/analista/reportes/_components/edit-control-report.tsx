@@ -11,7 +11,7 @@ import {
   SecurityQuestion,
   Tool,
 } from "@prisma/client";
-import { HeaderForm } from "./header-form";
+import { ControlHeaderForm } from "./control-header-form";
 import { ToolsList } from "./toolList";
 import { AspectsList } from "./aspect-list";
 import { CheckPrimeOptions } from "crypto";
@@ -70,7 +70,7 @@ export const EditControlReport = ({
   return (
     <div className="w-full flex flex-col gap-3 relative m-3">
       <div className="bg-white rounded-lg overflow-hidden">
-        <HeaderForm
+        <ControlHeaderForm
           control={controlData}
           areas={areas}
           contractors={contractors}

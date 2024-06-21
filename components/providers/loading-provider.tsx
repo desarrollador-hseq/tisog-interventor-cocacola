@@ -119,7 +119,7 @@ export const LoadingProvider = ({ children }: Props) => {
       <body
         className={cn(loadingApp && "overflow-hidden")}
         style={{
-          background: `url('/blob-scene.svg')`,
+          background: `url('/tisog-bg-white.svg')`,
           backgroundAttachment: "fixed",
           backgroundSize: "cover",
           height: "100vh",

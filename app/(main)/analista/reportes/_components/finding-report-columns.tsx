@@ -6,7 +6,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { ControlReport, FindingReport } from "@prisma/client";
+import { Contractor, ControlReport, FindingReport } from "@prisma/client";
 
 const selectOptions = [
   { value: "inspeccion", label: "Inspección" },
@@ -23,7 +23,10 @@ const selectOptions = [
 export const findingReportColumns: ColumnDef<
   FindingReport & {
     controlReport:
-      | (ControlReport & { businessArea: { name: string | null } })
+      | (ControlReport & {
+          businessArea: { name: string | null };
+          contractor: Contractor | null;
+        })
       | null;
   }
 >[] = [
@@ -48,8 +51,8 @@ export const findingReportColumns: ColumnDef<
     },
   },
   {
-    accessorKey: "id",
-    accessorFn: (value) => value.id,
+    accessorKey: "contractor",
+    accessorFn: (value) => value.controlReport?.contractor?.name,
     header: ({ column }) => {
       return (
         <Button
@@ -57,13 +60,33 @@ export const findingReportColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground"
         >
-          Área
+          Contratista
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const turn = row.original?.id
+      const turn = row.original?.controlReport?.contractor?.name;
+      return <div className="">{turn}</div>;
+    },
+  },
+  {
+    accessorKey: "interventor",
+    accessorFn: (value) => value.controller?.name,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-secondary/30 hover:text-secondary-foreground"
+        >
+          Contratista
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const turn = row.original?.controller?.name;
       return <div className="">{turn}</div>;
     },
   },
@@ -71,7 +94,9 @@ export const findingReportColumns: ColumnDef<
     accessorKey: "date",
     enableColumnFilter: false,
     accessorFn: (value) =>
-      value.createdAt ? format(value.createdAt, "P", { locale: es }) : "",
+      value.controlReport?.date
+        ? format(value.controlReport?.date, "P", { locale: es })
+        : "",
     maxSize: 100,
     header: ({ column }) => {
       return (
@@ -80,17 +105,17 @@ export const findingReportColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground"
         >
-          Fecha de creación
+          Fecha
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const date = row.original?.createdAt;
-      const dateFormated = row.original?.createdAt
-        ? format(row.original?.createdAt, "P", { locale: es })
+      const date = row.original?.controlReport?.date;
+      const dateFormated = row.original?.controlReport?.date
+        ? format(row.original?.controlReport?.date, "P", { locale: es })
         : "";
-      return <div className="capitalize">{dateFormated}</div>;
+      return <div className="">{dateFormated}</div>;
     },
   },
   {
@@ -112,12 +137,14 @@ export const findingReportColumns: ColumnDef<
     },
     cell: ({ row }) => {
       const turn = row.original?.controlReport?.source;
-      const sourceEsp = selectOptions.find(d => d.value === turn);
-      return <div className="capitalize">{sourceEsp ? sourceEsp.label : ""}</div>;
+      const sourceEsp = selectOptions.find((d) => d.value === turn);
+      return (
+        <div className="capitalize">{sourceEsp ? sourceEsp.label : ""}</div>
+      );
     },
   },
   {
-    accessorKey: "taskDescription",
+    accessorKey: "findingLevel",
     header: ({ column }) => {
       return (
         <Button
@@ -125,17 +152,47 @@ export const findingReportColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground"
         >
-          Descripción
+          Criticidad
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="capitalize truncate">
-        {row.getValue("taskDescription")}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const level = row.original?.findingLevel;
+      const sourceEsp =
+        level === "HIGH" ? (
+          <span className="px-2 h-fit bg-red-600 text-white rounded-md">ALTA</span>
+        ) : level === "MEDIUM" ? (
+          <span className="px-2 h-fit bg-yellow-600 text-white rounded-md">MEDIA</span>
+        ) : (
+          <span className="px-2 h-fit bg-slate-500 text-white rounded-md">BAJA</span>
+        );
+      return sourceEsp;
+    },
   },
-
- 
+  {
+    accessorKey: "status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-secondary/30 hover:text-secondary-foreground"
+        >
+          Criticidad
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const level = row.original?.status;
+      const sourceEsp =
+        level === "OPEN" ? (
+          <span className="px-2 h-fit ">Abierto</span>
+        )  : (
+          <span className="px-2 h-fit">Cerrado</span>
+        );
+      return sourceEsp;
+    },
+  },
 ];

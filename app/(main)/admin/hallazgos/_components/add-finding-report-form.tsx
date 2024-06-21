@@ -9,21 +9,38 @@ import {
   Contractor,
   ControlReport,
   FindingReport,
+  User,
 } from "@prisma/client";
 import { debounce } from "lodash";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 import { CalendarInputForm } from "@/components/calendar-input-form";
-import { HeaderForm } from "@/app/(main)/analista/reportes/_components/header-form";
+import { ControlHeaderForm } from "@/app/(main)/analista/reportes/_components/control-header-form";
 import { useLoading } from "@/components/providers/loading-provider";
 import { UnsafeActForm } from "@/app/(main)/analista/reportes/_components/unsafe-act-form";
 import { TextAreaForm } from "@/components/textarea-form";
 import { AspectsList } from "@/app/(main)/analista/reportes/_components/aspect-list";
 import { UploadImageForm } from "@/components/upload-image-form";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Loader2 } from "lucide-react";
 
 interface AddFindingReportFormProps {
   findingReport?:
@@ -32,17 +49,22 @@ interface AddFindingReportFormProps {
   contractors: Contractor[];
   businessAreas: BusinessAreas[];
   aspects: any[];
+  controllers: User[]
+  actualUserId?: string
 }
 
 const formSchema = z.object({
   findingDesc: z.string().min(1, {
-    message: "Nombre completo es requerido",
+    message: "Descripción es requerido",
   }),
   actionToTake: z.string().min(1, {
-    message: "Nombre completo es requerido",
+    message: "Accion a tomar es requerido",
+  }),
+  typeAction: z.string().min(1, {
+    message: "tipo es requerido",
   }),
   actionInmediate: z.string().min(1, {
-    message: "Nombre completo es requerido",
+    message: "Accion inmediata es requerido",
   }),
   proposedClosureDate: z.date().nullable(),
   actualClosureDate: z.date().nullable(),
@@ -53,9 +75,12 @@ export const AddFindingReportForm = ({
   contractors,
   businessAreas,
   aspects,
+  actualUserId,
+  controllers
 }: AddFindingReportFormProps) => {
   const router = useRouter();
   const [findingReportData, setFindingReportData] = useState(findingReport);
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -64,16 +89,16 @@ export const AddFindingReportForm = ({
       actionInmediate: findingReportData?.actionInmediate || "",
       proposedClosureDate: findingReportData?.proposedClosureDate || null,
       actualClosureDate: findingReportData?.actualClosureDate || null,
+      typeAction: findingReportData?.typeAction || "CORRECTIVE",
     },
   });
   const { isSubmitting, isValid } = form.formState;
   const { setValue, setError, watch, getValues } = form;
-  const { setLoadingApp } = useLoading();
 
   const debouncedSave = useMemo(
     () =>
       debounce(async (values: z.infer<typeof formSchema>) => {
-        setLoadingApp(true);
+        setIsLoading(true);
         try {
           await axios.patch(`/api/finding-report/${findingReport?.id}`, values);
 
@@ -81,10 +106,10 @@ export const AddFindingReportForm = ({
         } catch (error) {
           toast.error("Ocurrió un error");
         } finally {
-          setLoadingApp(false);
+          setIsLoading(false);
         }
       }, 1000),
-    [findingReport, router, setLoadingApp]
+    [findingReport, router, setIsLoading]
   );
 
   useEffect(() => {
@@ -134,12 +159,17 @@ export const AddFindingReportForm = ({
   };
 
   return (
-    <div className="max-w-[1500px] w-full h-full mx-auto bg-white rounded-md shadow-sm overflow-y-hidden">
-      <div className="grid lg:grid-cols-3 gap-1">
+    <div className=" max-w-[1500px] w-full h-full mx-auto bg-white rounded-md shadow-sm overflow-y-hidden">
+      <div className="relative grid lg:grid-cols-3 gap-1 max-h-fit">
+        {isLoading && (
+          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center backdrop-blur-sm bg-white/30">
+            <Loader2 className="w-7 h-7 animate-spin text-primary fade-in-5" />
+          </div>
+        )}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="items-center mt-1 w-full grid grid-cols-2 gap-2 bg-slate-100 rounded-md p-3 col-span-2"
+            className="items-center mt-1 w-full grid grid-cols-2 gap-2 bg-slate-100 rounded-md p-3 col-span-2 "
           >
             <div className="col-span-2">
               <TextAreaForm
@@ -148,19 +178,47 @@ export const AddFindingReportForm = ({
                 name="findingDesc"
               />
             </div>
-            <div>
-              <TextAreaForm
-                control={form.control}
-                label="Correción"
-                name="actionInmediate"
-              />
-            </div>
-            <div>
-              <TextAreaForm
-                control={form.control}
-                label="Acción correctiva"
-                name="actionToTake"
-              />
+            <div className="w-full flex col-span-2 gap-2">
+              <div>
+                <FormField
+                  control={form.control}
+                  name="typeAction"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tipo de acción</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-fit">
+                            <SelectValue placeholder="Selecciona un tipo de acción" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="CORRECTIVE">Corrección</SelectItem>
+                          <SelectItem value="IMPROVEMENT">Mejora</SelectItem>
+                        </SelectContent>
+                      </Select>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="w-full flex gap-1">
+                <TextAreaForm
+                  control={form.control}
+                  label="Correción"
+                  name="actionInmediate"
+                />
+          
+                <TextAreaForm
+                  control={form.control}
+                  label="Acción correctiva"
+                  name="actionToTake"
+                />
+              </div>
             </div>
             <div>
               <CalendarInputForm
@@ -203,25 +261,28 @@ export const AddFindingReportForm = ({
 
       {/* 2 Column */}
       <div className="space-y-4 mt-3">
-        <div className="border-2 border-secondary rounded-md p-2">
-          {/* <InputForm control={form.control} label="" name="" /> */}
-          <h2 className="text-center py-2 font-bold text-md">
+        <div className="bg-blue-100 rounded-md  overflow-hidden">
+          <h2 className="text-center py-2 font-bold text-md bg-slate-400 text-white">
             Datos del control
           </h2>
-          <HeaderForm
-            control={findingReport?.controlReport!}
-            contractors={contractors}
-            areas={businessAreas}
-          />
+          {/* <InputForm control={form.control} label="" name="" /> */}
+          <div className="">
+            <ControlHeaderForm
+              control={findingReport?.controlReport!}
+              contractors={contractors}
+              areas={businessAreas}
+              controllers={controllers}
+              actualUserId={actualUserId}
+            />
 
-          <UnsafeActForm control={findingReport?.controlReport!} />
-          <AspectsList
-            aspects={aspects}
-            controlId={findingReport?.controlReport?.id}
-            controlCreationDate={findingReport?.controlReport?.createdAt!}
-            isAdmin={true}
-            
-          />
+            <UnsafeActForm control={findingReport?.controlReport!} />
+            <AspectsList
+              aspects={aspects}
+              controlId={findingReport?.controlReport?.id}
+              controlCreationDate={findingReport?.controlReport?.createdAt!}
+              isAdmin={true}
+            />
+          </div>
         </div>
       </div>
     </div>

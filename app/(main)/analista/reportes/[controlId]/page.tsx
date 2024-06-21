@@ -8,7 +8,6 @@ import { EditControlReport } from "../_components/edit-control-report";
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
 
-
 const EditControlPage = async ({
   params,
 }: {
@@ -75,29 +74,27 @@ const EditControlPage = async ({
       checklistItems: {
         where: {
           controlReportId: control.id,
-        }
+        },
       },
     },
   });
 
   return (
-   <CardPage pageHeader={
-    <TitleOnPage text={`Reporte de control`} />
-   }>
-     <EditControlReport
-      companyId=""
-      control={control!}
-      contractors={contractors}
-      aspects={aspects}
-      areas={businessAreas}
-      //   areas={businessAreas.map((area) => area)}
-      tools={tools}
-      toolDefaults={toolDefaults}
-      defaultsToolsWithType={toolDefaults}
-      disabled={false}
-      isAdmin={session.user.role === "ADMIN"}
-    />
-   </CardPage>
+    <CardPage pageHeader={<TitleOnPage text={`Reporte de control`} />}>
+      <EditControlReport
+        companyId=""
+        control={control!}
+        contractors={contractors}
+        aspects={aspects}
+        areas={businessAreas}
+        //   areas={businessAreas.map((area) => area)}
+        tools={tools}
+        toolDefaults={toolDefaults}
+        defaultsToolsWithType={toolDefaults}
+        disabled={false}
+        isAdmin={session.user.role === "ADMIN"}
+      />
+    </CardPage>
   );
 };
 

@@ -1,30 +1,41 @@
+import Link from "next/link";
 // import { CardPage } from "@/components/card-page";
 import { TableDefault } from "@/components/table-default";
 import { TitleOnPage } from "@/components/title-on-page";
 import { db } from "@/lib/db";
 import { CardPage } from "@/components/card-page";
-import { userTableColumns } from "./_components/user-table-columns";
+import { accidentTableColumns } from "./_components/accidents-table-columns";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
-const bcrumb = [{ label: "analistas", path: "/admin/empresas" }];
+const bcrumb = [{ label: "Accidentes", path: "/admin/accidentes" }];
 
-const ControllersPage = async () => {
-  const users = await db.user.findMany({
+const AccidentsPage = async () => {
+  const accidents = await db.accidents.findMany({
     where: {
       active: true,
-      role: "USER",
     },
+    include: {
+      contractor: {
+        select: {
+          name: true
+        }
+      },
+      area: {
+        select: {
+          name: true
+        }
+      }
+    }
   });
 
   return (
     <CardPage
       pageHeader={
-        <TitleOnPage text="Listado de analistas" bcrumb={bcrumb}>
+        <TitleOnPage text="Listado de accidentes" bcrumb={bcrumb}>
           <Link
             className={cn(buttonVariants({ variant: "secondary" }))}
-            href={`/admin/analistas/crear`}
+            href={`/admin/accidentes/crear`}
           >
             Agregar
           </Link>
@@ -32,12 +43,12 @@ const ControllersPage = async () => {
       }
     >
       <TableDefault
-        data={users}
-        columns={userTableColumns}
-        editHref={{ btnText: "Editar", href: `/admin/analistas` }}
+        data={accidents}
+        columns={accidentTableColumns}
+        editHref={{ btnText: "Editar", href: `/admin/accidentes` }}
       />
     </CardPage>
   );
 };
 
-export default ControllersPage;
+export default AccidentsPage;

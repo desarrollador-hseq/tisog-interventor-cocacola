@@ -1,13 +1,13 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { User } from "@prisma/client";
+import { Accidents, User } from "@prisma/client";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export const userTableColumns: ColumnDef<User>[] = [
+export const accidentTableColumns: ColumnDef<Accidents>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "type",
     accessorFn: (value) => value.name,
     header: ({ column }) => {
       return (
@@ -16,14 +16,15 @@ export const userTableColumns: ColumnDef<User>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
         >
-          Nombre completo
+          
           <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const name = row.original?.name;
-      return <div className="">{name}</div>;
+      const typedb = row.original?.type;
+      const type = typedb === "ACCIDENT" ? "Accidente" : "Incidente"
+      return <div className="">{type }</div>;
     },
   },
   {
