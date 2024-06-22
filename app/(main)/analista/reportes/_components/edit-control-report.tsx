@@ -10,6 +10,7 @@ import {
   SecurityCategory,
   SecurityQuestion,
   Tool,
+  User,
 } from "@prisma/client";
 import { ControlHeaderForm } from "./control-header-form";
 import { ToolsList } from "./toolList";
@@ -27,14 +28,15 @@ export const EditControlReport = ({
   toolDefaults,
   disabled,
   control,
-  isAdmin
+  isAdmin,
+  controllers
 }: {
   control: ControlReport;
   tools: Tool[] | null;
   areas: BusinessAreas[];
   aspects: (SecurityQuestion & {
     checklistItems: ChecklistItem[];
-    category: SecurityCategory | null;
+    category: {name: string | null} | null;
   })[];
   contractors: Contractor[];
   companyId: string;
@@ -42,6 +44,7 @@ export const EditControlReport = ({
   toolDefaults: DefaultTool[];
   disabled: boolean;
   isAdmin: boolean;
+  controllers: User[]
 }) => {
   const [controlData, setControlData] = useState(control);
 
@@ -75,6 +78,7 @@ export const EditControlReport = ({
           areas={areas}
           contractors={contractors}
           disabled={disabled}
+          controllers={controllers}
         />
       </div>
 

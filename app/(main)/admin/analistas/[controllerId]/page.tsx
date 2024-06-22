@@ -25,6 +25,7 @@ const CreateControllerPage = async ({
   if (!controller) {
     return <CardPage>Analista no encontrado</CardPage>;
   }
+  
 
   return (
     <CardPage

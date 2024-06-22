@@ -79,12 +79,21 @@ const EditControlPage = async ({
     },
   });
 
+  const controllers = await db.user.findMany({
+    where: {
+      role: "USER",
+      active: true,
+    },
+  })
+
+
   return (
     <CardPage pageHeader={<TitleOnPage text={`Reporte de control`} />}>
       <EditControlReport
         companyId=""
         control={control!}
         contractors={contractors}
+        controllers={controllers}
         aspects={aspects}
         areas={businessAreas}
         //   areas={businessAreas.map((area) => area)}

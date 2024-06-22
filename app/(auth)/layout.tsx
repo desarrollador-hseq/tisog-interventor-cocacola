@@ -17,7 +17,16 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
     }
   }
   return (
-    <div className="w-full">
+    <div className="w-full"
+    style={{
+      background: `url('/blob-scene.svg')`,
+      backgroundAttachment: "fixed",
+      backgroundSize: "cover",
+      height: "100vh",
+      width: "100%",
+      minWidth: "100%",
+    }}
+    >
       <div className=" w-full">{children}</div>
     </div>
   );

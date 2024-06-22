@@ -1,33 +1,32 @@
-import Link from "next/link";
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
 import { db } from "@/lib/db";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { AddControllerForm } from "../_components/add-controller-form";
+
+import { AddAccidentForm } from "../_components/add-accident-form";
 
 const bcrumb = [
-  { label: "analistas", path: "/admin/analistas" },
+  { label: "Accidentes", path: "/admin/accidentes" },
   { label: "Agregar", path: "/admin/crear" },
 ];
 
-const CreateSupervisorPage = async () => {
-  const cities = await db.city.findMany({
+const CreateAccidentPage = async () => {
+  const areas = await db.businessAreas.findMany({
     where: {
       active: true,
     },
-    orderBy: {
-      realName: "desc",
+  });
+  const contractors = await db.contractor.findMany({
+    where: {
+      active: true,
     },
   });
-
   return (
     <CardPage
-      pageHeader={<TitleOnPage text={`Agregar analista`} bcrumb={bcrumb} />}
+      pageHeader={<TitleOnPage text={`Agregar accidente`} bcrumb={bcrumb} />}
     >
-      <AddControllerForm />
+      <AddAccidentForm areas={areas} contractors={contractors} />
     </CardPage>
   );
 };
 
-export default CreateSupervisorPage;
+export default CreateAccidentPage;

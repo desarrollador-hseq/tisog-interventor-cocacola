@@ -29,7 +29,7 @@ export const AspectsList = ({
 }: {
   aspects: (SecurityQuestion & {
     checklistItems: ChecklistItem[];
-    category: SecurityCategory | null;
+    category: { name: string | null } | null;
   })[];
   disabled: boolean;
   isAdmin: boolean;

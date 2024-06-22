@@ -18,16 +18,17 @@ const AccidentsPage = async () => {
     include: {
       contractor: {
         select: {
-          name: true
+          name: true,
         }
       },
       area: {
         select: {
-          name: true
+          name: true,
         }
       }
     }
   });
+
 
   return (
     <CardPage

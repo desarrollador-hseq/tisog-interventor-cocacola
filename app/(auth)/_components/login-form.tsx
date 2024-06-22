@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormMessage,
@@ -120,12 +121,6 @@ export const LoginForm = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem className="relative">
-                      <Link
-                        href="/recuperar-contrasena"
-                        className="w-full block text-sm text-blue-600 decoration-2 hover:underline font-medium text-end"
-                      >
-                        Olvidé la contraseña
-                      </Link>
                       <FormControl>
                         <Input
                           type={viewPass ? "text" : "password"}
@@ -149,6 +144,14 @@ export const LoginForm = () => {
                         </div>
                       )}
                       <FormMessage />
+                      <FormDescription>
+                        <Link
+                          href="/recuperar-contrasena"
+                          className="w-full block text-sm text-blue-600 decoration-2 hover:underline font-medium text-end"
+                        >
+                          Olvidé la contraseña
+                        </Link>
+                      </FormDescription>
                     </FormItem>
                   )}
                 />
@@ -158,7 +161,6 @@ export const LoginForm = () => {
                 {isEditing && <Loader2 className="w-4 h-4 animate-spin" />}
                 Entrar
               </Button>
-
             </form>
           </Form>
         </div>
@@ -166,4 +168,3 @@ export const LoginForm = () => {
     </div>
   );
 };
-
