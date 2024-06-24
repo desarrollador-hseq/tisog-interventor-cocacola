@@ -61,7 +61,7 @@ export const FindingResumePie = ({ findingReports, title }: FindingResumePieProp
           show: true,
         },
         data: findingReports.length !== 0 ? chartData : [],
-        color: ["#4e71b1", "#bae0fc"],
+        color: ["#ff0023", "#54b265"],
       },
     ],
     title: {

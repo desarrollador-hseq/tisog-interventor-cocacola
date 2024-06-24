@@ -127,6 +127,7 @@ export const LoadingProvider = ({ children }: Props) => {
           overflow: loadingApp ? "hidden" : "auto",
           width: "100%",
           minWidth: "100%",
+     
         }}
       >
         <div className="fadeIn w-full">

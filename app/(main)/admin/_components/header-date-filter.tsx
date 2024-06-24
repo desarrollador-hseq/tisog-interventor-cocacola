@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Company } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { DateFilter } from "@/components/date-filter";
 import { useLoading } from "@/components/providers/loading-provider";
 import { SelectCompanyFilter } from "./select-company-filter";
+import { Contractor } from "@prisma/client";
 // import { SelectLevelFilter } from "./select-level-filter";
 
-export const HeaderDateFilter = ({ companies }: { companies: Company[] }) => {
+export const HeaderDateFilter = ({ companies }: { companies: Contractor[] }) => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(false);
 
@@ -27,10 +27,11 @@ export const HeaderDateFilter = ({ companies }: { companies: Company[] }) => {
   return (
     <div
       className={cn(
-        "-mt-2 w-full h-25 flex flex-col md:flex-row rounded-md items-center justify-between gap-2  border backdrop-blur-sm bg-primary/60  inset-x-0 p-2 duration-200 ease-out transition transform origin-top-right",
+        "w-full top-0 h-[65px] p-5 bg-primary flex flex-col md:flex-row  items-center justify-between gap-2 bg-blue-900",
         visible &&
-          "fixed mt-0 py-1 px-5 top-[60px] left-0 right-0 z-50 h-fit max-w-[1200px] mx-auto rounded-b-sm gap-1"
+          "fixed py-1 px-5 top-0 left-0 right-0 z-50 h-fit  mx-auto rounded-b-lg gap-1 "
       )}
+
     >
       <h2 className=" text-3xl font-bold text-white self-center  text-center">
         Panel

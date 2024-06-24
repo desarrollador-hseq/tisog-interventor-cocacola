@@ -3,13 +3,12 @@
 import { Chart } from "@/components/chart";
 import { ControlReport, FindingReport } from "@prisma/client";
 
+interface controlWithContractor extends FindingReport {
+  controlReport: ControlReport & { contractor: { name: string | null } };
+}
+
 interface FindingsByContractorBarChartProps {
-  findingReports: FindingReport &
-    {
-      controlReport:
-        | (ControlReport & { contractor: { name: string | null } })
-        | null;
-    }[];
+  findingReports: controlWithContractor[];
 }
 
 export const FindingsContractorBar = ({
@@ -75,7 +74,7 @@ export const FindingsContractorBar = ({
         },
         data: openCounts,
         itemStyle: {
-          color: "#4e71b1",
+          color: "#ff0023",
         },
       },
       {
@@ -87,7 +86,7 @@ export const FindingsContractorBar = ({
         },
         data: closedCounts,
         itemStyle: {
-          color: "#bae0fc",
+          color: "#54b265",
         },
       },
     ],

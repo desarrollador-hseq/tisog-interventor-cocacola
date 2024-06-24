@@ -35,11 +35,6 @@ export const FindingIndicators = ({
     );
   }
 
-  const totalReports = filteredReports?.length || 0;
-  const totalOpenReports =
-    filteredReports?.filter((report) => report.status === "OPEN").length || 0;
-  const totalClosedReports =
-    filteredReports?.filter((report) => report.status === "CLOSED").length || 0;
 
   // const criticalReports =
   //   filteredReports?.filter((report) => report.isCritical) || [];
@@ -50,21 +45,16 @@ export const FindingIndicators = ({
   //   criticalReports.filter((report) => report.status === "CLOSED").length || 0;
 
   return (
-    <div className="border-4 border-primary mx-1">
-      <div className="p-4 flex flex-col items-center justify-center bg-primary">
-        <h2 className="text-2xl text-center font-bold text-white">
-          Indicadores de resultados
-        </h2>
-      </div>
-
-      <div className="p-2">
+    <div className="border-4 border-primary">
+      
+      <div className="">
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-3  lg:grid-rows-1 mt-0 w-full min-w-full">
-          <h3 className="text-center col-span-3 p-3 font-bold text-2xl backdrop-blur-sm bg-primary/60 text-slate-100">
+          <h3 className="text-center col-span-3 p-3 font-bold text-2xl backdrop-blur-sm bg-blue-900 text-slate-100">
             Hallazgos
           </h3>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 mb-3 lg:grid-rows-1 w-full min-w-full backdrop-blur-sm bg-primary/60">
-          <div className="flex flex-col p-2">
+          <div className="flex flex-col p-2 rounded-md">
             <FindingResumePie
               title="Por estados"
               findingReports={filteredReports || []}
