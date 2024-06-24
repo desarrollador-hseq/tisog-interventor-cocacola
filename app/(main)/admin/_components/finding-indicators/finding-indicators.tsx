@@ -5,6 +5,7 @@ import { endOfDay } from "date-fns";
 import { useLoading } from "@/components/providers/loading-provider";
 import { FindingResumePie } from "./finding-resume-pie";
 import { FindingsContractorBar } from "./finding-contractor-bar";
+import { useEffect, useState } from "react";
 
 interface FindingIndicatorsProps {
   findingReports:
@@ -36,6 +37,25 @@ export const FindingIndicators = ({
   }
 
 
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  useEffect(() => {
+    // Simula la carga de datos asíncrona
+    setTimeout(() => {
+      setDataLoaded(true);
+    }, 1000);
+  }, []);
+
+  const handlePrint = () => {
+    if (dataLoaded) {
+      window.print();
+    } else {
+      alert('Los datos aún se están cargando...');
+    }
+  };
+
+
+
   // const criticalReports =
   //   filteredReports?.filter((report) => report.isCritical) || [];
   // const criticalTotal = criticalReports.length;
@@ -45,7 +65,7 @@ export const FindingIndicators = ({
   //   criticalReports.filter((report) => report.status === "CLOSED").length || 0;
 
   return (
-    <div className="border-4 border-primary">
+    <div className="border-4 border-primary h-fit" id="printableArea">
       
       <div className="">
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-3  lg:grid-rows-1 mt-0 w-full min-w-full">
@@ -75,6 +95,7 @@ export const FindingIndicators = ({
             />
           </div>
         </div>
+        <button onClick={handlePrint}>Imprimir</button>
       </div>
     </div>
   );

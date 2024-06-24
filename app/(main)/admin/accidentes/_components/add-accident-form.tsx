@@ -59,11 +59,8 @@ const formSchema = z.object({
   numDoc: z.string().min(1, {
     message: "Campo requerido",
   }),
-  email: z.string().email({
-    message: "Ingrese un correo electrónico válido",
-  }),
   date: z.date(),
-  birthdate: z.date(),
+  birthdate: z.date().optional(),
   type: z.enum(["ACCIDENT", "INCIDENT"]),
   contractorId: z.string().min(1, {
     message: "Campo requerido",
@@ -76,7 +73,7 @@ const formSchema = z.object({
     "LOST_WORKDAY",
     "NEAR_MISS",
   ]),
-  level: z.number(),
+  level: z.coerce.number(),
   name: z.string().min(1, {
     message: "Campo requerido",
   }),
@@ -89,6 +86,9 @@ const formSchema = z.object({
   desc: z.string().min(1, {
     message: "Campo requerido",
   }),
+  correction: z.string().optional(),
+  correctiveAction: z.string().optional(),
+  closedDate: z.date().optional(),
   typeInjury: z.string().min(1, {
     message: "Campo requerido",
   }),
@@ -103,8 +103,8 @@ export const AddAccidentForm = ({
   const isEdit = useMemo(() => !!accident, [accident]);
 
   if (isEdit && !accident) {
-    router.replace("/admin/analistas/");
-    toast.error("Analista no encontrado, redirigiendo...");
+    router.replace("/admin/accidentes/");
+    toast.error("Accidente no encontrado, redirigiendo...");
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -121,6 +121,9 @@ export const AddAccidentForm = ({
       position: accident?.position || "",
       areaId: accident?.areaId || "",
       desc: accident?.desc || "",
+      correction: accident?.correction || "",
+      correctiveAction: accident?.correctiveAction || "",
+      closedDate: accident?.closedDate || new Date(),
       typeInjury: accident?.typeInjury || "",
       status: accident?.status || "OPEN",
       birthdate: accident?.birthdate || undefined,
@@ -134,11 +137,12 @@ export const AddAccidentForm = ({
     try {
       if (isEdit) {
         await axios.patch(`/api/accidents/${accident?.id}`, values);
-        toast.success("Analista actualizado");
+        toast.success("Accidente actualizado");
       } else {
-        const { data } = await axios.post(`/api/user-controller/`, values);
-        router.push(`/admin/accidentes/`);
+        const { data } = await axios.post(`/api/accidents/`, values);
+        router.push(`/admin/accidents/`);
         toast.success("Accidente guardado correctamente");
+        
       }
       // router.push(`/admin/colaboradores`);
       router.refresh();
@@ -359,14 +363,21 @@ export const AddAccidentForm = ({
           />
           <InputForm
             control={form.control}
-            label="numDoc"
-            name="Numero de documento"
+            label="Número de documento"
+            name="numDoc"
             className="w-full"
           />
           <InputForm
             control={form.control}
-            label="position"
-            name="Cargo"
+            label="Cargo"
+            name="position"
+            className="w-full"
+          />
+
+          <CalendarInputForm
+            control={form.control}
+            label="Fecha de nacimiento"
+            name="birthdate"
             className="w-full"
           />
 
@@ -443,11 +454,23 @@ export const AddAccidentForm = ({
             name="typeInjury"
             className="w-full"
           />
+          <TextAreaForm
+            control={form.control}
+            label="Corrección"
+            name="correction"
+            className="w-full"
+          />
+          <TextAreaForm
+            control={form.control}
+            label="Acción correctiva"
+            name="correctiveAction"
+            className="w-full"
+          />
 
           <CalendarInputForm
             control={form.control}
             label="Fecha de nacimiento"
-            name="birthdate"
+            name="closedDate"
             className="w-full"
           />
 

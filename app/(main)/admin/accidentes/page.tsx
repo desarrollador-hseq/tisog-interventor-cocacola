@@ -26,6 +26,9 @@ const AccidentsPage = async () => {
           name: true,
         }
       }
+    },
+    orderBy: {
+      createdAt: 'desc'
     }
   });
 

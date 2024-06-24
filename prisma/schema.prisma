@@ -102,7 +102,7 @@ enum FindingTypeAction {
 model FindingReport {
   id String @id @default(uuid())
 
-  findingDesc String?
+  findingDesc String? @db.Text
 
   controlReportId String?
   controlReport   ControlReport? @relation(fields: [controlReportId], references: [id])
@@ -207,7 +207,7 @@ model Accidents {
   id String @id @default(uuid())
 
   date DateTime
-  num  Int
+  // num  Int
 
   type AccidentType @default(ACCIDENT)
 
@@ -228,8 +228,12 @@ model Accidents {
   areaId String?
   area   BusinessAreas? @relation(fields: [areaId], references: [id])
 
-  desc       String?
-  typeInjury String?
+  desc       String? @db.Text
+  typeInjury String? @db.Text
+
+  correction       String?   @db.Text
+  correctiveAction String?   @db.Text
+  closedDate       DateTime?
 
   status AccidentStatus @default(OPEN)
 
@@ -238,6 +242,7 @@ model Accidents {
   updatedAt DateTime @updatedAt
 
   @@index([contractorId])
+  @@index([areaId])
 }
 
 model SecurityQuestion {

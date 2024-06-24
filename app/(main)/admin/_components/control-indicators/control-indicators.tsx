@@ -53,24 +53,24 @@ export const ControlIndicators = ({
             Controles
           </h3>
         </div>
-        <div className="grid grid-cols-1 gap-1 mb-3 lg:grid-cols-2 w-full min-w-full backdrop-blur-sm bg-primary/60">
-          <div className="flex flex-col p-2 col-span-2">
+        <div className="grid gap-1 lg:grid-cols-2 w-full min-w-full backdrop-blur-sm bg-primary/60">
+          <div className="flex flex-col p-2 lg:col-span-2">
             <ControlSourcePie
               controlReports={filteredReports}
-              title="Por tipo de fuente"
+              title="Tipo de fuente"
             />
           </div>
           <div className="flex flex-col p-2 ">
             <ControlsContractorBar 
               controlReports={filteredReports}
-              title="Por contratista"
+              title="Contratistas"
             />
           </div>
           <div className="flex flex-col p-2 ">
             <ControlAreaPie 
               controlReports={filteredReports}
               areas={areas}
-              title="Por áreas"
+              title="Área del evento"
             />
           </div>
         </div>

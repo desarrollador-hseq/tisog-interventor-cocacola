@@ -1,27 +1,24 @@
 "use client";
 
-import {
-  Accidents, BusinessAreas, Contractor,
-} from "@prisma/client";
+import { Accidents, BusinessAreas, Contractor } from "@prisma/client";
 import { endOfDay } from "date-fns";
 import { useLoading } from "@/components/providers/loading-provider";
 import { AccidentTypePie } from "./accident-type-pie";
 import { AccidentOriginPie } from "./accident-origin-pie";
 import { AccidentsContractorBar } from "./accident-contractor-bar";
-
+import { AccidentClassificationBar } from "./accident-classification-bar";
+import { AccidentLevelBar } from "./accident-level-bar";
 
 interface accidentWithContractorAndArea extends Accidents {
   contractor: Contractor | null;
-  area: BusinessAreas | null
+  area: BusinessAreas | null;
 }
 
 interface AccidentIndicatorsProps {
-  accidents: accidentWithContractorAndArea[] | null | undefined
+  accidents: accidentWithContractorAndArea[] | null | undefined;
 }
 
-export const AccidentIndicators = ({
-  accidents,
-}: AccidentIndicatorsProps) => {
+export const AccidentIndicators = ({ accidents }: AccidentIndicatorsProps) => {
   const { userRole, dateFilter, cityFilter, companyFilter } = useLoading();
 
   let filteredReports =
@@ -54,27 +51,29 @@ export const AccidentIndicators = ({
           <div className="flex flex-col p-2 ">
             <AccidentTypePie
               accidents={filteredReports}
-              title="Por tipo"
+              title="Tipo de evento"
             />
           </div>
           <div className="flex flex-col p-2 ">
-            <AccidentOriginPie
+            <AccidentOriginPie accidents={filteredReports} title="Origen" />
+          </div>
+          <div className="flex flex-col p-2 ">
+            <AccidentsContractorBar
               accidents={filteredReports}
-              title="Por origen"
+              title="Contratista y tipo de evento"
             />
           </div>
           <div className="flex flex-col p-2 ">
-           <AccidentsContractorBar
-              accidents={filteredReports}
-              title="Por tipo y contratista"
-            /> 
+            <AccidentClassificationBar
+             accidents={filteredReports}
+             title="Clasificación"
+            />
           </div>
           <div className="flex flex-col p-2 ">
-            {/* <ControlAreaPie
-              controlReports={filteredReports}
-              areas={areas}
-              title="Por áreas"
-            /> */}
+            <AccidentLevelBar
+             accidents={filteredReports}
+             title="Nivel"
+            />
           </div>
         </div>
       </div>
