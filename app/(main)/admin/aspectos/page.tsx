@@ -57,6 +57,7 @@ const AspectPage = async () => {
         columns={aspectsTableColumns}
         editHref={{ btnText: "Editar", href: `/admin/aspectos/editar` }}
         deleteHref={`/api/aspects/`}
+        nameDocument="aspectos"
       />
 
       <SimpleModal

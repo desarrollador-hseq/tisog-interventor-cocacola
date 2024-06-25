@@ -6,6 +6,7 @@ import { FindingIndicators } from "./_components/finding-indicators/finding-indi
 import { KpiCard } from "@/components/kpi-card";
 import { ControlIndicators } from "./_components/control-indicators/control-indicators";
 import { AccidentIndicators } from "./_components/accident-indicators/accident-indicators";
+import { DashboardContent } from "./_components/dashboard-content";
 
 const AdminPage = async () => {
   const contractors = await db.contractor.findMany({
@@ -34,6 +35,16 @@ const AdminPage = async () => {
               name: true,
             },
           },
+          businessArea: {
+            select: {
+              name: true,
+            }
+          },
+          controller: {
+            select: {
+              name: true
+            }
+          }
         },
       },
     },
@@ -62,6 +73,8 @@ const AdminPage = async () => {
       area: true
     }
   });
+
+
   
   return (
     <div className="bg-blue-100">
@@ -75,16 +88,12 @@ const AdminPage = async () => {
         <KpiCard name="Interventores" number={controllers.length} icon={User} />
       </div>
 
-      <div>
-        <div className="p-4 flex flex-col items-center justify-center bg-primary">
-          <h2 className="text-2xl text-center font-bold text-white">
-            Indicadores de resultados
-          </h2>
-        </div>
-        <FindingIndicators findingReports={findingReports} />
-        <ControlIndicators controlReports={controlReports} areas={areas} />
-        <AccidentIndicators accidents={accidents} />
-      </div>
+        <DashboardContent 
+         findingReports={findingReports}
+         controlReport={controlReports}
+         accidents={accidents}
+         areas={areas}
+        />
 
       {/* <TableDefault 
         columns={}

@@ -8,7 +8,11 @@ import { SelectCompanyFilter } from "./select-company-filter";
 import { Contractor } from "@prisma/client";
 // import { SelectLevelFilter } from "./select-level-filter";
 
-export const HeaderDateFilter = ({ companies }: { companies: Contractor[] }) => {
+export const HeaderDateFilter = ({
+  companies,
+}: {
+  companies: Contractor[];
+}) => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(false);
 
@@ -29,9 +33,8 @@ export const HeaderDateFilter = ({ companies }: { companies: Contractor[] }) => 
       className={cn(
         "w-full top-0 h-[65px] p-5 bg-primary flex flex-col md:flex-row  items-center justify-between gap-2 bg-blue-900",
         visible &&
-          "fixed py-1 px-5 top-0 left-0 right-0 z-50 h-fit  mx-auto rounded-b-lg gap-1 "
+          "fixed py-1 px-5 top-[48px] left-0 right-0 z-50 h-fit  mx-auto rounded-b-lg gap-1 "
       )}
-
     >
       <h2 className=" text-3xl font-bold text-white self-center  text-center">
         Panel

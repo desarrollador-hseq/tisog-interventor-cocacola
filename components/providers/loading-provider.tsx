@@ -118,6 +118,7 @@ export const LoadingProvider = ({ children }: Props) => {
     >
       <body
         className={cn(loadingApp && "overflow-hidden")}
+        id="layout-main"
         style={{
           background: `url('/tisog-bg-blue.png')`,
           backgroundAttachment: "fixed",
@@ -127,8 +128,8 @@ export const LoadingProvider = ({ children }: Props) => {
           overflow: loadingApp ? "hidden" : "auto",
           width: "100%",
           minWidth: "100%",
-     
         }}
+        
       >
         <div className="fadeIn w-full">
           {children}

@@ -35,6 +35,7 @@ const ControllersPage = async () => {
         data={users}
         columns={userTableColumns}
         editHref={{ btnText: "Editar", href: `/admin/analistas` }}
+        nameDocument="analistas"
       />
     </CardPage>
   );

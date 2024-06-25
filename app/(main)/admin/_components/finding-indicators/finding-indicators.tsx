@@ -5,7 +5,12 @@ import { endOfDay } from "date-fns";
 import { useLoading } from "@/components/providers/loading-provider";
 import { FindingResumePie } from "./finding-resume-pie";
 import { FindingsContractorBar } from "./finding-contractor-bar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { TableDefault } from "@/components/table-default";
+import { findingReportTableColumns } from "../../hallazgos/_components/finding-report-table-columns";
+import { findingReportColumns } from "@/app/(main)/admin/hallazgos/_components/finding-report-columns";
+import { findingReportDescColumns } from "../../hallazgos/_components/finding-report-desc-columns";
+import { FindingReportExportExcel } from "../../hallazgos/_components/finding-report-export-excel";
 
 interface FindingIndicatorsProps {
   findingReports:
@@ -36,26 +41,6 @@ export const FindingIndicators = ({
     );
   }
 
-
-  const [dataLoaded, setDataLoaded] = useState(false);
-
-  useEffect(() => {
-    // Simula la carga de datos asíncrona
-    setTimeout(() => {
-      setDataLoaded(true);
-    }, 1000);
-  }, []);
-
-  const handlePrint = () => {
-    if (dataLoaded) {
-      window.print();
-    } else {
-      alert('Los datos aún se están cargando...');
-    }
-  };
-
-
-
   // const criticalReports =
   //   filteredReports?.filter((report) => report.isCritical) || [];
   // const criticalTotal = criticalReports.length;
@@ -65,16 +50,15 @@ export const FindingIndicators = ({
   //   criticalReports.filter((report) => report.status === "CLOSED").length || 0;
 
   return (
-    <div className="border-4 border-primary h-fit" id="printableArea">
-      
-      <div className="">
+    <div className="border-4 border-primary h-fit w-full">
+      <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-3  lg:grid-rows-1 mt-0 w-full min-w-full">
           <h3 className="text-center col-span-3 p-3 font-bold text-2xl backdrop-blur-sm bg-blue-900 text-slate-100">
             Hallazgos
           </h3>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 mb-3 lg:grid-rows-1 w-full min-w-full backdrop-blur-sm bg-primary/60">
-          <div className="flex flex-col p-2 rounded-md">
+          <div className="flex flex-col p-2 rounded-md w-full justify-center items-center">
             <FindingResumePie
               title="Por estados"
               findingReports={filteredReports || []}
@@ -95,7 +79,19 @@ export const FindingIndicators = ({
             />
           </div>
         </div>
-        <button onClick={handlePrint}>Imprimir</button>
+        <div className="flex flex-col p-2">
+          <TableDefault
+            columns={findingReportColumns}
+            data={filteredReports}
+            deleteHref=""
+          />
+          <div className="">
+            <FindingReportExportExcel
+              columns={findingReportDescColumns}
+              data={filteredReports}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

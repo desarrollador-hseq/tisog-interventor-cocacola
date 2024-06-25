@@ -46,7 +46,7 @@ export const ControlIndicators = ({
   }
 
   return (
-    <div className="border-4 border-primary shadow-lg">
+    <div className="border-4 border-primary shadow-lg w-full">
       <div className="shadow-lg">
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-3  lg:grid-rows-1 mt-0 w-full min-w-full">
           <h3 className="text-center col-span-3 p-3 font-bold text-2xl backdrop-blur-sm bg-blue-900 text-slate-100">

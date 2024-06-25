@@ -12,7 +12,6 @@ export default async function MainLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
- 
 
   if (!session || !session.user?.role) {
     return <RedirectAfterLogin />;
@@ -26,10 +25,11 @@ export default async function MainLayout({
         background: `url('/blob-scene.svg')`,
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
-        height: "100vh",
-        overflow:  "auto",
+        minHeight: "100vh",
+        overflow: "auto",
         width: "100%",
         minWidth: "100%",
+        height: "100%",
       }}
     >
       <main

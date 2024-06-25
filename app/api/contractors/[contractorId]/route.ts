@@ -4,6 +4,23 @@ import { getServerSession } from "next-auth";
 import { db } from "@/lib/db";
 import { authOptions } from "@/lib/auth-options";
 
+export async function GET(req: Request, { params }: { params: { contractorId: string } }) {
+  try {
+
+
+    const contractor = await db.contractor.findUnique({
+      where: {
+        id: params.contractorId,
+      }
+    })
+
+    return NextResponse.json(contractor);
+  } catch (error) {
+    console.log("[CONTRACTOR-GET]", error);
+    return new NextResponse("Internal Errorr" + error, { status: 500 });
+  }
+
+}
 export async function PATCH(req: Request, { params }: { params: { contractorId: string } }) {
   const session = await getServerSession(authOptions);
   try {
@@ -11,7 +28,7 @@ export async function PATCH(req: Request, { params }: { params: { contractorId: 
 
     if (!session) return new NextResponse("Unauthorized", { status: 401 })
 
-    const existingContractor= await db.contractor.findUnique({
+    const existingContractor = await db.contractor.findUnique({
       where: { id: params.contractorId, active: true },
     });
 

@@ -42,6 +42,7 @@ const ContractorPage = async () => {
         data={companies}
         columns={contractorTableColumns}
         editHref={{ btnText: "Editar", href: `/admin/contratistas` }}
+        nameDocument="contratistas"
       />
     </CardPage>
   );

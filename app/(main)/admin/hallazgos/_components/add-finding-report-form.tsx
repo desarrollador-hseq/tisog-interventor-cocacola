@@ -27,7 +27,6 @@ import {
 
 import { CalendarInputForm } from "@/components/calendar-input-form";
 import { ControlHeaderForm } from "@/app/(main)/analista/reportes/_components/control-header-form";
-import { useLoading } from "@/components/providers/loading-provider";
 import { UnsafeActForm } from "@/app/(main)/analista/reportes/_components/unsafe-act-form";
 import { TextAreaForm } from "@/components/textarea-form";
 import { AspectsList } from "@/app/(main)/analista/reportes/_components/aspect-list";
@@ -278,7 +277,7 @@ export const AddFindingReportForm = ({
             <UnsafeActForm control={findingReport?.controlReport!} />
             <AspectsList
               aspects={aspects}
-              controlId={findingReport?.controlReport?.id}
+              controlId={findingReport?.controlReport?.id || undefined}
               controlCreationDate={findingReport?.controlReport?.createdAt!}
               isAdmin={true}
             />

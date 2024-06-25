@@ -26,7 +26,7 @@ export function TablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
   const total = table.getFilteredRowModel().rows.length;
   return (
-    <div className="flex items-center justify-between px-2 w-full flex-wrap gap-1">
+    <div className="flex items-center justify-between px-2 w-full flex-wrap gap-1" id="non-print">
       <div className="flex-1 text-sm text-muted-foreground">
         {total !== 0 && (total === 1 ? `${total} registro.` : `${total} registros.`)}
       </div>

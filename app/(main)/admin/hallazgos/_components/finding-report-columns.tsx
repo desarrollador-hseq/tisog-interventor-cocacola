@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Contractor, ControlReport, FindingReport } from "@prisma/client";
+import { boolean } from "zod";
 
 const selectOptions = [
   { value: "inspeccion", label: "Inspección" },
@@ -25,9 +26,11 @@ export const findingReportColumns: ColumnDef<
     controlReport:
       | (ControlReport & {
           businessArea: { name: string | null };
-          contractor: Contractor | null;
+          contractor: { name: string | null };
+          controller: { name: string | null };
         })
       | null;
+      exportOnly: boolean
   }
 >[] = [
   {
@@ -72,7 +75,7 @@ export const findingReportColumns: ColumnDef<
   },
   {
     accessorKey: "interventor",
-    accessorFn: (value) => value.controller?.name,
+    accessorFn: (value) => value.controlReport?.controller?.name,
     header: ({ column }) => {
       return (
         <Button
@@ -80,13 +83,14 @@ export const findingReportColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground"
         >
-          Contratista
+          Interventor
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const turn = row.original?.controller?.name;
+      const turn = row.original?.controlReport?.controller?.name || "No asignado";
+
       return <div className="">{turn}</div>;
     },
   },
@@ -161,11 +165,17 @@ export const findingReportColumns: ColumnDef<
       const level = row.original?.findingLevel;
       const sourceEsp =
         level === "HIGH" ? (
-          <span className="px-2 h-fit bg-red-600 text-white rounded-md">ALTA</span>
+          <span className="px-2 h-fit bg-red-600 text-white rounded-md">
+            ALTA
+          </span>
         ) : level === "MEDIUM" ? (
-          <span className="px-2 h-fit bg-yellow-600 text-white rounded-md">MEDIA</span>
+          <span className="px-2 h-fit bg-yellow-600 text-white rounded-md">
+            MEDIA
+          </span>
         ) : (
-          <span className="px-2 h-fit bg-slate-500 text-white rounded-md">BAJA</span>
+          <span className="px-2 h-fit bg-slate-500 text-white rounded-md">
+            BAJA
+          </span>
         );
       return sourceEsp;
     },
@@ -179,7 +189,7 @@ export const findingReportColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground"
         >
-          Criticidad
+          Estado
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -189,7 +199,7 @@ export const findingReportColumns: ColumnDef<
       const sourceEsp =
         level === "OPEN" ? (
           <span className="px-2 h-fit ">Abierto</span>
-        )  : (
+        ) : (
           <span className="px-2 h-fit">Cerrado</span>
         );
       return sourceEsp;

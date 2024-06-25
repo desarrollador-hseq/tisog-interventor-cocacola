@@ -3,36 +3,38 @@ import { TableDefault } from "@/components/table-default";
 import { TitleOnPage } from "@/components/title-on-page";
 import { db } from "@/lib/db";
 import { CardPage } from "@/components/card-page";
-import { findingReportColumns } from "../../analista/reportes/_components/finding-report-columns";
+import { findingReportColumns } from "./_components/finding-report-columns";
 
 const bcrumb = [{ label: "Hallazgos", path: "/admin/hallazgos" }];
 
 const FindingReportPage = async () => {
-
-
   const findingReports = await db.findingReport.findMany({
     where: {
       NOT: {
         status: "CANCELED",
-      }
+      },
     },
     include: {
       controlReport: {
         include: {
           businessArea: {
             select: {
-              name: true
-            }
+              name: true,
+            },
           },
           contractor: {
             select: {
-              name: true
-            }
+              name: true,
+            },
           },
-          
-        }
-      }
-    }
+          controller: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   return (
@@ -52,6 +54,7 @@ const FindingReportPage = async () => {
         data={findingReports}
         columns={findingReportColumns}
         editHref={{ btnText: "Editar", href: `/admin/hallazgos` }}
+        nameDocument="hallazgos"
       />
     </CardPage>
   );

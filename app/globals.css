@@ -89,8 +89,16 @@
 
 
   @media print {
-    body * {
+    html {
+      background: white;
+    }
+    body  {
       /* visibility: hidden; */
+      background: white;
+    }
+    #layout-main  {
+      visibility: hidden !important;
+
     }
     #printableArea, #printableArea * {
       visibility: visible;
@@ -110,4 +118,17 @@
       page-break-after: auto;
       page-break-inside: avoid;
     }
+    .grid {
+      display: flex;
+      flex-direction: column;
+    }
+    #non-print {
+      display: none;
+    }
+    #filter-app {
+      display: flex;
+    }
+  }
+  .avoid-page-break {
+    page-break-inside: avoid;
   }

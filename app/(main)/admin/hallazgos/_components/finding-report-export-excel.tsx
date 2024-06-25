@@ -33,28 +33,21 @@ import {
 } from "@/components/ui/table";
 
 import TableColumnFiltering from "@/components/table-column-filtering";
-import { TablePagination } from "./table-pagination";
-import { SimpleModal } from "./simple-modal";
+
 import { toast } from "sonner";
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { TableToExcel } from "./table-to-excel";
+import { TableToExcel } from "@/components/table-to-excel";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  editHref?: { btnText: string; href: string };
-  deleteHref?: string;
-  nameDocument?: string;
 }
 
-export function TableDefault<TData, TValue>({
+export function FindingReportExportExcel<TData, TValue>({
   data,
   columns,
-  editHref,
-  deleteHref,
-  nameDocument,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -87,24 +80,9 @@ export function TableDefault<TData, TValue>({
     },
   });
 
-  const onAceptDelete = async (id: string) => {
-    setisLoading(true);
-    try {
-      await axios.delete(`${deleteHref}/${id}`);
-      toast.success("Elemento eliminado");
-      // router.push("/admin/herramientas/");
-      // router.refresh()
-    } catch (error) {
-      toast.error("ocurrió un error al momento de eliminar el elemento");
-    } finally {
-      router.refresh();
-      setisLoading(false);
-    }
-  };
-
   return (
     <div className="w-full">
-      <div className="rounded-md border border-input overflow-hidden">
+      <div className="rounded-md border border-input overflow-hidden hidden">
         <Table className="">
           <TableHeader className="bg-slate-300">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -159,48 +137,6 @@ export function TableDefault<TData, TValue>({
                       )}
                     </TableCell>
                   ))}
-
-                  {!!editHref && (
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-4 w-8 p-0">
-                            <span className="sr-only">abrir menu</span>
-                            <MoreHorizontal />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                          align="end"
-                          className="flex flex-col"
-                        >
-                          <DropdownMenuItem asChild className="cursor-pointer">
-                            <Link
-                              className="flex justify-center"
-                              href={`${editHref.href}/${row.original.id}`}
-                            >
-                              <Pencil className="w-4 h-4 mr-2" />
-                              {editHref.btnText}
-                            </Link>
-                          </DropdownMenuItem>
-                          {!!deleteHref && (
-                            <DropdownMenuItem
-                              asChild
-                              className="cursor-pointer"
-                            >
-                              <SimpleModal
-                                textBtn="eliminar"
-                                title="Eliminar el elemento"
-                                onAcept={() => onAceptDelete(row.original.id)}
-                                large={false}
-                              >
-                                ¿Desea eliminar el elemento definitivamente?
-                              </SimpleModal>
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  )}
                 </TableRow>
               ))
             ) : (
@@ -216,12 +152,8 @@ export function TableDefault<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      
 
-      <div className="flex items-center justify-between space-x-1 py-2">
-        <TablePagination table={table} />
-      </div>
-        {!!nameDocument && <TableToExcel table={table} name={nameDocument} />}
+      <TableToExcel table={table} name={"hallazgos"} />
     </div>
   );
 }

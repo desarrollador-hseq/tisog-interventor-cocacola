@@ -41,6 +41,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
+    "react-export-table-to-excel": "^1.0.6",
     "react-hook-form": "^7.51.5",
     "react-scroll-up": "^1.4.0",
     "sonner": "^1.4.41",
