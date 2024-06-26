@@ -27,7 +27,7 @@ const AspectPage = async () => {
       active: true,
     },
     include: {
-      category: true
+      category: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -86,7 +86,7 @@ const AspectPage = async () => {
             </TableHeader>
             <TableBody>
               {categories.map((category) => (
-                <TableRow>
+                <TableRow key={category.id}>
                   <TableCell className="font-medium">{category.name}</TableCell>
                   <TableCell className="font-medium flex gap-2">
                     <SimpleModal

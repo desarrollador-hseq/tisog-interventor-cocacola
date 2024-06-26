@@ -11,6 +11,7 @@ import { authOptions } from "@/lib/auth-options";
 import { TableDefault } from "@/components/table-default";
 import { controlReportColumns } from "./_components/control-report-columns";
 import { db } from "@/lib/db";
+import { ControlTable } from "./_components/control-table";
 
 const ControlPage = async () => {
   const session = await getServerSession(authOptions);
@@ -22,23 +23,47 @@ const ControlPage = async () => {
   const controlReports = await db.controlReport.findMany({
     where: {
       active: true,
+      controllerId: session.user.id,
+    },
+    // include: {
+    // businessArea: {
+    //   select: {
+    //     name: true,
+    //   },
+    // },
+    // contractor: {
+    //   select: {
+    //     name: true,
+    //   },
+    // },
+    // findingReport: {
+    //   select: {
+    //     id: true,
+    //   },
+    // },
+    // },
+    orderBy: {
+      date: "desc",
     },
   });
 
   return (
-    <CardPage>
-      <TitleOnPage text="Reportes de control">
-        <Link
-          href={"/analista/reportes/crear"}
-          className={cn(buttonVariants())}
-        >
-          Crear
-        </Link>
-      </TitleOnPage>
-
-      <TableDefault
-        columns={controlReportColumns}
+    <CardPage
+      className="p-0"
+      pageHeader={
+        <TitleOnPage text="Reportes de control">
+          <Link
+            href={"/analista/reportes/crear"}
+            className={cn(buttonVariants())}
+          >
+            Crear
+          </Link>
+        </TitleOnPage>
+      }
+    >
+      <ControlTable
         data={controlReports}
+        columns={controlReportColumns}
         editHref={{
           btnText: "editar",
           href: `/analista/reportes/`,

@@ -32,13 +32,15 @@ export const LogoMain = ({
     );
   };
   return (
-    <Image
-      className={cn(goRoot && "cursor-pointer", className)}
-      onClick={navigate}
-      src="/tisog-logo.svg"
-      alt="logo de tisog"
-      height={height}
-      width={width}
-    />
+    <div className="bg-white rounded-sm p-0.5 px-2">
+      <Image
+        className={cn(goRoot && "cursor-pointer", className)}
+        onClick={navigate}
+        src="/tisog-logo.svg"
+        alt="logo de tisog"
+        height={height}
+        width={width}
+      />
+    </div>
   );
 };

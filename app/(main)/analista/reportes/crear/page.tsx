@@ -38,6 +38,7 @@ const CreateAts = async () => {
         contractors={contractors}
         controllers={controllers}
         actualUserId={session.user.id}
+        isAdmin={false}
       />
     </CardPage>
   );

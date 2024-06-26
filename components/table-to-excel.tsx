@@ -56,7 +56,7 @@ export const TableToExcel = ({ table, name }: { table: any; name: string }) => {
       </Table>
 
       {table.getRowModel().rows.length > 0 && (
-        <div className="flex items-center justify-between space-x-2 py-4">
+        <div className="non-print flex items-center justify-between space-x-2 py-4">
           <div>
             <DownloadTableExcel
               filename={`${name}-${formatDate(new Date(), "dd-MM-yyyy")}`}

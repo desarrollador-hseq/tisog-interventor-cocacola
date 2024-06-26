@@ -17,6 +17,11 @@ import { ToolsList } from "./toolList";
 import { AspectsList } from "./aspect-list";
 import { CheckPrimeOptions } from "crypto";
 import { UnsafeActForm } from "./unsafe-act-form";
+import {
+  shouldControlBeManaged,
+  shouldControlBeManagedSameDay,
+} from "@/lib/utils";
+import { CloudLightning } from "lucide-react";
 
 export const EditControlReport = ({
   areas,
@@ -29,14 +34,14 @@ export const EditControlReport = ({
   disabled,
   control,
   isAdmin,
-  controllers
+  controllers,
 }: {
   control: ControlReport;
   tools: Tool[] | null;
   areas: BusinessAreas[];
   aspects: (SecurityQuestion & {
     checklistItems: ChecklistItem[];
-    category: {name: string | null} | null;
+    category: { name: string | null } | null;
   })[];
   contractors: Contractor[];
   companyId: string;
@@ -44,7 +49,7 @@ export const EditControlReport = ({
   toolDefaults: DefaultTool[];
   disabled: boolean;
   isAdmin: boolean;
-  controllers: User[]
+  controllers: User[];
 }) => {
   const [controlData, setControlData] = useState(control);
 
@@ -68,7 +73,8 @@ export const EditControlReport = ({
     setControlData(control);
   }, [control]);
 
-  console.log({ create: control.createdAt });
+  const canEdit = shouldControlBeManagedSameDay(controlData.date) || isAdmin;
+    console.log({firss: shouldControlBeManagedSameDay(controlData.date), daee: controlData.date})
 
   return (
     <div className="w-full flex flex-col gap-3 relative m-3">
@@ -77,8 +83,9 @@ export const EditControlReport = ({
           control={controlData}
           areas={areas}
           contractors={contractors}
-          disabled={disabled}
+          disabled={!canEdit}
           controllers={controllers}
+          isAdmin={isAdmin}
         />
       </div>
 
@@ -92,6 +99,7 @@ export const EditControlReport = ({
           controlId={control.id}
           defaultsToolssWithType={toolDefaults}
           groupedToolsByType={groupedToolsByType}
+          isAdmin={isAdmin}
         />
       </div>
       <div className="bg-slate-200 rounded-lg overflow-hidden">
@@ -109,11 +117,10 @@ export const EditControlReport = ({
           aspects={aspects}
           disabled={false}
           controlId={controlData.id}
-          controlCreationDate={controlData.createdAt}
+          controlCreationDate={controlData.date}
           isAdmin={isAdmin}
         />
       </div>
-    
     </div>
   );
 };

@@ -37,9 +37,9 @@ export const Navbar = ({
               openSidebar={openSidebar}
               setOpenSidebar={setOpenSidebar}
             />
-            <div className="bg-white rounded-sm p-0.5 px-2">
-              <LogoMain goRoot width={65} />
-            </div>
+
+            <LogoMain goRoot width={65} />
+
             <span className="font-semibold text-lg">Interventoría HSE</span>
           </div>
 

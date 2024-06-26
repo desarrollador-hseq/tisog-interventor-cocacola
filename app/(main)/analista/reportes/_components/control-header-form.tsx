@@ -74,6 +74,7 @@ export const ControlHeaderForm = ({
   actualUserId,
   controllers,
   disabled,
+  isAdmin,
 }: {
   control?: ControlReport;
   areas: BusinessAreas[];
@@ -81,6 +82,7 @@ export const ControlHeaderForm = ({
   actualUserId?: string;
   controllers: User[];
   disabled?: boolean;
+  isAdmin: boolean;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -164,7 +166,6 @@ export const ControlHeaderForm = ({
               <FormField
                 control={form.control}
                 name="businessAreaId"
-                disabled={disabled}
                 render={({ field }) => (
                   <FormItem className="flex flex-col w-full">
                     <FormLabel className="font-semibold text-primary">
@@ -232,6 +233,7 @@ export const ControlHeaderForm = ({
                 control={form.control}
                 label="Lugar exacto (opcional)"
                 name="exactLocation"
+                disabled={disabled}
               />
             </div>
 
@@ -245,6 +247,7 @@ export const ControlHeaderForm = ({
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled={disabled}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -412,6 +415,7 @@ export const ControlHeaderForm = ({
                 label="Fecha"
                 name="date"
                 className="w-full"
+                // disabled={!isAdmin}
               />
             </div>
             <div className="md:col-span-2">
@@ -419,6 +423,7 @@ export const ControlHeaderForm = ({
                 control={form.control}
                 label="Descripción de la actividad"
                 name="description"
+                disabled={disabled}
               />
             </div>
           </div>

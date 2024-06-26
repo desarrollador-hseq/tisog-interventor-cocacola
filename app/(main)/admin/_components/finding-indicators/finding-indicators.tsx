@@ -5,23 +5,31 @@ import { endOfDay } from "date-fns";
 import { useLoading } from "@/components/providers/loading-provider";
 import { FindingResumePie } from "./finding-resume-pie";
 import { FindingsContractorBar } from "./finding-contractor-bar";
-import { useEffect, useRef, useState } from "react";
 import { TableDefault } from "@/components/table-default";
-import { findingReportTableColumns } from "../../hallazgos/_components/finding-report-table-columns";
 import { findingReportColumns } from "@/app/(main)/admin/hallazgos/_components/finding-report-columns";
 import { findingReportDescColumns } from "../../hallazgos/_components/finding-report-desc-columns";
 import { FindingReportExportExcel } from "../../hallazgos/_components/finding-report-export-excel";
 
+
+
+
+
 interface FindingIndicatorsProps {
-  findingReports:
-    | (FindingReport & { controlReport: ControlReport | null })[]
-    | null;
+  findingReports: FindingReport & {
+    controlReport:
+      | (ControlReport & {
+          businessArea: { name: string | null };
+          contractor: { name: string | null };
+          controller: { name: string | null };
+        })
+      | null;
+  }[];
 }
 
 export const FindingIndicators = ({
   findingReports,
 }: FindingIndicatorsProps) => {
-  const { userRole, dateFilter, cityFilter, companyFilter } = useLoading();
+  const { dateFilter, companyFilter } = useLoading();
 
   let filteredReports =
     !dateFilter || (!dateFilter.from && !dateFilter.to)
@@ -40,14 +48,6 @@ export const FindingIndicators = ({
       (report) => report?.controlReport?.contractorId === companyFilter
     );
   }
-
-  // const criticalReports =
-  //   filteredReports?.filter((report) => report.isCritical) || [];
-  // const criticalTotal = criticalReports.length;
-  // const criticalOpenReports =
-  //   criticalReports.filter((report) => report.status === "OPEN").length || 0;
-  // const criticalClosedReports =
-  //   criticalReports.filter((report) => report.status === "CLOSED").length || 0;
 
   return (
     <div className="border-4 border-primary h-fit w-full">
@@ -73,10 +73,7 @@ export const FindingIndicators = ({
             />
           </div>
           <div className="flex flex-col p-2">
-            <FindingsContractorBar
-              // title="Críticos por estados"
-              findingReports={filteredReports || []}
-            />
+            <FindingsContractorBar findingReports={filteredReports || []} />
           </div>
         </div>
         <div className="flex flex-col p-2">
@@ -85,6 +82,7 @@ export const FindingIndicators = ({
             data={filteredReports}
             deleteHref=""
           />
+          <div className="page-break"></div>
           <div className="">
             <FindingReportExportExcel
               columns={findingReportDescColumns}

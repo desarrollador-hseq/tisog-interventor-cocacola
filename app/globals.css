@@ -92,10 +92,7 @@
     html {
       background: white;
     }
-    body  {
-      /* visibility: hidden; */
-      background: white;
-    }
+   
     #layout-main  {
       visibility: hidden !important;
 
@@ -108,10 +105,6 @@
       left: 0;
       top: 0;
     }
-    /* Ocultar el botón de impresión */
-    button {
-      display: none;
-    }
     /* Manejar saltos de página */
     .content {
       page-break-before: auto;
@@ -122,13 +115,20 @@
       display: flex;
       flex-direction: column;
     }
-    #non-print {
-      display: none;
+    #non-print, .non-print {
+      display: none !important;
     }
+    .background-fixed {
+      background: none !important;
+    }
+  
     #filter-app {
       display: flex;
     }
   }
   .avoid-page-break {
     page-break-inside: avoid;
+  }
+  .page-break {
+    page-break-before: always;
   }

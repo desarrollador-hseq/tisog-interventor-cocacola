@@ -20,18 +20,22 @@ export default async function MainLayout({
   const { user } = await session;
 
   return (
-    <div
-      style={{
-        background: `url('/blob-scene.svg')`,
-        backgroundAttachment: "fixed",
-        backgroundSize: "cover",
-        minHeight: "100vh",
-        overflow: "auto",
-        width: "100%",
-        minWidth: "100%",
-        height: "100%",
-      }}
-    >
+    <div>
+      <div
+        style={{
+          background: `url('/blob-scene.svg')`,
+          backgroundAttachment: "fixed",
+          backgroundSize: "cover",
+          minHeight: "100vh",
+          overflow: "auto",
+          width: "100%",
+          minWidth: "100%",
+          height: "100%",
+          position: "fixed"
+        
+        }}
+        className="non-print"
+      />
       <main
         className={cn(
           "relative flex flex-col h-full min-h-screen m-0 p-0 mx-auto bg-transparent"

@@ -1,14 +1,15 @@
 "use client";
 
 import { Chart } from "@/components/chart";
-import { ControlReport, FindingReport } from "@prisma/client";
+import { Contractor, ControlReport, FindingReport } from "@prisma/client";
 
 interface controlWithContractor extends FindingReport {
   controlReport: ControlReport & { contractor: { name: string | null } };
 }
 
 interface FindingsByContractorBarChartProps {
-  findingReports: controlWithContractor[];
+  findingReports:  
+  | (FindingReport & { controlReport: ControlReport & {contractor: Contractor |null} | null })[];
 }
 
 export const FindingsContractorBar = ({
@@ -16,7 +17,7 @@ export const FindingsContractorBar = ({
 }: FindingsByContractorBarChartProps) => {
   // Agrupar hallazgos por contratista y estado
   const contractorData = findingReports.reduce((acc, finding) => {
-    const contractorId = finding.controlReport?.contractor.name;
+    const contractorId = finding.controlReport?.contractor?.name;
     if (!contractorId) return acc;
 
     if (!acc[contractorId]) {

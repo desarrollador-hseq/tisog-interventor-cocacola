@@ -108,8 +108,8 @@ export const ModalSelectTool = ({
               <CommandEmpty>Herrameinta no encontrada</CommandEmpty>
             </CommandList>
           ) : (
-            filteredTools?.map((group) => (
-              <div key={group.toolDefaultId} className="h-full">
+            filteredTools?.map((group, index) => (
+              <div key={group.toolDefaultId + index} className="h-full">
                 <h3 className="text-lg font-semibold px-4 py-2">
                   {group.typeTool ? group.typeTool : "Otros riesgos"}
                 </h3>

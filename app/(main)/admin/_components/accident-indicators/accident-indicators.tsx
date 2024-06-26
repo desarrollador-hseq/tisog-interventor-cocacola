@@ -47,7 +47,7 @@ export const AccidentIndicators = ({ accidents }: AccidentIndicatorsProps) => {
             Accidentes / Incidentes
           </h3>
         </div>
-        <div className="grid grid-cols-1 gap-1 mb-3 lg:grid-cols-2 w-full min-w-full backdrop-blur-sm bg-primary/60">
+        <div className="grid grid-cols-1 gap-1 lg:grid-cols-2 w-full min-w-full backdrop-blur-sm bg-primary/60">
           <div className="flex flex-col p-2 ">
             <AccidentTypePie
               accidents={filteredReports}

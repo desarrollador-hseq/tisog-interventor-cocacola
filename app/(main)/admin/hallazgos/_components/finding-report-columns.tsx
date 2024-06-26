@@ -6,8 +6,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Contractor, ControlReport, FindingReport } from "@prisma/client";
-import { boolean } from "zod";
+import { ControlReport, FindingReport } from "@prisma/client";
 
 const selectOptions = [
   { value: "inspeccion", label: "Inspección" },
@@ -30,7 +29,6 @@ export const findingReportColumns: ColumnDef<
           controller: { name: string | null };
         })
       | null;
-      exportOnly: boolean
   }
 >[] = [
   {

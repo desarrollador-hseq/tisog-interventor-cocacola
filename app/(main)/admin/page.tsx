@@ -30,21 +30,9 @@ const AdminPage = async () => {
     include: {
       controlReport: {
         include: {
-          contractor: {
-            select: {
-              name: true,
-            },
-          },
-          businessArea: {
-            select: {
-              name: true,
-            }
-          },
-          controller: {
-            select: {
-              name: true
-            }
-          }
+          contractor:true,
+          businessArea: true,
+          controller: true
         },
       },
     },
@@ -89,8 +77,8 @@ const AdminPage = async () => {
       </div>
 
         <DashboardContent 
-         findingReports={findingReports}
          controlReport={controlReports}
+         findingReports={findingReports}
          accidents={accidents}
          areas={areas}
         />

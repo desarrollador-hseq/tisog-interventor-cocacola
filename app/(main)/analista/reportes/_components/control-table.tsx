@@ -13,10 +13,16 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil } from "lucide-react";
+import {
+  Clock,
+  Eye,
+  GraduationCap,
+  MoreHorizontal,
+  Pencil,
+} from "lucide-react";
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,23 +39,27 @@ import {
 } from "@/components/ui/table";
 
 import TableColumnFiltering from "@/components/table-column-filtering";
-import { TablePagination } from "./table-pagination";
-import { SimpleModal } from "./simple-modal";
+
 import { toast } from "sonner";
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { TableToExcel } from "./table-to-excel";
+import { TablePagination } from "@/components/table-pagination";
+import { TableToExcel } from "@/components/table-to-excel";
+import { cn, shouldControlBeManaged } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: TData[] &
+    {
+      date?: Date | null;
+    }[];
   editHref?: { btnText: string; href: string };
   deleteHref?: string;
   nameDocument?: string;
 }
 
-export function TableDefault<TData, TValue>({
+export function ControlTable<TData, TValue>({
   data,
   columns,
   editHref,
@@ -102,6 +112,11 @@ export function TableDefault<TData, TValue>({
     }
   };
 
+  const beManaged = (date?: string | null) => {
+    const isManaged = !!date && shouldControlBeManaged(date);
+    return isManaged;
+  };
+
   return (
     <div className="w-full">
       <div className="rounded-md border border-input overflow-hidden">
@@ -112,6 +127,7 @@ export function TableDefault<TData, TValue>({
                 key={headerGroup.id}
                 className="bg-bg-slate-300 hover:bg-bg-slate-300"
               >
+                <TableHead />
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
@@ -141,6 +157,7 @@ export function TableDefault<TData, TValue>({
                   );
                 })}
                 <TableHead />
+                <TableHead />
               </TableRow>
             ))}
           </TableHeader>
@@ -150,7 +167,18 @@ export function TableDefault<TData, TValue>({
                 <TableRow
                   key={row.id + index}
                   data-state={row.getIsSelected() && "selected"}
+                  className={cn(
+                    "text-slate-900",
+                    beManaged(row.original.date)
+                      ? "bg-red-100 hover:bg-red-200"
+                      : "bg-slate-200 hover:bg-slate-400"
+                  )}
                 >
+                  <TableCell>
+                    {beManaged(row.original.date) && (
+                      <Clock className="w-5 h-5 animate-spin text-primary" />
+                    )}
+                  </TableCell>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
@@ -162,45 +190,29 @@ export function TableDefault<TData, TValue>({
 
                   {!!editHref && (
                     <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-4 w-8 p-0">
-                            <span className="sr-only">abrir menu</span>
-                            <MoreHorizontal />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                          align="end"
-                          className="flex flex-col"
-                        >
-                          <DropdownMenuItem asChild className="cursor-pointer">
-                            <Link
-                              className="flex justify-center"
-                              href={`${editHref.href}/${row.original.id}`}
-                            >
-                              <Pencil className="w-4 h-4 mr-2" />
-                              {editHref.btnText}
-                            </Link>
-                          </DropdownMenuItem>
-                          {!!deleteHref && (
-                            <DropdownMenuItem
-                              asChild
-                              className="cursor-pointer"
-                            >
-                              <SimpleModal
-                                textBtn="eliminar"
-                                title="Eliminar el elemento"
-                                onAcept={() => onAceptDelete(row.original.id)}
-                                large={false}
-                              >
-                                ¿Desea eliminar el elemento definitivamente?
-                              </SimpleModal>
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <Link
+                        className={cn(
+                          "flex justify-center ",
+                          buttonVariants({
+                            className: cn(
+                              "p-2 h-fit",
+                              beManaged(row.original.date)
+                                ? "bg-slate-400 hover:bg-slate-500 shadow-lg border-2"
+                                : "bg-blue-400 hover:bg-blue-500"
+                            ),
+                          })
+                        )}
+                        href={`${editHref.href}/${row.original.id}`}
+                      >
+                        {beManaged(row.original.date) ? (
+                          <Pencil className="w-4 h-4 animate-pulse" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
+                      </Link>
                     </TableCell>
                   )}
+                  <TableCell />
                 </TableRow>
               ))
             ) : (
@@ -216,12 +228,11 @@ export function TableDefault<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      
 
       <div className="flex items-center justify-between space-x-1 py-2">
         <TablePagination table={table} />
       </div>
-        {!!nameDocument && <TableToExcel table={table} name={nameDocument} />}
+      {!!nameDocument && <TableToExcel table={table} name={nameDocument} />}
     </div>
   );
 }

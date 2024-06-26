@@ -28,7 +28,7 @@ const ToolPage = async () => {
       active: true,
     },
     include: {
-      typeTool: true
+      typeTool: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -42,8 +42,6 @@ const ToolPage = async () => {
       createdAt: "desc",
     },
   });
-
-  
 
   return (
     <CardPage
@@ -91,24 +89,18 @@ const ToolPage = async () => {
             </TableHeader>
             <TableBody>
               {toolTypes.map((toolType) => (
-                <TableRow>
-              
-                    <TableCell className="font-medium">
-                      {toolType.name}
-                    </TableCell>
-                    <TableCell className="font-medium flex gap-2">
-                      <SimpleModal
-                        btnClass="p-1 h-auto bg-slate-400 hover:bg-slate-600"
-                        textBtn={<Edit2 className="w-4 h-4 " />}
-                        title={
-                          <TitleOnPage text="Editar tipo de herramienta" />
-                        }
-                      >
-                        <AddTypeToolForm typeTool={toolType} />
-                      </SimpleModal>
-                      <DeleteTypeTool typeTool={toolType} />
-                    </TableCell>
-             
+                <TableRow key={toolType.id}>
+                  <TableCell className="font-medium">{toolType.name}</TableCell>
+                  <TableCell className="font-medium flex gap-2">
+                    <SimpleModal
+                      btnClass="p-1 h-auto bg-slate-400 hover:bg-slate-600"
+                      textBtn={<Edit2 className="w-4 h-4 " />}
+                      title={<TitleOnPage text="Editar tipo de herramienta" />}
+                    >
+                      <AddTypeToolForm typeTool={toolType} />
+                    </SimpleModal>
+                    <DeleteTypeTool typeTool={toolType} />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

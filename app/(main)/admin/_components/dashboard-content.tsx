@@ -1,19 +1,22 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Printer } from "lucide-react";
 import {
   FindingReport,
   ControlReport,
   Accidents,
   BusinessAreas,
   Contractor,
+  User,
 } from "@prisma/client";
 import { AccidentIndicators } from "./accident-indicators/accident-indicators";
 import { ControlIndicators } from "./control-indicators/control-indicators";
 import { FindingIndicators } from "./finding-indicators/finding-indicators";
-import { useEffect, useState } from "react";
 import { useLoading } from "@/components/providers/loading-provider";
-import axios from "axios";
 import { formatDate } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const DashboardContent = ({
   findingReports,
@@ -21,9 +24,9 @@ export const DashboardContent = ({
   accidents,
   areas,
 }: {
-  findingReports: FindingReport[];
-  controlReport: ControlReport[];
-  accidents: Accidents[];
+  findingReports: any;
+  controlReport: any;
+  accidents: any;
   areas: BusinessAreas[];
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -83,7 +86,13 @@ export const DashboardContent = ({
       <ControlIndicators controlReports={controlReport} areas={areas} />
       <AccidentIndicators accidents={accidents} />
 
-      <button onClick={handlePrint}>Imprimir</button>
+      <Button
+        onClick={handlePrint}
+        variant="secondary"
+        className="non-print fixed w-[120px] mx-auto bottom-1 left-0 right-0 rounded-full p-1 px-2.5"
+      >
+        <Printer className="w-5 h-5" />
+      </Button>
     </div>
   );
 };

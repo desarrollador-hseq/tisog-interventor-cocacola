@@ -1,7 +1,9 @@
 import { type ClassValue, clsx } from "clsx"
-import { format } from "date-fns";
+import { format, isSameDay } from "date-fns";
 import { es } from "date-fns/locale";
 import { twMerge } from "tailwind-merge"
+import { differenceInDays } from 'date-fns';
+
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -36,3 +38,17 @@ export const formatDateCert = (date: Date) => {
 export const normalizeString = (str: string) => {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
+
+
+
+export const shouldControlBeManaged = (createdDate: string) => {
+  const now = new Date();
+  const created = new Date(createdDate);
+  return differenceInDays(now, created) < 7;
+};
+
+export const shouldControlBeManagedSameDay = (createdDate: Date | null) => {
+  if(!createdDate) return false
+  const now = new Date();
+  return isSameDay(now, createdDate);
+};
