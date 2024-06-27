@@ -24,16 +24,16 @@ export const findingReportColumns: ColumnDef<
   FindingReport & {
     controlReport:
       | (ControlReport & {
-          businessArea: { name: string | null };
-          contractor: { name: string | null };
-          controller: { name: string | null };
+          businessArea: { name: string | null } | null;
+          contractor: { name: string | null } | null;
+          controller: { name: string | null } | null;
         })
       | null;
   }
 >[] = [
   {
     accessorKey: "businessArea",
-    accessorFn: (value) => value.controlReport?.businessArea.name,
+    accessorFn: (value) => value.controlReport?.businessArea?.name,
     header: ({ column }) => {
       return (
         <Button
@@ -47,7 +47,7 @@ export const findingReportColumns: ColumnDef<
       );
     },
     cell: ({ row }) => {
-      const turn = row.original?.controlReport?.businessArea.name;
+      const turn = row.original?.controlReport?.businessArea?.name;
       return <div className="">{turn}</div>;
     },
   },
@@ -87,7 +87,8 @@ export const findingReportColumns: ColumnDef<
       );
     },
     cell: ({ row }) => {
-      const turn = row.original?.controlReport?.controller?.name || "No asignado";
+      const turn =
+        row.original?.controlReport?.controller?.name || "No asignado";
 
       return <div className="">{turn}</div>;
     },

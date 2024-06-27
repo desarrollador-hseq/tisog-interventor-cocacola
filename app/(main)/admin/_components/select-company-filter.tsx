@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Contractor } from "@prisma/client";
 import { Check, ChevronsUpDown, X } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLoading } from "@/components/providers/loading-provider";
@@ -41,10 +41,12 @@ export const SelectCompanyFilter = ({
 }) => {
   const { setCompanyFilter, companyFilter } = useLoading();
 
+  const contractor = useMemo(() => companyFilter, [companyFilter]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      companyId: companyFilter,
+      companyId: contractor,
     },
   });
   const { watch, setValue } = form;
@@ -56,6 +58,9 @@ export const SelectCompanyFilter = ({
   useEffect(() => {
     setCompanyFilter(watch("companyId"));
   }, [watch("companyId")]);
+  useEffect(() => {
+    setValue("companyId", contractor, { shouldValidate: true });
+  }, [contractor]);
 
   return (
     <Form {...form}>

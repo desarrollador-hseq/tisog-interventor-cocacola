@@ -14,8 +14,6 @@ import {
 } from "@prisma/client";
 import { AddFindingReportForm } from "./add-finding-report-form";
 
-
-
 export const EditFindingReport = ({
   areas,
   contractors,
@@ -26,9 +24,11 @@ export const EditFindingReport = ({
   disabled,
   findingReport,
   controllers,
-  actualUserId
+  actualUserId,
 }: {
-  findingReport: FindingReport & {controlReport: ControlReport | null} | null;
+  findingReport:
+    | (FindingReport & { controlReport: ControlReport | null })
+    | null;
   tools: Tool[] | null;
   areas: BusinessAreas[];
   aspects: SecurityQuestion & { checklistItems: ChecklistItem | null }[];
@@ -39,10 +39,8 @@ export const EditFindingReport = ({
   disabled: boolean;
   controllers: User[];
   actualUserId: string;
-
 }) => {
   const [controlData, setControlData] = useState(findingReport);
-
 
   return (
     <div className="w-full flex flex-col gap-3 relative m-3">
@@ -51,11 +49,13 @@ export const EditFindingReport = ({
           findingReport={findingReport}
           controllers={controllers}
           actualUserId={actualUserId}
+          isAdmin={true}
+          aspects={aspects}
+          businessAreas={areas}
+          contractors={contractors}
         />
       </div>
-      <div className="bg-slate-200 rounded-lg overflow-hidden">
-
-      </div>
+      <div className="bg-slate-200 rounded-lg overflow-hidden"></div>
     </div>
   );
 };

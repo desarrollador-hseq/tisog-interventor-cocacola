@@ -24,21 +24,12 @@ const typeActionOptions = [
   { value: "IMPROVEMENT", label: "De mejora" },
 ];
 
-export const findingReportDescColumns: ColumnDef<
-  FindingReport & {
-    controlReport:
-      | (ControlReport & {
-          businessArea: { name: string | null };
-          contractor: { name: string | null };
-          controller: { name: string | null };
-        })
-      | null;
-    exportOnly: boolean;
-  }
->[] = [
+
+
+export const findingReportDescColumns: ColumnDef<any>[] = [
   {
     accessorKey: "businessArea",
-    accessorFn: (value) => value.controlReport?.businessArea.name,
+    accessorFn: (value) => value.controlReport?.businessArea?.name,
     header: ({ column }) => {
       return (
         <Button

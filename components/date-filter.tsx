@@ -46,6 +46,8 @@ export const DateFilter = () => {
     if (!dateFilter) {
       setIsFiltering(false);
     }
+    setDateSelected(dateFilter);
+
   }, [dateFilter]);
 
   const onOpenFiltering = () => {

@@ -50,6 +50,7 @@ interface AddFindingReportFormProps {
   aspects: any[];
   controllers: User[]
   actualUserId?: string
+  isAdmin?: boolean
 }
 
 const formSchema = z.object({
@@ -75,7 +76,8 @@ export const AddFindingReportForm = ({
   businessAreas,
   aspects,
   actualUserId,
-  controllers
+  controllers,
+  isAdmin
 }: AddFindingReportFormProps) => {
   const router = useRouter();
   const [findingReportData, setFindingReportData] = useState(findingReport);
@@ -272,14 +274,16 @@ export const AddFindingReportForm = ({
               areas={businessAreas}
               controllers={controllers}
               actualUserId={actualUserId}
+              isAdmin={isAdmin || false}
             />
 
             <UnsafeActForm control={findingReport?.controlReport!} />
             <AspectsList
               aspects={aspects}
-              controlId={findingReport?.controlReport?.id || undefined}
+              controlId={findingReport?.controlReport?.id || ""}
               controlCreationDate={findingReport?.controlReport?.createdAt!}
               isAdmin={true}
+              disabled={!isAdmin || false}
             />
           </div>
         </div>

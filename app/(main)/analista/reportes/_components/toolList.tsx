@@ -97,11 +97,14 @@ export const ToolsList = ({
     >
       <div className="flex justify-between">
         <div className="text-2xl font-bold text-primary mb-3">Herramientas</div>
-        <ModalSelectTool
-          groupedToolsArray={groupedToolsByType}
-          controlId={controlId}
-          tools={currents}
-        />
+
+        {!disabled && (
+          <ModalSelectTool
+            groupedToolsArray={groupedToolsByType}
+            controlId={controlId}
+            tools={currents}
+          />
+        )}
       </div>
       <div className="flex gap-2 h-full">
         {Object.keys(groupedTools).map((typeId) => (

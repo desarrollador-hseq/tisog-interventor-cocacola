@@ -76,6 +76,7 @@ export const EditControlReport = ({
   const canEdit = shouldControlBeManagedSameDay(controlData.date) || isAdmin;
     console.log({firss: shouldControlBeManagedSameDay(controlData.date), daee: controlData.date})
 
+
   return (
     <div className="w-full flex flex-col gap-3 relative m-3">
       <div className="bg-white rounded-lg overflow-hidden">
@@ -99,7 +100,7 @@ export const EditControlReport = ({
           controlId={control.id}
           defaultsToolssWithType={toolDefaults}
           groupedToolsByType={groupedToolsByType}
-          isAdmin={isAdmin}
+          disabled={!canEdit}
         />
       </div>
       <div className="bg-slate-200 rounded-lg overflow-hidden">
@@ -117,7 +118,7 @@ export const EditControlReport = ({
           aspects={aspects}
           disabled={false}
           controlId={controlData.id}
-          controlCreationDate={controlData.date}
+          controlCreationDate={controlData.date!}
           isAdmin={isAdmin}
         />
       </div>

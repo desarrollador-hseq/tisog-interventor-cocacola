@@ -10,20 +10,18 @@ import { findingReportColumns } from "@/app/(main)/admin/hallazgos/_components/f
 import { findingReportDescColumns } from "../../hallazgos/_components/finding-report-desc-columns";
 import { FindingReportExportExcel } from "../../hallazgos/_components/finding-report-export-excel";
 
-
-
-
+interface ControlWithAreaAndContractor extends FindingReport {
+  controlReport:
+    | (ControlReport & {
+        businessArea: { name: string | null };
+        contractor: { name: string | null };
+        controller: { name: string | null };
+      })
+    | null;
+}
 
 interface FindingIndicatorsProps {
-  findingReports: FindingReport & {
-    controlReport:
-      | (ControlReport & {
-          businessArea: { name: string | null };
-          contractor: { name: string | null };
-          controller: { name: string | null };
-        })
-      | null;
-  }[];
+  findingReports: ControlWithAreaAndContractor[];
 }
 
 export const FindingIndicators = ({
@@ -35,7 +33,7 @@ export const FindingIndicators = ({
     !dateFilter || (!dateFilter.from && !dateFilter.to)
       ? findingReports
       : findingReports?.filter((report) => {
-          const startDate = report.createdAt;
+          const startDate = report.controlReport?.date;
           if (!startDate) return false;
           return (
             (!dateFilter.from || startDate >= dateFilter.from) &&

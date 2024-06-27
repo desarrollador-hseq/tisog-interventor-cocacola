@@ -3,18 +3,22 @@
 import { Chart } from "@/components/chart";
 import { Contractor, ControlReport, FindingReport } from "@prisma/client";
 
-interface controlWithContractor extends FindingReport {
-  controlReport: ControlReport & { contractor: { name: string | null } };
+interface ControlWithAreaAndContractor extends FindingReport {
+  controlReport:
+    | (ControlReport & {
+        businessArea: { name: string | null };
+        contractor: { name: string | null };
+        controller: { name: string | null };
+      })
+    | null;
 }
 
-interface FindingsByContractorBarChartProps {
-  findingReports:  
-  | (FindingReport & { controlReport: ControlReport & {contractor: Contractor |null} | null })[];
+interface FindingIndicatorsProps {
+  findingReports: ControlWithAreaAndContractor[];
 }
-
 export const FindingsContractorBar = ({
   findingReports,
-}: FindingsByContractorBarChartProps) => {
+}: FindingIndicatorsProps) => {
   // Agrupar hallazgos por contratista y estado
   const contractorData = findingReports.reduce((acc, finding) => {
     const contractorId = finding.controlReport?.contractor?.name;

@@ -1,11 +1,8 @@
 import React from "react";
-import { Building, User } from "lucide-react";
+import { Building } from "lucide-react";
 import { HeaderDateFilter } from "./_components/header-date-filter";
 import { db } from "@/lib/db";
-import { FindingIndicators } from "./_components/finding-indicators/finding-indicators";
 import { KpiCard } from "@/components/kpi-card";
-import { ControlIndicators } from "./_components/control-indicators/control-indicators";
-import { AccidentIndicators } from "./_components/accident-indicators/accident-indicators";
 import { DashboardContent } from "./_components/dashboard-content";
 
 const AdminPage = async () => {
@@ -30,9 +27,9 @@ const AdminPage = async () => {
     include: {
       controlReport: {
         include: {
-          contractor:true,
+          contractor: true,
           businessArea: true,
-          controller: true
+          controller: true,
         },
       },
     },
@@ -58,30 +55,22 @@ const AdminPage = async () => {
     },
     include: {
       contractor: true,
-      area: true
-    }
+      area: true,
+    },
   });
 
-
-  
   return (
     <div className="bg-blue-100">
-      <div className="my-6 flex gap-3 w-full justify-center flex-wrap ">
       <HeaderDateFilter companies={contractors} />
-        <KpiCard
-          name="Contratistas"
-          number={contractors.length}
-          icon={Building}
-        />
-        <KpiCard name="Interventores" number={controllers.length} icon={User} />
-      </div>
 
-        <DashboardContent 
-         controlReport={controlReports}
-         findingReports={findingReports}
-         accidents={accidents}
-         areas={areas}
-        />
+      <DashboardContent
+        controlReport={controlReports}
+        findingReports={findingReports}
+        accidents={accidents}
+        areas={areas}
+        numControllers={controllers.length || 0}
+        numContractors={contractors.length}
+      />
 
       {/* <TableDefault 
         columns={}

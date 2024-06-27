@@ -126,7 +126,7 @@ const translateDay = (day: string): string => {
 };
 
 interface DailyReportProps {
-  daily: ChecklistItem[];
+  daily: any[];
   controlId: string;
   questionId: string;
   isAdmin: boolean;
