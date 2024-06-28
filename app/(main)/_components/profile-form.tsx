@@ -3,6 +3,7 @@
 import { User } from "@prisma/client";
 import { FieldUpdateForm } from "@/components/field-update-form";
 import { UpdatePasswordForm } from "./update-password-form";
+import { CheckReceiveNotifications } from "../admin/_components/check-receive-notifications";
 // import { CheckReceiveNotifications } from "../admin/_components/check-receive-notifications";
 
 export const ProfileForm = ({ user }: { user: User | null }) => {
@@ -32,12 +33,12 @@ export const ProfileForm = ({ user }: { user: User | null }) => {
             value={user?.email}
           />
 
-          {/* {user.role !== "USER" && (
+          {user.role !== "USER" && (
             <CheckReceiveNotifications
               id={user?.id}
               check={!!user?.receiveNotifications || false}
             />
-          )} */}
+          )}
         </div>
 
         <UpdatePasswordForm />

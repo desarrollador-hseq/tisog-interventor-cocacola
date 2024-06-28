@@ -29,7 +29,7 @@ const SetNewPasswordPage = async ({
   }
 
   return (
-    <div className="min-h-[calc(100vh)] w-full flex justify-center bg-blue-50">
+    <div className="min-h-[calc(100vh)] w-full flex justify-center ">
       <div className="container w-full flex items-center justify-center h-fit pt-10">
         <SetNewPasswordForm
           token={params.token}

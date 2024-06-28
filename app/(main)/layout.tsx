@@ -4,7 +4,8 @@ import { cn } from "@/lib/utils";
 import { RedirectAfterLogin } from "./_components/redirect-after-login";
 import { authOptions } from "@/lib/auth-options";
 import { Navbar } from "./_components/navbar/navbar";
-import { useLoading } from "@/components/providers/loading-provider";
+
+
 
 export default async function MainLayout({
   children,
@@ -41,7 +42,7 @@ export default async function MainLayout({
           "relative flex flex-col h-full min-h-screen m-0 p-0 mx-auto bg-transparent"
         )}
       >
-        <Navbar name={user?.name || ""} isAdmin={user.role === "ADMIN"} />
+        <Navbar name={user?.name || ""} isAdmin={user.role === "ADMIN"} isMaster={user.isMaster || false} />
         <div className=" md:pl-48 min-h-screen xl:flex justify-center items-start xl:w-full relative">
           <div className="mt-[48px] max-w-[1200px] w-full mx-auto bg-white min-h-[calc(100vh-48px)]">
             {children}

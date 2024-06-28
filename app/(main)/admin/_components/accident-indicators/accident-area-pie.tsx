@@ -1,28 +1,35 @@
 "use client";
 
 import { Chart } from "@/components/chart";
-import { BusinessAreas, Contractor, ControlReport } from "@prisma/client";
+import {
+  Accidents,
+  BusinessAreas,
+  Contractor,
+  ControlReport,
+  FindingReport,
+} from "@prisma/client";
 
-interface ControlWithContractorAndArea extends ControlReport {
+interface FindingWithArea extends FindingReport {
   contractor: Contractor | null;
-  businessArea: BusinessAreas | null;
+  controlReport: ControlReport | null;
+  area: BusinessAreas | null;
 }
 
 interface ControlAreaPieProps {
-  controlReports: ControlWithContractorAndArea[] | null | undefined;
+  accidents: Accidents[] | null | undefined;
   title: string;
   areas: BusinessAreas[];
 }
 
-export const ControlAreaPie = ({
-  controlReports,
+export const AccidentAreaPie = ({
+  accidents,
   title,
   areas,
 }: ControlAreaPieProps) => {
-  // Función para contar los controles por ID de área
-  const countControlsByAreaId = () => {
-    return controlReports?.reduce((acc, control) => {
-      const areaId = control.businessAreaId || "Desconocido";
+  // Función para contar los accidentes por ID de área
+  const countAccidentsByAreaId = () => {
+    return accidents?.reduce((acc, accident) => {
+      const areaId = accident.areaId || "Desconocido";
       if (!acc[areaId]) {
         acc[areaId] = 0;
       }
@@ -31,19 +38,19 @@ export const ControlAreaPie = ({
     }, {} as Record<string, number>);
   };
 
-  const controlCountsByAreaId = countControlsByAreaId() || {};
+  const accidentCountsByAreaId = countAccidentsByAreaId() || {};
 
-  // Calcular el total de controles para el cálculo de porcentajes
-  const totalControls = controlReports?.length || 0;
+  // Calcular el total de accidentes para el cálculo de porcentajes
+  const totalAccidents = accidents?.length || 0;
 
   // Mapear los IDs de área a nombres de área y calcular el porcentaje
-  const chartData = Object.entries(controlCountsByAreaId).map(
+  const chartData = Object.entries(accidentCountsByAreaId).map(
     ([areaId, count]) => {
       const area = areas.find((a) => a.id === areaId);
-      const percentage = ((count / totalControls) * 100).toFixed(2); // Calcular porcentaje
+      const percentage = ((count / totalAccidents) * 100).toFixed(); // Calcular porcentaje
       return {
         value: count,
-        name: area ? `${area.name} ` : `Desconocido`, // Añadir porcentaje al nombre
+        name: area ? `${area.name}` : `Desconocido`, // Añadir porcentaje al nombre
       };
     }
   );
@@ -60,7 +67,7 @@ export const ControlAreaPie = ({
     },
     series: [
       {
-        name: "Controles por Área",
+        name: "Accidentes por Área",
         type: "pie",
         radius: ["50%", "70%"],
         avoidLabelOverlap: false,
@@ -68,7 +75,7 @@ export const ControlAreaPie = ({
           show: true,
           fontWeight: "bold",
           formatter(param: any) {
-            const percentage = ((param.value / totalControls) * 100).toFixed(2);
+            const percentage = ((param.value / totalAccidents) * 100).toFixed();
             return `${param.name}: ${param.value} (${percentage}%)`; // Mostrar cantidad y porcentaje
           },
         },

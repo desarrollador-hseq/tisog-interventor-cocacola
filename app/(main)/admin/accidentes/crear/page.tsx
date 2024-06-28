@@ -22,7 +22,7 @@ const CreateAccidentPage = async () => {
   });
   return (
     <CardPage
-      pageHeader={<TitleOnPage text={`Agregar accidente`} bcrumb={bcrumb} />}
+      pageHeader={<TitleOnPage text={`Registrar accidente`} bcrumb={bcrumb} />}
     >
       <AddAccidentForm areas={areas} contractors={contractors} />
     </CardPage>

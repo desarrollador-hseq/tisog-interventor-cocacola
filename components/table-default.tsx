@@ -104,19 +104,19 @@ export function TableDefault<TData, TValue>({
 
   return (
     <div className="w-full">
-      <div className="rounded-md border border-input overflow-hidden">
+      <div className="rounded-t-lg border border-input overflow-hidden">
         <Table className="bg-white">
-          <TableHeader className="bg-slate-300">
+          <TableHeader className="bg-slate-200">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="bg-bg-slate-300 hover:bg-bg-slate-300"
+                className="bg-bg-slate-200 hover:bg-bg-slate-200 border-b-2 border-slate-300 shadow-sm"
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="py-2 text- bg-slate-300"
+                      className="py-2 text- bg-slate-200"
                     >
                       {header.isPlaceholder
                         ? null
@@ -218,7 +218,7 @@ export function TableDefault<TData, TValue>({
       </div>
       
 
-      <div className="flex items-center justify-between space-x-1 py-2">
+      <div className="flex items-center justify-between space-x-1 py-2 bg-slate-200">
         <TablePagination table={table} />
       </div>
         {!!nameDocument && <TableToExcel table={table} name={nameDocument} />}

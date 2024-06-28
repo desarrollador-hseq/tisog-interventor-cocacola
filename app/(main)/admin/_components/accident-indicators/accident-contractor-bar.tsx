@@ -4,7 +4,7 @@ import { Chart } from "@/components/chart";
 import { Contractor, Accidents } from "@prisma/client";
 
 interface accidentWithContractor extends Accidents {
-  contractor: Contractor  | null
+  contractor: Contractor | null;
 }
 
 interface accidentByContractorBarProps {
@@ -19,16 +19,16 @@ export const AccidentsContractorBar = ({
   // Función para contar los accidentes por tipo y contratista
   const countAccidentsByContractor = () => {
     return accidents?.reduce((acc, accident) => {
-      const contractorName = accident?.contractor?.name || 'Desconocido';
+      const contractorName = accident?.contractor?.name || "Desconocido";
       if (!acc[contractorName]) {
         acc[contractorName] = {
           accidents: 0,
           incidents: 0,
         };
       }
-      if (accident.type === 'ACCIDENT') {
+      if (accident.type === "ACCIDENT") {
         acc[contractorName].accidents++;
-      } else if (accident.type === 'INCIDENT') {
+      } else if (accident.type === "INCIDENT") {
         acc[contractorName].incidents++;
       }
       return acc;
@@ -38,55 +38,68 @@ export const AccidentsContractorBar = ({
   const contractorData = countAccidentsByContractor() || {};
 
   const contractors = Object.keys(contractorData);
-  const accidentCounts = contractors.map((contractor) => contractorData[contractor].accidents);
-  const incidentCounts = contractors.map((contractor) => contractorData[contractor].incidents);
+  const accidentCounts = contractors.map(
+    (contractor) => contractorData[contractor].accidents
+  );
+  const incidentCounts = contractors.map(
+    (contractor) => contractorData[contractor].incidents
+  );
 
   const option = {
     tooltip: {
-      trigger: 'axis',
+      trigger: "axis",
       axisPointer: {
-        type: 'shadow',
+        type: "shadow",
       },
-      
     },
     legend: {
-      data: ['Accidentes', 'Incidentes'],
+      data: ["Accidentes", "Incidentes"],
       show: true,
-      top: '0%',
-      left: 'center',
+      top: "0%",
+      left: "center",
     },
     xAxis: {
-      type: 'category',
+      type: "category",
       data: contractors,
     },
     yAxis: {
-      type: 'value',
+      type: "value",
+    },
+    title: {
+      show: accidentCounts.length === 0 && incidentCounts.length === 0,
+      textStyle: {
+        color: "gray",
+        fontSize: 20,
+      },
+      text: "Sin datos",
+      left: "center",
+      top: "center",
     },
     series: [
       {
-        name: 'Accidentes',
-        type: 'bar',
+        name: "Accidentes",
+        type: "bar",
         label: {
           show: true,
-          position: 'inside',
-          formatter: '{c}',
+          position: "inside",
+          formatter: "{c}",
         },
         data: accidentCounts,
         itemStyle: {
-          color: '#cd2418',
+          color: "#cd2418",
         },
       },
       {
-        name: 'Incidentes',
-        type: 'bar',
+        name: "Incidentes",
+        type: "bar",
         label: {
           show: true,
-          position: 'inside',
-          formatter: '{c}',
+          position: "inside",
+          formatter: "{c}",
         },
         data: incidentCounts,
         itemStyle: {
-          color: '#fff64f',
+          color: "#fff64f",
         },
       },
     ],

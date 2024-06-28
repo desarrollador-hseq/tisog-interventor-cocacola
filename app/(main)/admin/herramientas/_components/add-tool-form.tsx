@@ -112,11 +112,11 @@ export const AddtoolForm = ({ tool, typeTools }: AddToolFormProps) => {
   };
 
   return (
-    <div className="max-w-[1500px] w-[50%] h-full mx-auto bg-white  overflow-y-hidden p-3">
+    <div className="max-w-[1500px] w-full h-full mx-auto bg-white  overflow-y-hidden p-3">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col items-center mt-8 p-2 w-full gap-4"
+          className="flex flex-col items-center mt-8 p-2 w-full gap-4 "
         >
           <InputForm
             control={form.control}

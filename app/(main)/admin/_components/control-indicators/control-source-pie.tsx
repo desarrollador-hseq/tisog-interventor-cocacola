@@ -4,9 +4,9 @@ import { Chart } from "@/components/chart";
 import { BusinessAreas, Contractor, ControlReport } from "@prisma/client";
 
 interface ControlWithContractorAndArea extends ControlReport {
-  contractor: Contractor | null;
-  businessArea: BusinessAreas | null;
+  contractor: Contractor | null; businessArea: BusinessAreas | null
 }
+
 
 interface ControlSourcePieProps {
   controlReports: ControlWithContractorAndArea[] | null | undefined;

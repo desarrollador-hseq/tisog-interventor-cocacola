@@ -19,7 +19,7 @@ import { AddCategoryAspectForm } from "./_components/add-category-aspect-form";
 import { Edit2 } from "lucide-react";
 import { DeleteCategoryAspect } from "./_components/delete-category-aspect";
 
-const bcrumb = [{ label: "Herramientas", path: "/admin/herramientas" }];
+const bcrumb = [{ label: "Aspectos", path: "/admin/aspectos" }];
 
 const AspectPage = async () => {
   const aspects = await db.securityQuestion.findMany({
@@ -92,7 +92,7 @@ const AspectPage = async () => {
                     <SimpleModal
                       btnClass="p-1 h-auto bg-slate-400 hover:bg-slate-600"
                       textBtn={<Edit2 className="w-4 h-4 " />}
-                      title={<TitleOnPage text="Editar tipo de herramienta" />}
+                      title={<TitleOnPage text="Editar la categoria" />}
                     >
                       <AddCategoryAspectForm category={category} />
                     </SimpleModal>

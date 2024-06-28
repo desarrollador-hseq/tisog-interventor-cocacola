@@ -36,10 +36,11 @@ import {
 
 import { useLoading } from "@/components/providers/loading-provider";
 import { SecurityCategory, SecurityQuestion } from "@prisma/client";
+import { TextAreaForm } from "@/components/textarea-form";
 
 interface AddAspectFormProps {
   aspect?: SecurityQuestion | null;
-  categories: SecurityCategory[]
+  categories: SecurityCategory[];
 }
 
 const formSchema = z.object({
@@ -61,8 +62,8 @@ export const AddAspectForm = ({ aspect, categories }: AddAspectFormProps) => {
   const isEdit = useMemo(() => !!aspect, [aspect]);
 
   if (isEdit && !aspect) {
-    toast.error("Herramienta no encontrado, redirigiendo...");
-    router.replace("/admin/herramientas/");
+    toast.error("aspecto no encontrado, redirigiendo...");
+    router.replace("/admin/aspectos/");
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -116,19 +117,19 @@ export const AddAspectForm = ({ aspect, categories }: AddAspectFormProps) => {
   };
 
   return (
-    <div className="max-w-[1500px] w-[50%] h-full mx-auto bg-white  overflow-y-hidden p-3">
+    <div className="max-w-[1500px] w-full h-full mx-auto bg-white  overflow-y-hidden p-3">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col items-center mt-8 p-2 w-full gap-4"
         >
-              <InputForm
+          <TextAreaForm
             control={form.control}
             label="Pregunta"
             name="question"
             className="w-full"
           />
-          <InputForm
+          <TextAreaForm
             control={form.control}
             label="Negativo"
             name="negativeQuestion"
@@ -154,9 +155,8 @@ export const AddAspectForm = ({ aspect, categories }: AddAspectFormProps) => {
                         )}
                       >
                         {field.value
-                          ? categories?.find(
-                              (type) => type.id === field.value
-                            )?.name
+                          ? categories?.find((type) => type.id === field.value)
+                              ?.name
                           : "Selecciona una categoria"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>

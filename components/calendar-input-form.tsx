@@ -46,7 +46,7 @@ export const CalendarInputForm: React.FC<CalendarInputFormProps<any>> = ({
       name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col w-full">
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-primary">{label}</FormLabel>
           <Popover>
             <PopoverTrigger asChild disabled={disabled} className="w-full">
               <FormControl>

@@ -8,6 +8,7 @@ import { AccidentOriginPie } from "./accident-origin-pie";
 import { AccidentsContractorBar } from "./accident-contractor-bar";
 import { AccidentClassificationBar } from "./accident-classification-bar";
 import { AccidentLevelBar } from "./accident-level-bar";
+import { AccidentAreaPie } from "./accident-area-pie";
 
 interface accidentWithContractorAndArea extends Accidents {
   contractor: Contractor | null;
@@ -16,9 +17,10 @@ interface accidentWithContractorAndArea extends Accidents {
 
 interface AccidentIndicatorsProps {
   accidents: accidentWithContractorAndArea[] | null | undefined;
+  areas: BusinessAreas[]
 }
 
-export const AccidentIndicators = ({ accidents }: AccidentIndicatorsProps) => {
+export const AccidentIndicators = ({ accidents, areas }: AccidentIndicatorsProps) => {
   const { userRole, dateFilter, cityFilter, companyFilter } = useLoading();
 
   let filteredReports =
@@ -40,7 +42,7 @@ export const AccidentIndicators = ({ accidents }: AccidentIndicatorsProps) => {
   }
 
   return (
-    <div className="border-4 border-primary shadow-lg w-full">
+    <div className="border-4 border-primary shadow-lg w-full page-break ">
       <div className="shadow-lg">
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-3  lg:grid-rows-1 mt-0 w-full min-w-full">
           <h3 className="text-center col-span-3 p-3 font-bold text-2xl backdrop-blur-sm bg-blue-900 text-slate-100">
@@ -73,6 +75,13 @@ export const AccidentIndicators = ({ accidents }: AccidentIndicatorsProps) => {
             <AccidentLevelBar
              accidents={filteredReports}
              title="Nivel"
+            />
+          </div>
+          <div className="flex flex-col p-2 ">
+            <AccidentAreaPie
+             accidents={filteredReports}
+             areas={areas}
+             title="Áreas"
             />
           </div>
         </div>

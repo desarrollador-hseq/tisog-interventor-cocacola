@@ -1,12 +1,12 @@
 "use client";
 
 import React, { Dispatch, SetStateAction } from "react";
-import { Building2, ClipboardCheck, Home, Users } from "lucide-react";
+import { Building2, ClipboardCheck, ClipboardList, Hammer, Home, ListTodo, TriangleAlert, Users } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { SidebarContent } from "./sidebar-content";
 
 const dashRoutes = [
-  { icon: Home, label: "Inicio", href: "/analista" },
+  { icon: Home, label: "Dashboard", href: "/analista" },
   {
     icon: ClipboardCheck,
     label: "reportes",
@@ -14,7 +14,7 @@ const dashRoutes = [
   },
 ];
 const adminRoutes = [
-  { icon: Home, label: "Inicio", href: "/admin" },
+  { icon: Home, label: "Dashboard", href: "/admin" },
   {
     icon: Building2,
     label: "Contratistas",
@@ -25,18 +25,14 @@ const adminRoutes = [
     label: "Analistas",
     href: "/admin/analistas",
   },
+
   {
-    icon: Users,
-    label: "Herramientas",
-    href: "/admin/herramientas",
-  },
-  {
-    icon: ClipboardCheck,
+    icon: ClipboardList,
     label: "Reportes de hallazgos",
     href: "/admin/hallazgos",
   },
   {
-    icon: ClipboardCheck,
+    icon: TriangleAlert,
     label: "Accidentes",
     href: "/admin/accidentes",
   },
@@ -45,12 +41,14 @@ const adminRoutes = [
 interface SidebarProps {
   openSidebar: boolean;
   isAdmin: boolean;
+  isMaster: boolean;
   setOpenSidebar: Dispatch<SetStateAction<boolean>>;
 }
 
 export const Sidebar = ({
   isAdmin,
   openSidebar,
+  isMaster,
   setOpenSidebar,
 }: SidebarProps) => {
   return (
@@ -61,6 +59,7 @@ export const Sidebar = ({
             <SidebarContent
               routes={isAdmin ? adminRoutes : dashRoutes}
               isAdmin={isAdmin}
+              isMaster={isMaster}
             />
           </SheetContent>
         </Sheet>
@@ -69,6 +68,7 @@ export const Sidebar = ({
           <SidebarContent
             routes={isAdmin ? adminRoutes : dashRoutes}
             isAdmin={isAdmin}
+            isMaster={isMaster}
           />
         </div>
       </div>

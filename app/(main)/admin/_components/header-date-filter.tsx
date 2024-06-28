@@ -34,9 +34,9 @@ export const HeaderDateFilter = ({
   return (
     <div
       className={cn(
-        "top-0 h-fit w-full p-1 bg-primary flex flex-col md:flex-row  items-center justify-between gap-2 bg-blue-900",
+        "top-0 h-fit w-full p-1 bg-primary flex flex-col md:flex-row  items-center justify-between gap-2 bg-blue-900 rounded-b-md shadow-sm",
         visible &&
-          "fixed py-1 px-3 top-0 left-0 right-0 z-50 h-fit rounded-b-lg shadow-md gap-1 fadeIn border-b border-blue-500 min-w-full max-w-[100vw] mx-auto w-full"
+          "fixed py-1 px-3 top-0 left-0 right-0 z-50 h-fit rounded-b-lg shadow-md gap-1 border-b border-blue-500 min-w-full max-w-[100vw] mx-auto w-full"
       )}
     >
       <div
@@ -45,7 +45,9 @@ export const HeaderDateFilter = ({
           visible && "md:flex"
         )}
       >
-        <LogoMain goRoot width={65} />
+        <span className=" bg-white rounded-sm">
+          <LogoMain goRoot width={65} />
+        </span>
 
         <span className="font-semibold text-lg text-white">
           Interventoría HSE

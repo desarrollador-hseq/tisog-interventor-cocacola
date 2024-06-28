@@ -10,8 +10,10 @@ import { DropdownUser } from "./dropdown-user";
 export const Navbar = ({
   name,
   isAdmin,
+  isMaster,
 }: {
   isAdmin: boolean;
+  isMaster: boolean;
   name?: string;
 }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -36,11 +38,16 @@ export const Navbar = ({
               isAdmin={isAdmin}
               openSidebar={openSidebar}
               setOpenSidebar={setOpenSidebar}
+              isMaster={isMaster}
             />
 
-            <LogoMain goRoot width={65} />
+            <div className="flex items-center gap-1 w-fit">
+              <span className="bg-white rounded-sm">
+                <LogoMain goRoot width={65} />
+              </span>
 
-            <span className="font-semibold text-lg">Interventoría HSE</span>
+              <span className="font-semibold text-lg">Interventoría HSE</span>
+            </div>
           </div>
 
           <div className="flex gap-5 items-center">

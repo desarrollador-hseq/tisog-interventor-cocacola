@@ -28,7 +28,6 @@ export const AccidentLevelBar = ({
 
   const totalAccidents = accidents?.length || 0;
 
-  
   const typeTranslations: Record<string, string> = {
     0: "Nivel 0",
     1: "Nivel 1",
@@ -37,10 +36,9 @@ export const AccidentLevelBar = ({
     Desconocido: "Desconocido",
   };
 
-
   const chartData = Object.entries(accidentCountsByType).map(
     ([type, count]) => {
-      const translatedType = typeTranslations[type] || type; 
+      const translatedType = typeTranslations[type] || type;
 
       return {
         value: count,

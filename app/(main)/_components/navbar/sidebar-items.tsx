@@ -66,7 +66,7 @@ export const SidebarItems = ({ icon: Icon, label, href }: SidebarItemProps) => {
           </div>
           <div
             className={cn(
-              "ml-auto opacity-0 border-2 border-slate-300 h-full transition-all animate-in",
+              "ml-auto opacity-0 border-2 border-slate-300 h-full min-h-full transition-all animate-in",
               isActive && "opacity-100"
             )}
           />

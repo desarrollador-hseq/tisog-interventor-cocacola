@@ -82,10 +82,10 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className=" relative mt-7 bg-white border border-gray-200 rounded-md shadow-sm flex ">
+    <div className=" relative mt-3 bg-blue-900 border border-slate-600 rounded-md shadow-md flex text-white">
       <div className="p-4 sm:p-7 min-w-[400px] min-h-[400px] flex flex-col justify-center">
         <div className="text-center">
-          <h1 className="block text-2xl font-bold text-gray-800 ">
+          <h1 className="block text-2xl font-bold text-white">
             Iniciar sesión
           </h1>
         </div>
@@ -106,7 +106,7 @@ export const LoginForm = () => {
                         <Input
                           disabled={isSubmitting}
                           placeholder="Correo electrónico"
-                          className="h-14"
+                          className="h-14 bg-blue-200 shadow-inner placeholder:text-slate-800 text-slate-800"
                           {...field}
                         />
                       </FormControl>
@@ -124,7 +124,7 @@ export const LoginForm = () => {
                       <FormControl>
                         <Input
                           type={viewPass ? "text" : "password"}
-                          className="relative h-14"
+                          className="relative h-14 bg-blue-200 shadow-inner placeholder:text-slate-800 text-slate-8000"
                           disabled={isSubmitting}
                           placeholder="•••••••••"
                           autoComplete="off"
@@ -134,7 +134,7 @@ export const LoginForm = () => {
                       {field.value && (
                         <div
                           onClick={() => setViewPass(!viewPass)}
-                          className="absolute top-1 right-2 "
+                          className="absolute top-2.5 right-2 "
                         >
                           {!viewPass ? (
                             <Eye className="w-5 h-5" />
@@ -147,7 +147,7 @@ export const LoginForm = () => {
                       <FormDescription>
                         <Link
                           href="/recuperar-contrasena"
-                          className="w-full block text-sm text-blue-600 decoration-2 hover:underline font-medium text-end"
+                          className="w-full block text-sm text-blue-200 decoration-2 hover:underline font-medium text-end"
                         >
                           Olvidé la contraseña
                         </Link>
@@ -157,7 +157,10 @@ export const LoginForm = () => {
                 />
               </div>
 
-              <Button disabled={!isValid || isSubmitting} className="w-full">
+              <Button
+                disabled={!isValid || isSubmitting}
+                className="w-full bg-blue-400 hover:bg-blue-500 disabled:cursor-not-allowed"
+              >
                 {isEditing && <Loader2 className="w-4 h-4 animate-spin" />}
                 Entrar
               </Button>

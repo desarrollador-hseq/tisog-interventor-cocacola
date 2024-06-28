@@ -63,6 +63,16 @@ export const ControlsContractorBar = ({
         },
       },
     ],
+    title: {
+      show: contractors.length === 0,
+      textStyle: {
+        color: "gray",
+        fontSize: 20,
+      },
+      text: "Sin datos",
+      left: "center",
+      top: "center",
+    },
   };  
 
   return <Chart title={title} option={option} />;

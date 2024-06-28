@@ -85,7 +85,7 @@ export const ForgotPasswordForm = () => {
   };
 
   return (
-    <Card className="flex flex-col items-center w-full max-w-[400px]">
+    <Card className="flex flex-col items-center w-full max-w-[400px] bg-blue-200">
       <CardHeader>
         <h2 className="font-bold text-xl">Recuperar contraseña</h2>
       </CardHeader>

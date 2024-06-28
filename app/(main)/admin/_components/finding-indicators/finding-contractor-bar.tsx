@@ -69,6 +69,16 @@ export const FindingsContractorBar = ({
     yAxis: {
       type: "value",
     },
+    title: {
+      show: contractors.length === 0,
+      textStyle: {
+        color: "gray",
+        fontSize: 20,
+      },
+      text: "Sin datos",
+      left: "center",
+      top: "center",
+    },
     series: [
       {
         name: "Abiertas",

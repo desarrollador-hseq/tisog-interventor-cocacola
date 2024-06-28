@@ -4,9 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Accidents,
   BusinessAreas,
-  City,
   Contractor,
-  User,
 } from "@prisma/client";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -142,7 +140,6 @@ export const AddAccidentForm = ({
         const { data } = await axios.post(`/api/accidents/`, values);
         router.push(`/admin/accidents/`);
         toast.success("Accidente guardado correctamente");
-        
       }
       // router.push(`/admin/colaboradores`);
       router.refresh();
@@ -172,337 +169,339 @@ export const AddAccidentForm = ({
     }
   };
   return (
-    <div className="max-w-[1500px] w-[50%] h-full mx-auto bg-slate-100 border overflow-y-hidden p-3 rounded-md shadow-sm">
+    <div className="max-w-[1500px]  h-full mx-auto bg-slate-100 border overflow-y-hidden p-3 rounded-md shadow-sm">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col items-center mt-8 p-2 w-full gap-4"
-        >
-          <CalendarInputForm
-            control={form.control}
-            label="Fecha"
-            name="date"
-            className="w-full"
-          />
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tipo</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona un tipo " />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="ACCIDENT">Accidente</SelectItem>
-                    <SelectItem value="INCIDENT">Incidente</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="contractorId"
-            render={({ field }) => (
-              <FormItem className="flex flex-col w-full">
-                <FormLabel>Contratista:</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-center">
+          <div className="grid grid-cols-2 items-center mt-2 p-2 w-full gap-4">
+            <CalendarInputForm
+              control={form.control}
+              label="Fecha"
+              name="date"
+              className="w-full"
+            />
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-primary">Tipo</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? contractors?.find(
-                              (contractor) => contractor.id === field.value
-                            )?.name
-                          : "Selecciona un contratista"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona un tipo " />
+                      </SelectTrigger>
                     </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-full p-0">
-                    <Command className="w-full">
-                      <CommandInput placeholder="Buscar contratista" />
-                      <CommandEmpty>Contratista no encontrada</CommandEmpty>
-                      <CommandGroup>
-                        <CommandList>
-                          {contractors?.map((contractor) => (
-                            <CommandItem
-                              value={`${contractor.name}`}
-                              key={contractor.id}
-                              onSelect={() => {
-                                form.setValue("contractorId", contractor.id, {
-                                  shouldValidate: true,
-                                });
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  contractor.id === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {contractor.name}
-                            </CommandItem>
-                          ))}
-                        </CommandList>
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="origin"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Origen</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona un origen " />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="ACT">ACTO</SelectItem>
-                    <SelectItem value="CONDITION">CONDICION</SelectItem>
-                  </SelectContent>
-                </Select>
+                    <SelectContent>
+                      <SelectItem value="ACCIDENT">Accidente</SelectItem>
+                      <SelectItem value="INCIDENT">Incidente</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="classification"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Clasificacion</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona un origen " />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="FIRST_AID">Primeros auxilios</SelectItem>
-                    <SelectItem value="MEDICAL_TREATMENT">
-                      Tratamiento medico
-                    </SelectItem>
-                    <SelectItem value="LOST_WORKDAY">
-                      Incidente, dias perdidos
-                    </SelectItem>
-                    <SelectItem value="NEAR_MISS">Near miss</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="level"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Clasificacion</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona una clasificación" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="0">Nivel 0</SelectItem>
-                    <SelectItem value="1">Nivel 1</SelectItem>
-                    <SelectItem value="2">Nivel 2</SelectItem>
-                    <SelectItem value="3">Nivel 3</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <InputForm
-            control={form.control}
-            label="Nombre"
-            name="name"
-            className="w-full"
-          />
-          <InputForm
-            control={form.control}
-            label="Número de documento"
-            name="numDoc"
-            className="w-full"
-          />
-          <InputForm
-            control={form.control}
-            label="Cargo"
-            name="position"
-            className="w-full"
-          />
-
-          <CalendarInputForm
-            control={form.control}
-            label="Fecha de nacimiento"
-            name="birthdate"
-            className="w-full"
-          />
-
-          <FormField
-            control={form.control}
-            name="areaId"
-            render={({ field }) => (
-              <FormItem className="flex flex-col w-full">
-                <FormLabel>Área:</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
+            <FormField
+              control={form.control}
+              name="contractorId"
+              render={({ field }) => (
+                <FormItem className="flex flex-col w-full">
+                  <FormLabel className="text-primary">Contratista:</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? contractors?.find(
+                                (contractor) => contractor.id === field.value
+                              )?.name
+                            : "Selecciona un contratista"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command className="w-full">
+                        <CommandInput placeholder="Buscar contratista" />
+                        <CommandEmpty>Contratista no encontrada</CommandEmpty>
+                        <CommandGroup>
+                          <CommandList>
+                            {contractors?.map((contractor) => (
+                              <CommandItem
+                                value={`${contractor.name}`}
+                                key={contractor.id}
+                                onSelect={() => {
+                                  form.setValue("contractorId", contractor.id, {
+                                    shouldValidate: true,
+                                  });
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    contractor.id === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {contractor.name}
+                              </CommandItem>
+                            ))}
+                          </CommandList>
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="origin"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-primary">Origen</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? areas?.find((area) => area.id === field.value)?.name
-                          : "Selecciona un area"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona un origen " />
+                      </SelectTrigger>
                     </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-full p-0">
-                    <Command className="w-full">
-                      <CommandInput placeholder="Buscar area" />
-                      <CommandEmpty>Área no encontrada</CommandEmpty>
-                      <CommandGroup>
-                        <CommandList>
-                          {areas?.map((area) => (
-                            <CommandItem
-                              value={`${area.name}`}
-                              key={area.id}
-                              onSelect={() => {
-                                form.setValue("areaId", area.id, {
-                                  shouldValidate: true,
-                                });
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  area.id === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {area.name}
-                            </CommandItem>
-                          ))}
-                        </CommandList>
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                    <SelectContent>
+                      <SelectItem value="ACT">ACTO</SelectItem>
+                      <SelectItem value="CONDITION">CONDICION</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-          <TextAreaForm
-            control={form.control}
-            label="Descripción"
-            name="desc"
-            className="w-full"
-          />
-          <TextAreaForm
-            control={form.control}
-            label="Tipo de lesión"
-            name="typeInjury"
-            className="w-full"
-          />
-          <TextAreaForm
-            control={form.control}
-            label="Corrección"
-            name="correction"
-            className="w-full"
-          />
-          <TextAreaForm
-            control={form.control}
-            label="Acción correctiva"
-            name="correctiveAction"
-            className="w-full"
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="classification"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-primary">Clasificacion</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona un origen " />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="FIRST_AID">
+                        Primeros auxilios
+                      </SelectItem>
+                      <SelectItem value="MEDICAL_TREATMENT">
+                        Tratamiento medico
+                      </SelectItem>
+                      <SelectItem value="LOST_WORKDAY">
+                        Incidente, dias perdidos
+                      </SelectItem>
+                      <SelectItem value="NEAR_MISS">Near miss</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-          <CalendarInputForm
-            control={form.control}
-            label="Fecha de nacimiento"
-            name="closedDate"
-            className="w-full"
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="level"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-primary">Clasificacion</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona una clasificación" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="0">Nivel 0</SelectItem>
+                      <SelectItem value="1">Nivel 1</SelectItem>
+                      <SelectItem value="2">Nivel 2</SelectItem>
+                      <SelectItem value="3">Nivel 3</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Estado</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona un origen " />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="OPEN">Abierto</SelectItem>
-                    <SelectItem value="CLOSED">Cerrado</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <InputForm
+              control={form.control}
+              label="Nombre"
+              name="name"
+              className="w-full"
+            />
+            <InputForm
+              control={form.control}
+              label="Número de documento"
+              name="numDoc"
+              className="w-full"
+            />
+            <InputForm
+              control={form.control}
+              label="Cargo"
+              name="position"
+              className="w-full"
+            />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <CalendarInputForm
+              control={form.control}
+              label="Fecha de nacimiento"
+              name="birthdate"
+              className="w-full"
+            />
+
+            <FormField
+              control={form.control}
+              name="areaId"
+              render={({ field }) => (
+                <FormItem className="flex flex-col w-full">
+                  <FormLabel className="text-primary">Área:</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? areas?.find((area) => area.id === field.value)
+                                ?.name
+                            : "Selecciona un area"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command className="w-full">
+                        <CommandInput placeholder="Buscar area" />
+                        <CommandEmpty>Área no encontrada</CommandEmpty>
+                        <CommandGroup>
+                          <CommandList>
+                            {areas?.map((area) => (
+                              <CommandItem
+                                value={`${area.name}`}
+                                key={area.id}
+                                onSelect={() => {
+                                  form.setValue("areaId", area.id, {
+                                    shouldValidate: true,
+                                  });
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    area.id === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {area.name}
+                              </CommandItem>
+                            ))}
+                          </CommandList>
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <TextAreaForm
+              control={form.control}
+              label="Descripción"
+              name="desc"
+              className="w-full"
+            />
+            <TextAreaForm
+              control={form.control}
+              label="Tipo de lesión"
+              name="typeInjury"
+              className="w-full"
+            />
+            <TextAreaForm
+              control={form.control}
+              label="Corrección"
+              name="correction"
+              className="w-full"
+            />
+            <TextAreaForm
+              control={form.control}
+              label="Acción correctiva"
+              name="correctiveAction"
+              className="w-full"
+            />
+
+            <CalendarInputForm
+              control={form.control}
+              label="Fecha de nacimiento"
+              name="closedDate"
+              className="w-full"
+            />
+
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-primary"> Estado</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona un origen " />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="OPEN">Abierto</SelectItem>
+                      <SelectItem value="CLOSED">Cerrado</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <Button
             disabled={isSubmitting || !isValid}
-            className="w-full max-w-[500px] gap-3"
+            className="w-full max-w-[500px] gap-3 mx-auto"
           >
             {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
             {isEdit ? "Actualizar" : "Agregar"}

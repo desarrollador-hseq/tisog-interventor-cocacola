@@ -25,7 +25,7 @@ export const TitleOnPage = ({
       )}
     >
       <CardContent className="w-full min-h-20 flex items-center justify-between p-3 flex-col md:flex-row">
-        <div className="w-full flex flex-col ml-2">
+        <div className="w-full flex flex-col ml-2 gap-1">
           {bcrumb && (
             <nav className="flex mt-1" aria-label="Breadcrumb">
               <ol className="inline-flex items-center space-x-1">

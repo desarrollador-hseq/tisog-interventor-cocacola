@@ -19,7 +19,7 @@ const CreateToolPage = async () => {
 
   return (
     <CardPage
-      pageHeader={<TitleOnPage text="Agregar herramienta" bcrumb={bcrumb} />}
+      pageHeader={<TitleOnPage text="Agregar aspecto" bcrumb={bcrumb} />}
     >
       <AddAspectForm categories={categories} />
     </CardPage>

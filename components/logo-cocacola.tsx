@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-export const LogoMain = ({
+export const LogoCocaCola = ({
   goRoot,
   className,
   height = 40,
@@ -32,11 +32,11 @@ export const LogoMain = ({
     );
   };
   return (
-    <div className=" rounded-sm p-0.5 px-2  flex justify-center">
+    <div className="bg-whit rounded-sm p-0.5 px-2">
       <Image
         className={cn(goRoot && "cursor-pointer", className)}
         onClick={navigate}
-        src="/tisog-logo.svg"
+        src="/Coca-Cola_logo.png"
         alt="logo de tisog"
         height={height}
         width={width}

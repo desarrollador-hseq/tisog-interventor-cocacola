@@ -37,6 +37,7 @@ export const FindingResumePie = ({ findingReports, title }: FindingResumePieProp
       top: "0%",
       left: "center",
     },
+    
     series: [
       {
         name: "",
@@ -47,7 +48,8 @@ export const FindingResumePie = ({ findingReports, title }: FindingResumePieProp
           show: true,
           fontWeight: "bold",
           formatter(param: any) {
-            return param.name + ": " + param.value + "";
+            const percentage = ((param.value / totalCount) * 100).toFixed();
+            return `${param.name}: ${param.value} (${percentage}%)`; // Mostrar cantidad y porcentaje
           },
         },
         emphasis: {
