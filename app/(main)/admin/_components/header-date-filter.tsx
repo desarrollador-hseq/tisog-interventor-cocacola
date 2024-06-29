@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { Contractor } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { DateFilter } from "@/components/date-filter";
 import { useLoading } from "@/components/providers/loading-provider";
 import { SelectCompanyFilter } from "./select-company-filter";
-import { Contractor } from "@prisma/client";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
 import { LogoMain } from "@/components/logo-main";
 // import { SelectLevelFilter } from "./select-level-filter";
 

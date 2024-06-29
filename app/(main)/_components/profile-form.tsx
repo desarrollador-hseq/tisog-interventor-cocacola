@@ -33,7 +33,7 @@ export const ProfileForm = ({ user }: { user: User | null }) => {
             value={user?.email}
           />
 
-          {user.role !== "USER" && (
+          {user.role !== "USER" && user.role !== "VIEWER" && (
             <CheckReceiveNotifications
               id={user?.id}
               check={!!user?.receiveNotifications || false}

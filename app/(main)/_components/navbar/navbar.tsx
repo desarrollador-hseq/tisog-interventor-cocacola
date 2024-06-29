@@ -11,9 +11,11 @@ export const Navbar = ({
   name,
   isAdmin,
   isMaster,
+  isViewer,
 }: {
   isAdmin: boolean;
   isMaster: boolean;
+  isViewer: boolean;
   name?: string;
 }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -34,12 +36,16 @@ export const Navbar = ({
             >
               <Menu />
             </Button>
-            <Sidebar
-              isAdmin={isAdmin}
-              openSidebar={openSidebar}
-              setOpenSidebar={setOpenSidebar}
-              isMaster={isMaster}
-            />
+
+            {!isViewer && (
+              <Sidebar
+                isAdmin={isAdmin}
+                openSidebar={openSidebar}
+                setOpenSidebar={setOpenSidebar}
+                isMaster={isMaster}
+                isViewer={isViewer}
+              />
+            )}
 
             <div className="flex items-center gap-1 w-fit">
               <span className="bg-white rounded-sm">
@@ -51,7 +57,7 @@ export const Navbar = ({
           </div>
 
           <div className="flex gap-5 items-center">
-            <DropdownUser name={name} isAdmin={isAdmin} />
+            <DropdownUser name={name} isAdmin={isAdmin} isViewer={isViewer} />
           </div>
         </div>
       </div>

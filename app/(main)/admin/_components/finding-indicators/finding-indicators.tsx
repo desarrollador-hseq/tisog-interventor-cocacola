@@ -6,9 +6,10 @@ import { useLoading } from "@/components/providers/loading-provider";
 import { FindingResumePie } from "./finding-resume-pie";
 import { FindingsContractorBar } from "./finding-contractor-bar";
 import { TableDefault } from "@/components/table-default";
-import { findingReportColumns } from "@/app/(main)/admin/hallazgos/_components/finding-report-columns";
-import { findingReportDescColumns } from "../../hallazgos/_components/finding-report-desc-columns";
-import { FindingReportExportExcel } from "../../hallazgos/_components/finding-report-export-excel";
+import { findingReportColumns } from "../../(restricted)/hallazgos/_components/finding-report-columns";
+import { findingReportDescColumns } from "../../(restricted)/hallazgos/_components/finding-report-desc-columns";
+import { FindingReportExportExcel } from "../../(restricted)/hallazgos/_components/finding-report-export-excel";
+
 
 interface ControlWithAreaAndContractor extends FindingReport {
   controlReport:

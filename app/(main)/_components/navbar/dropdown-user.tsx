@@ -10,7 +10,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ModalLogout } from "@/components/modal-logout";
 
-export function DropdownUser({ name, isAdmin }: { name?: string; isAdmin: boolean}) {
+export function DropdownUser({
+  name,
+  isAdmin,
+  isViewer,
+}: {
+  name?: string;
+  isAdmin: boolean;
+  isViewer: boolean;
+}) {
   const router = useRouter();
 
   return (
@@ -37,7 +45,11 @@ export function DropdownUser({ name, isAdmin }: { name?: string; isAdmin: boolea
 
         <DropdownMenuItem
           className="cursor-pointer border-none hover:bg-secondary hover:text-white"
-          onClick={() => router.push(`/${isAdmin ? "admin" : "analista"}/perfil/`)}
+          onClick={() =>
+            router.push(
+              `/${isAdmin || isViewer ? "admin" : "analista"}/perfil/`
+            )
+          }
         >
           Perfil
         </DropdownMenuItem>

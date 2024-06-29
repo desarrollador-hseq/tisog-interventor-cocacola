@@ -12,6 +12,7 @@ export async function PATCH(req: Request, { params }: { params: { userId: string
         const values = await req.json()
 
         if (!session) return new NextResponse("Unauthorized", { status: 401 })
+        if (!session.user.isMaster) return new NextResponse("USUARIO NO AUTORIZADO", { status: 400 })
 
         const userSaved = await db.user.findUnique({
             where: {
@@ -30,7 +31,18 @@ export async function PATCH(req: Request, { params }: { params: { userId: string
                         active: true,
                     }
                 })
-                if (result) return new NextResponse("Email ya se encuentra registrado en una empresa activa", { status: 400 })
+                if (result) return new NextResponse("Email ya se encuentra registrado en un usuario activo", { status: 400 })
+            }
+        }
+        if (values.numDoc) {
+            if (values.numDoc !== userSaved.numDoc) {
+                const result = await db.user.findFirst({
+                    where: {
+                        numDoc: values.numDoc,
+                        active: true,
+                    }
+                })
+                if (result) return new NextResponse("Documento ya se encuentra registrado en un usuario activo", { status: 400 })
             }
         }
 

@@ -8,7 +8,7 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await getServerSession(authOptions);
 
   if (session) {
-    if (session.user.role === "ADMIN") {
+    if (session.user.role === "ADMIN" || session.user.role === "VIEWER") {
       redirect("/admin/");
     } else if (session.user.role === "USER") {
       redirect("/analista/");
@@ -16,6 +16,7 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
       signOut();
     }
   }
+
   return (
     <div
       className="w-full"

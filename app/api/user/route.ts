@@ -5,49 +5,41 @@ import { authOptions } from "@/lib/auth-options";
 
 
 
-export async function PATCH(req: Request, { params }: { params: { userId: string } }) {
+export async function POST(req: Request) {
+    const session = await getServerSession(authOptions);
     try {
-        const session = await getServerSession(authOptions)
-        const { userId } = params;
-        const values = await req.json()
+        const values = await req.json();
 
-        if (!session) return new NextResponse("Unauthorized", { status: 401 })
+        if (!session || !session.user.email) return new NextResponse("Unauthorized", { status: 401 })
 
-        const userSaved = await db.user.findUnique({
-            where: {
-                id: userId
-            }
-        })
+        const existingController = await db.user.findFirst({
+            where: { email: values.email, active: true },
+        });
 
-        if (!userSaved) return new NextResponse("Not found", { status: 404 })
+        const existingController2 = await db.user.findFirst({
+            where: { numDoc: values.numDoc, active: true },
+        });
 
-  
-        if (values.email) {
-            if (values.email !== userSaved.email) {
-                const result = await db.user.findFirst({
-                    where: {
-                        email: values.email,
-                        active: true,
-                    }
-                })
-                if (result) return new NextResponse("Email ya se encuentra registrado en una empresa activa", { status: 400 })
-            }
+        if (existingController) {
+            return new NextResponse("Correo electrónico ya registrado", {
+                status: 400,
+            });
+        }
+        if (existingController2) {
+            return new NextResponse("Número de documento ya registrado", {
+                status: 400,
+            });
         }
 
-
-        const userUpdated = await db.user.update({
-            where: {
-                id: userId,
-            },
+        const controller = await db.user.create({
             data: {
-                ...values
-            }
-        })
+                ...values,
+            },
+        });
 
-        return NextResponse.json(userUpdated)
-
+        return NextResponse.json(controller);
     } catch (error) {
-        console.log("[USER_PATCH_ID]", error)
-        return new NextResponse("Internal Errorr" + error, { status: 500 })
+        console.log("[USER-CREATE]", error);
+        return new NextResponse("Internal Errorr" + error, { status: 500 });
     }
 }

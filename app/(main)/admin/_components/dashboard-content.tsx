@@ -88,7 +88,7 @@ export const DashboardContent = ({
             )}
 
             {dateFilter?.from && dateFilter?.to && (
-              <div className="flex gap-2 text-sm">
+              <div className="flex gap-2 text-xs">
                 <span>Fecha: </span>
                 <span>desde {formatDate(dateFilter?.from)}</span>
                 <span>hasta {formatDate(dateFilter?.to)}</span>

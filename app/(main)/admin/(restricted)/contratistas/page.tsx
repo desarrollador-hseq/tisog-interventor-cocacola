@@ -9,7 +9,7 @@ import { contractorTableColumns } from "./_components/contractor-table-columns";
 import { db } from "@/lib/db";
 import { CardPage } from "@/components/card-page";
 
-const bcrumb = [{ label: "Empresas", path: "/admin/empresas" }];
+const bcrumb = [{ label: "Contratistas", path: "/admin/contratistas" }];
 
 const ContractorPage = async () => {
   const companies = await db.contractor.findMany({

@@ -13,16 +13,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil } from "lucide-react";
-import Link from "next/link";
-
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -33,10 +23,6 @@ import {
 } from "@/components/ui/table";
 
 import TableColumnFiltering from "@/components/table-column-filtering";
-
-import { toast } from "sonner";
-
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { TableToExcel } from "@/components/table-to-excel";
 

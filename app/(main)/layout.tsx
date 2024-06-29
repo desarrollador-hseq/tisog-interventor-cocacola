@@ -5,8 +5,6 @@ import { RedirectAfterLogin } from "./_components/redirect-after-login";
 import { authOptions } from "@/lib/auth-options";
 import { Navbar } from "./_components/navbar/navbar";
 
-
-
 export default async function MainLayout({
   children,
 }: Readonly<{
@@ -32,8 +30,7 @@ export default async function MainLayout({
           width: "100%",
           minWidth: "100%",
           height: "100%",
-          position: "fixed"
-        
+          position: "fixed",
         }}
         className="non-print"
       />
@@ -42,8 +39,18 @@ export default async function MainLayout({
           "relative flex flex-col h-full min-h-screen m-0 p-0 mx-auto bg-transparent"
         )}
       >
-        <Navbar name={user?.name || ""} isAdmin={user.role === "ADMIN"} isMaster={user.isMaster || false} />
-        <div className=" md:pl-48 min-h-screen xl:flex justify-center items-start xl:w-full relative">
+        <Navbar
+          name={user?.name || ""}
+          isAdmin={user.role === "ADMIN"}
+          isViewer={user.role === "VIEWER"}
+          isMaster={user.isMaster || false}
+        />
+        <div
+          className={cn(
+            "min-h-screen xl:flex justify-center items-start xl:w-full relative",
+            user.role !== "VIEWER" && "md:pl-48"
+          )}
+        >
           <div className="mt-[48px] max-w-[1200px] w-full mx-auto bg-white min-h-[calc(100vh-48px)]">
             {children}
           </div>
