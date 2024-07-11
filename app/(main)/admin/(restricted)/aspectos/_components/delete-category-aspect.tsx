@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { SecurityCategory, TypeTool } from "@prisma/client";
+import { SecurityCategory } from "@prisma/client";
 import axios from "axios";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";

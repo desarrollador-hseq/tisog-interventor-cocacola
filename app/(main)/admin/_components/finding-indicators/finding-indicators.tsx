@@ -59,7 +59,7 @@ export const FindingIndicators = ({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 mb-3 lg:grid-rows-1 w-full min-w-full backdrop-blur-sm bg-primary/60">
           <div className="flex flex-col p-2 rounded-md w-full justify-center items-center">
             <FindingResumePie
-              title="Por estados"
+              title="Estado de los hallazgos"
               findingReports={filteredReports || []}
             />
           </div>

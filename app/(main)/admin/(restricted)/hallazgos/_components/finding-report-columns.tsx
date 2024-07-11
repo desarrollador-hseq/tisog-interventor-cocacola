@@ -121,31 +121,31 @@ export const findingReportColumns: ColumnDef<
       return <div className="">{dateFormated}</div>;
     },
   },
-  {
-    accessorKey: "source",
-    accessorFn: (value) => value.controlReport?.source,
-    enableColumnFilter: false,
+  // {
+  //   accessorKey: "source",
+  //   accessorFn: (value) => value.controlReport?.source,
+  //   enableColumnFilter: false,
 
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="hover:bg-secondary/30 hover:text-secondary-foreground"
-        >
-          Fuente
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const turn = row.original?.controlReport?.source;
-      const sourceEsp = selectOptions.find((d) => d.value === turn);
-      return (
-        <div className="capitalize">{sourceEsp ? sourceEsp.label : ""}</div>
-      );
-    },
-  },
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //         className="hover:bg-secondary/30 hover:text-secondary-foreground"
+  //       >
+  //         Fuente
+  //         <ArrowUpDown className="ml-2 h-4 w-4" />
+  //       </Button>
+  //     );
+  //   },
+  //   cell: ({ row }) => {
+  //     const turn = row.original?.controlReport?.source;
+  //     const sourceEsp = selectOptions.find((d) => d.value === turn);
+  //     return (
+  //       <div className="capitalize">{sourceEsp ? sourceEsp.label : ""}</div>
+  //     );
+  //   },
+  // },
   {
     accessorKey: "findingLevel",
     header: ({ column }) => {

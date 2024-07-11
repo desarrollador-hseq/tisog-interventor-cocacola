@@ -107,5 +107,5 @@ export const FindingsContractorBar = ({
     ],
   };
 
-  return <Chart title="Evento por contratista" option={option} />;
+  return <Chart title="Hallazgos por contratista" option={option} />;
 };
