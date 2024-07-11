@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SecurityCategory, TypeTool } from "@prisma/client";
+import { BusinessAreas } from "@prisma/client";
 import axios from "axios";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -16,34 +16,32 @@ import { Form } from "@/components/ui/form";
 import { useLoading } from "@/components/providers/loading-provider";
 
 interface AddCategoryAspectFormProps {
-  category?: SecurityCategory | null;
+  businessArea?: BusinessAreas | null;
 }
 
 const formSchema = z.object({
   name: z.string().min(1, {
     message: "Nombre es requerido",
   }),
-  num: z.coerce.number(),
 });
 
-export const AddCategoryAspectForm = ({
-  category,
+export const AddAreaForm = ({
+  businessArea,
 }: AddCategoryAspectFormProps) => {
   const router = useRouter();
   const { setLoadingApp } = useLoading();
 
-  const isEdit = useMemo(() => !!category, [category]);
+  const isEdit = useMemo(() => !!businessArea, [businessArea]);
 
-  if (isEdit && !category) {
-    toast.error("Tipo de herramienta no encontrado, redirigiendo...");
-    router.replace("/admin/herramientas/");
+  if (isEdit && !businessArea) {
+    toast.error("Área no encontrada, redirigiendo...");
+    router.replace("/admin/areas/");
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: category?.name || "",
-      num: category?.num || NaN,
+      name: businessArea?.name || "",
     },
   });
 
@@ -53,12 +51,12 @@ export const AddCategoryAspectForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (isEdit) {
-        await axios.patch(`/api/category-aspect/${category?.id}`, values);
-        toast.success("Categoria de aspecto actualizado");
+        await axios.patch(`/api/areas/${businessArea?.id}`, values);
+        toast.success("Áreas actualizada");
       } else {
-        const { data } = await axios.post(`/api/category-aspect/`, values);
-        router.push(`/admin/aspectos/`);
-        toast.success("Categoria de aspecto agregado correctamente");
+        const { data } = await axios.post(`/api/areas/`, values);
+        router.push(`/admin/areas/`);
+        toast.success("Áreas agregada correctamente");
       }
       // router.push(`/admin/colaboradores`);
       router.refresh();
@@ -69,11 +67,11 @@ export const AddCategoryAspectForm = ({
           const errorMessage = serverResponse.data;
           if (
             typeof errorMessage === "string" &&
-            errorMessage.includes("Categoria ya se encuentra registrada")
+            errorMessage.includes("Área ya se encuentra registrada")
           ) {
             setError("name", {
               type: "manual",
-              message: "Categoria ya se encuentra registrada",
+              message: "Área ya se encuentra registrada",
             });
           } else {
             toast.error(errorMessage);
@@ -95,14 +93,6 @@ export const AddCategoryAspectForm = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col items-center mt-8 p-2 w-full gap-4"
         >
-          <InputForm
-            control={form.control}
-            label="Posición"
-            name="num"
-            className="w-full"
-            type="number"
-          />
-
           <InputForm
             control={form.control}
             label="Nombre"

@@ -46,7 +46,7 @@ import { CalendarInputForm } from "@/components/calendar-input-form";
 import { InputForm } from "@/components/input-form";
 
 const formSchema = z.object({
-  source: z.string().min(1, { message: "Campo es requerido" }),
+  // source: z.string().min(1, { message: "Campo es requerido" }),
   description: z.string().min(1, { message: "Campo es requerido" }),
   exactLocation: z.string().min(1, { message: "Campo es requerido" }),
   businessAreaId: z.string().min(1, { message: "Campo es requerido" }),
@@ -57,14 +57,14 @@ const formSchema = z.object({
 
 const selectOptions = [
   { value: "inspeccion", label: "Inspección" },
-  { value: "inspeccion-preoperacional", label: "Insp. Preoperacional" },
-  {
-    value: "reporte-condicion-insegura",
-    label: "Reporte de condiciones inseguras",
-  },
-  { value: "reporte-acto-inseguro", label: "Reporte de actos inseguros" },
+  // { value: "inspeccion-preoperacional", label: "Insp. Preoperacional" },
+  // {
+  //   value: "reporte-condicion-insegura",
+  //   label: "Reporte de condiciones inseguras",
+  // },
+  // { value: "reporte-acto-inseguro", label: "Reporte de actos inseguros" },
   { value: "observacion-en-campo", label: "Observaciones en campo" },
-  { value: "sugerencia", label: "Sugerencia" },
+  // { value: "sugerencia", label: "Sugerencia" },
 ];
 
 export const ControlHeaderForm = ({
@@ -91,7 +91,7 @@ export const ControlHeaderForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      source: control?.source || "",
+      // source: control?.source || "",
       description: control?.description || "",
       businessAreaId: control?.businessAreaId || "",
       exactLocation: control?.exactLocation || "",
@@ -237,7 +237,7 @@ export const ControlHeaderForm = ({
               />
             </div>
 
-            <div>
+            {/* <div>
               <FormField
                 control={form.control}
                 name="source"
@@ -267,7 +267,7 @@ export const ControlHeaderForm = ({
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
             <div>
               <FormField
                 control={form.control}

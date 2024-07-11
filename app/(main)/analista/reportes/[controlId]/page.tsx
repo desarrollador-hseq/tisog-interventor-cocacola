@@ -76,7 +76,13 @@ const EditControlPage = async ({
           controlReportId: control.id,
         },
       },
+    
     },
+    orderBy: {
+      category: {
+        num: "asc"
+      }
+    }
   });
 
   const controllers = await db.user.findMany({

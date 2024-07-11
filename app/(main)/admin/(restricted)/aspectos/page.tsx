@@ -38,7 +38,7 @@ const AspectPage = async () => {
       active: true,
     },
     orderBy: {
-      createdAt: "desc",
+      num: "asc",
     },
   });
 
@@ -60,50 +60,59 @@ const AspectPage = async () => {
         nameDocument="aspectos"
       />
 
-      <SimpleModal
-        title={<TitleOnPage text="Categorias de aspectos" />}
-        large
-        textBtn="gestionar categorias de los aspectos"
-      >
-        <CardPage
-          className="border-none shadow-none"
-          pageHeader={
-            <SimpleModal
-              title={<TitleOnPage text="Agregar tipo de aspecto" />}
-              textBtn="Agregar"
-              btnClass="w-fit"
-            >
-              <AddCategoryAspectForm />
-            </SimpleModal>
-          }
+      <div className="mt-6 flex justify-center">
+        <SimpleModal
+          title={<TitleOnPage text="Categorias de aspectos" />}
+          large
+          textBtn="Gestionar categorias de los aspectos"
         >
-          <Table className="border">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nombre</TableHead>
-                <TableHead>Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {categories.map((category) => (
-                <TableRow key={category.id}>
-                  <TableCell className="font-medium">{category.name}</TableCell>
-                  <TableCell className="font-medium flex gap-2">
-                    <SimpleModal
-                      btnClass="p-1 h-auto bg-slate-400 hover:bg-slate-600"
-                      textBtn={<Edit2 className="w-4 h-4 " />}
-                      title={<TitleOnPage text="Editar la categoria" />}
-                    >
-                      <AddCategoryAspectForm category={category} />
-                    </SimpleModal>
-                    <DeleteCategoryAspect category={category} />
-                  </TableCell>
+          <CardPage
+            className="border-none shadow-none"
+            pageHeader={
+              <SimpleModal
+                title={<TitleOnPage text="Agregar tipo de aspecto" />}
+                textBtn="Agregar"
+                btnClass="w-fit"
+              >
+                <AddCategoryAspectForm />
+              </SimpleModal>
+            }
+          >
+            <Table className="border">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Posición</TableHead>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead>Acciones</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardPage>
-      </SimpleModal>
+              </TableHeader>
+              <TableBody>
+                {categories.map((category) => (
+                  <TableRow key={category.id}>
+                    <TableCell className="font-medium">
+                      {category.num}
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      {category.name}
+                    </TableCell>
+
+                    <TableCell className="font-medium flex gap-2">
+                      <SimpleModal
+                        btnClass="p-1 h-auto bg-slate-400 hover:bg-slate-600"
+                        textBtn={<Edit2 className="w-4 h-4 " />}
+                        title={<TitleOnPage text="Editar la categoria" />}
+                      >
+                        <AddCategoryAspectForm category={category} />
+                      </SimpleModal>
+                      <DeleteCategoryAspect category={category} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardPage>
+        </SimpleModal>
+      </div>
     </CardPage>
   );
 };

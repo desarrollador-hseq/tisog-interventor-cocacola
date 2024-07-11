@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import {
   AddAccidentForm,
 } from "../_components/add-accident-form";
-import { DeleteUserController } from "../_components/delete-user-controller";
+import { DeleteAccident } from "../_components/delete-accident";
 
 const bcrumb = [
   { label: "Analistas", path: "/admin/analistas" },
@@ -42,7 +42,7 @@ const CreateControllerPage = async ({
     <CardPage
       pageHeader={
         <TitleOnPage text={`Editar accidente`} bcrumb={bcrumb}>
-          {/* <DeleteUserController accident={accident} /> */}
+           <DeleteAccident accident={accident} /> 
         </TitleOnPage>
       }
     >

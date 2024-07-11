@@ -1,4 +1,4 @@
-import { FileSliders, Hammer, ListTodo, LucideIcon, User } from "lucide-react";
+import { FileSliders, Hammer, ListTodo, LucideIcon, MapPinned, User } from "lucide-react";
 import { SidebarItems } from "./sidebar-items";
 import { LogoMain } from "@/components/logo-main";
 
@@ -62,6 +62,11 @@ export const SidebarContent = ({
                   href={`/admin/herramientas`}
                   label={`Herramientas`}
                   icon={Hammer}
+                />
+                <SidebarItems
+                  href={`/admin/areas`}
+                  label={`Áreas`}
+                  icon={MapPinned}
                 />
               </>
             </AccordionContent>

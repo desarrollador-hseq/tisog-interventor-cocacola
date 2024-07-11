@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { BusinessAreas, Contractor, ControlReport } from "@prisma/client";
 import { ControlSourcePie } from "../../admin/_components/control-indicators/control-source-pie";
-import { ControlAreaPie } from "../../admin/_components/control-indicators/control-area-pie";
+import { ControlAreaBar } from "../../admin/_components/control-indicators/control-area-bar";
 import { KpiCard } from "@/components/kpi-card";
 import { SlidersVertical } from "lucide-react";
 import { controlReportColumns } from "../reportes/_components/control-report-columns";
@@ -52,7 +52,7 @@ export const ControlIndicators = ({
             />
           </div>
           <div className="flex flex-col p-2 ">
-            <ControlAreaPie
+            <ControlAreaBar
               areas={areas}
               controlReports={controlReports}
               title="Áreas"

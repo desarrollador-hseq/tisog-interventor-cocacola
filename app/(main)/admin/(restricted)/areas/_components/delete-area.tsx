@@ -1,33 +1,34 @@
+
+
+
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { User } from "@prisma/client";
+import { BusinessAreas, SecurityCategory, TypeTool } from "@prisma/client";
 import axios from "axios";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ModalDeleteConfirm } from "@/components/modal-delete-confirm";
 
-interface DeleteSupervisorProps {
-    controller: User;
+interface DeleteAreaProps {
+    businessArea: BusinessAreas;
 }
 
-export const DeleteUserController = ({ controller }: DeleteSupervisorProps) => {
+export const DeleteArea = ({ businessArea }: DeleteAreaProps) => {
   const router = useRouter();
   const [isLoading, setisLoading] = useState(false);
 
   const onConfirm = async () => {
     setisLoading(true);
     try {
-      await axios.delete(`/api/user-controller/${controller.id}`);
-      toast.success("Interventor eliminado");
-      router.push("/admin/interventores/");
-      router.refresh();
+      await axios.delete(`/api/areas/${businessArea.id}`);
+      toast.success("Área eliminada");
+      router.push("/admin/areas/");
+      // router.refresh()
     } catch (error) {
-      toast.error(
-        "Ocurrió un error al momento de eliminar al interventor"
-      );
+      toast.error("ocurrió un error al momento de eliminar el área");
     } finally {
       router.refresh();
       setisLoading(false);
@@ -36,15 +37,15 @@ export const DeleteUserController = ({ controller }: DeleteSupervisorProps) => {
 
   const title = (
     <p className="font-normal inline">
-      el interventor con número de documento:{" "}
-      <span className="font-bold ">{controller?.numDoc}</span>
+      el área de nombre:{" "}
+      <span className="font-bold ">{businessArea?.name}</span>
     </p>
   );
 
   return (
     <ModalDeleteConfirm onConfirm={onConfirm} title={title}>
-      <Button disabled={isLoading} variant="destructive" className="bg-red-700">
-        <Trash2 className="w-5 h-5" />
+      <Button disabled={isLoading} variant="destructive" className="p-1 h-auto bg-red-500 hover:bg-red-600">
+        <Trash2 className="w-4 h-4 " />
       </Button>
     </ModalDeleteConfirm>
   );

@@ -172,6 +172,7 @@ model ControlReport {
 
 model SecurityCategory {
   id String @id @default(uuid())
+  num Int? @default(0)
 
   name String @unique
 

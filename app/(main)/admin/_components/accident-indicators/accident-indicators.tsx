@@ -8,7 +8,8 @@ import { AccidentOriginPie } from "./accident-origin-pie";
 import { AccidentsContractorBar } from "./accident-contractor-bar";
 import { AccidentClassificationBar } from "./accident-classification-bar";
 import { AccidentLevelBar } from "./accident-level-bar";
-import { AccidentAreaPie } from "./accident-area-pie";
+import { AccidentAreaBar } from "./accident-area-bar";
+
 
 interface accidentWithContractorAndArea extends Accidents {
   contractor: Contractor | null;
@@ -78,7 +79,7 @@ export const AccidentIndicators = ({ accidents, areas }: AccidentIndicatorsProps
             />
           </div>
           <div className="flex flex-col p-2 ">
-            <AccidentAreaPie
+            <AccidentAreaBar
              accidents={filteredReports}
              areas={areas}
              title="Áreas"

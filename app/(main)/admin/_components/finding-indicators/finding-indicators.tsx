@@ -9,7 +9,7 @@ import { TableDefault } from "@/components/table-default";
 import { findingReportColumns } from "../../(restricted)/hallazgos/_components/finding-report-columns";
 import { findingReportDescColumns } from "../../(restricted)/hallazgos/_components/finding-report-desc-columns";
 import { FindingReportExportExcel } from "../../(restricted)/hallazgos/_components/finding-report-export-excel";
-
+import { FindingLevelBar } from "./finding-level-bar";
 
 interface ControlWithAreaAndContractor extends FindingReport {
   controlReport:
@@ -53,7 +53,7 @@ export const FindingIndicators = ({
       <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-3  lg:grid-rows-1 mt-0 w-full min-w-full">
           <h3 className="text-center col-span-3 p-3 font-bold text-2xl backdrop-blur-sm bg-blue-900 text-slate-100">
-            Hallazgos
+            Hallazgos reportados
           </h3>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 mb-3 lg:grid-rows-1 w-full min-w-full backdrop-blur-sm bg-primary/60">
@@ -64,12 +64,7 @@ export const FindingIndicators = ({
             />
           </div>
           <div className="flex flex-col p-2">
-            <FindingResumePie
-              title="Críticos por estados"
-              findingReports={
-                filteredReports?.filter((f) => f.findingLevel === "HIGH") || []
-              }
-            />
+            <FindingLevelBar findingReports={filteredReports} />
           </div>
           <div className="flex flex-col p-2">
             <FindingsContractorBar findingReports={filteredReports || []} />

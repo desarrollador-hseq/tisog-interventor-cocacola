@@ -21,11 +21,7 @@ interface ControlAreaPieProps {
   areas: BusinessAreas[];
 }
 
-export const AccidentAreaPie = ({
-  accidents,
-  title,
-  areas,
-}: ControlAreaPieProps) => {
+export const AccidentAreaBar = ({ accidents, title, areas }: ControlAreaPieProps) => {
   // Función para contar los accidentes por ID de área
   const countAccidentsByAreaId = () => {
     return accidents?.reduce((acc, accident) => {
@@ -57,7 +53,8 @@ export const AccidentAreaPie = ({
 
   const option = {
     tooltip: {
-      trigger: "item",
+      trigger: "axis",
+      axisPointer: { type: 'shadow' },
       formatter: "{b}: {c} ({d}%)", // Mostrar valor y porcentaje en el tooltip
     },
     legend: {
@@ -65,39 +62,50 @@ export const AccidentAreaPie = ({
       top: "0%",
       left: "center",
     },
+    xAxis: {
+      type: 'category',
+      data: chartData.map(item => item.name),
+      axisLabel: {
+        rotate: 45,
+        fontWeight: 'bold'
+      }
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {
+        formatter: '{value}'
+      }
+    },
     series: [
       {
         name: "Accidentes por Área",
-        type: "pie",
-        radius: ["50%", "70%"],
-        avoidLabelOverlap: false,
+        type: "bar",
+        data: chartData.map(item => item.value),
         label: {
           show: true,
+          position: 'inside',
           fontWeight: "bold",
           formatter(param: any) {
             const percentage = ((param.value / totalAccidents) * 100).toFixed();
-            return `${param.name}: ${param.value} (${percentage}%)`; // Mostrar cantidad y porcentaje
+            return `${param.value} (${percentage}%)`; // Mostrar cantidad y porcentaje
           },
         },
         emphasis: {
-          label: {
-            show: true,
-            fontSize: 14,
-            fontWeight: "bold",
-          },
+          focus: 'series'
         },
-        labelLine: {
-          show: true,
-        },
-        data: chartData,
-        color: [
-          "#4e71b1",
-          "#bae0fc",
-          "#82c9ff",
-          "#9ed0ff",
-          "#b2d8ff",
-          "#c6e0ff",
-        ], // Puedes añadir más colores si tienes más áreas
+        itemStyle: {
+          color: (params: any) => {
+            const colors = [
+              "#4e71b1",
+              "#bae0fc",
+              "#82c9ff",
+              "#9ed0ff",
+              "#b2d8ff",
+              "#c6e0ff"
+            ];
+            return colors[params.dataIndex % colors.length];
+          }
+        }
       },
     ],
     title: {

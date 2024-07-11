@@ -477,7 +477,7 @@ export const AddAccidentForm = ({
               name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-primary"> Estado</FormLabel>
+                  <FormLabel className="text-primary">Estado de la investigación</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}

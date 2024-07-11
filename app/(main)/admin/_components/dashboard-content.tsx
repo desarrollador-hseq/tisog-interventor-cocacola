@@ -103,8 +103,8 @@ export const DashboardContent = ({
           </div>
         )}
 
-        <FindingIndicators findingReports={findingReports} />
         <ControlIndicators controlReports={controlReport} areas={areas} />
+        <FindingIndicators findingReports={findingReports} />
         <AccidentIndicators accidents={accidents} areas={areas} />
 
         <ButtonPrint />
