@@ -118,5 +118,5 @@ export const FindingLevelBar = ({ findingReports }: FindingIndicatorsProps) => {
     ],
   };
 
-  return <Chart title={"Criticidad"} option={option} />;
+  return <Chart title={"Criticidad de los hallazgos"} option={option} />;
 };
