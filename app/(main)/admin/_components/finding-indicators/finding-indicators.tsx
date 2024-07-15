@@ -1,6 +1,6 @@
 "use client";
 
-import { FindingReport, ControlReport } from "@prisma/client";
+import { FindingReport, ControlReport, SecurityQuestion, SecurityCategory } from "@prisma/client";
 import { endOfDay } from "date-fns";
 import { useLoading } from "@/components/providers/loading-provider";
 import { FindingResumePie } from "./finding-resume-pie";
@@ -10,6 +10,7 @@ import { findingReportColumns } from "../../(restricted)/hallazgos/_components/f
 import { findingReportDescColumns } from "../../(restricted)/hallazgos/_components/finding-report-desc-columns";
 import { FindingReportExportExcel } from "../../(restricted)/hallazgos/_components/finding-report-export-excel";
 import { FindingLevelBar } from "./finding-level-bar";
+import { FindingBySecurityCategory } from "./finding-security-category-pie";
 
 interface ControlWithAreaAndContractor extends FindingReport {
   controlReport:
@@ -19,6 +20,7 @@ interface ControlWithAreaAndContractor extends FindingReport {
         controller: { name: string | null };
       })
     | null;
+    
 }
 
 interface FindingIndicatorsProps {
@@ -68,6 +70,9 @@ export const FindingIndicators = ({
           </div>
           <div className="flex flex-col p-2">
             <FindingsContractorBar findingReports={filteredReports || []} />
+          </div>
+          <div className="flex flex-col p-2">
+            <FindingBySecurityCategory findingReports={filteredReports || []} />
           </div>
         </div>
         <div className="flex flex-col p-2 page-break ">

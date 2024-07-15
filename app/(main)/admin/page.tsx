@@ -32,6 +32,11 @@ const AdminPage = async () => {
           controller: true,
         },
       },
+      securityQuestion: {
+        include: {
+          category: true
+        }
+      }
     },
   });
 
