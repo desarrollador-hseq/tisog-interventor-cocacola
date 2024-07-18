@@ -54,7 +54,8 @@ export const userTableColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "role",
-    accessorFn: (value) => value.numDoc,
+    accessorFn: (value) =>
+      roleOptions.find((d) => d.value === value.role)?.label,
     header: ({ column }) => {
       return (
         <Button
@@ -75,7 +76,7 @@ export const userTableColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "email",
-    accessorFn: (value) => value.numDoc,
+    accessorFn: (value) => value.email,
     header: ({ column }) => {
       return (
         <Button
@@ -95,7 +96,7 @@ export const userTableColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "isMaster",
-    accessorFn: (value) => value.isMaster,
+    enableColumnFilter: false,
     header: ({ column }) => {
       return (
         <Button

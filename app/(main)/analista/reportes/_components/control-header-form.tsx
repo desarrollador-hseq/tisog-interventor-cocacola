@@ -52,6 +52,7 @@ const formSchema = z.object({
   businessAreaId: z.string().min(1, { message: "Campo es requerido" }),
   contractorId: z.string().min(1, { message: "Campo es requerido" }),
   controllerId: z.string().min(1, { message: "Campo es requerido" }),
+  typeRisk: z.string().min(1, { message: "Campo es requerido" }),
   date: z.date(),
 });
 
@@ -65,6 +66,24 @@ const selectOptions = [
   // { value: "reporte-acto-inseguro", label: "Reporte de actos inseguros" },
   { value: "observacion-en-campo", label: "Observaciones en campo" },
   // { value: "sugerencia", label: "Sugerencia" },
+];
+const typeRisks = [
+  { value: "CHEMICAL_RISK", label: "Riesgo Químico" },
+  { value: "ELECTRICAL_RISK", label: "Riesgo eléctrico" },
+  { value: "MECHANICAL_RISK", label: "Riesgo mecánico" },
+  {
+    value: "SAFE_TRANSIT",
+    label: "Tránsito seguro y acceso a zonas restringidas",
+  },
+  { value: "ORDER_AND_CLEANLINESS", label: "Orden y aseo, BHM" },
+  { value: "ROAD_BEHAVIOR", label: "Comportamiento Vial" },
+  { value: "PPE_USE", label: "Uso de EPP" },
+  { value: "ERGONOMICS_AND_STORAGE", label: "Ergonomía y almacenamiento" },
+  { value: "WASTE_MANAGEMENT", label: "Gestión de residuos" },
+  {
+    value: "HIGH_RISK_TASKS",
+    label: "Tareas de alto riesgo/Actividades de mantenimiento",
+  },
 ];
 
 export const ControlHeaderForm = ({
@@ -97,6 +116,7 @@ export const ControlHeaderForm = ({
       exactLocation: control?.exactLocation || "",
       contractorId: control?.contractorId || "",
       controllerId: control?.controllerId || actualUserId || "",
+      typeRisk: control?.typeRisk || "",
       date: control?.date || new Date(),
     },
   });
@@ -237,13 +257,13 @@ export const ControlHeaderForm = ({
               />
             </div>
 
-            {/* <div>
+            <div>
               <FormField
                 control={form.control}
-                name="source"
+                name="typeRisk"
                 render={({ field }) => (
                   <FormItem className="flex flex-col w-full">
-                    <FormLabel>Fuente</FormLabel>
+                    <FormLabel className="font-semibold text-primary">Riesgo:</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -251,11 +271,11 @@ export const ControlHeaderForm = ({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selecciona una fuente" />
+                          <SelectValue placeholder="Selecciona riesto asociado" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {selectOptions.map((option) => (
+                        {typeRisks.map((option) => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -267,7 +287,7 @@ export const ControlHeaderForm = ({
                   </FormItem>
                 )}
               />
-            </div> */}
+            </div>
             <div>
               <FormField
                 control={form.control}

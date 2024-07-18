@@ -148,6 +148,12 @@ export const findingReportColumns: ColumnDef<
   // },
   {
     accessorKey: "findingLevel",
+    accessorFn: (value) => {
+      const level = value.findingLevel;
+      const sourceEsp =
+        level === "HIGH" ? "ALTA" : level === "MEDIUM" ? "MEDIA" : "BAJA";
+      return sourceEsp;
+    },
     header: ({ column }) => {
       return (
         <Button
@@ -181,6 +187,7 @@ export const findingReportColumns: ColumnDef<
   },
   {
     accessorKey: "status",
+    enableColumnFilter: false,
     header: ({ column }) => {
       return (
         <Button

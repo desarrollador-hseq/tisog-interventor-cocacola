@@ -13,7 +13,9 @@ export const accidentTableColumns: ColumnDef<
 >[] = [
   {
     accessorKey: "type",
-    accessorFn: (value) => value.name,
+    accessorFn: (value) => {
+      return value.type === "ACCIDENT" ? "Accidente" : "Incidente";
+    },
     header: ({ column }) => {
       return (
         <Button
@@ -21,6 +23,7 @@ export const accidentTableColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
         >
+          Tipo
           <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
@@ -53,7 +56,7 @@ export const accidentTableColumns: ColumnDef<
   },
   {
     accessorKey: "area",
-    accessorFn: (value) => !!value.area?.name ? value.area.name : "Sin área",
+    accessorFn: (value) => (!!value.area?.name ? value.area.name : "Sin área"),
 
     header: ({ column }) => {
       return (
@@ -68,13 +71,13 @@ export const accidentTableColumns: ColumnDef<
       );
     },
     cell: ({ row }) => {
-      const numDoc = row.original?.area?.name ||  "Sin área";
+      const numDoc = row.original?.area?.name || "Sin área";
       return <div className="">{numDoc}</div>;
     },
   },
   {
-    accessorKey: "contractor",
-    accessorFn: (value) => value.contractor?.name,
+    accessorKey: "source",
+    accessorFn: (value) => (value.origin === "ACT" ? "ACTO" : "CONDICIÓN"),
     header: ({ column }) => {
       return (
         <Button
@@ -82,13 +85,51 @@ export const accidentTableColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
         >
-          Contratista
+          Origen
           <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const name = row.original?.contractor?.name;
+      const name = row.original?.origin === "ACT" ? "ACTO" : "CONDICIÓN";
+      return <div className="">{name}</div>;
+    },
+  },
+  {
+    accessorKey: "classification",
+    accessorFn: (value) =>
+      value.classification === "FIRST_AID"
+        ? "Primeros auxilios"
+        : value.classification === "LOST_WORKDAY"
+        ? "Incidente, dias perdidos"
+        : value.classification === "MEDICAL_TREATMENT"
+        ? "Tratamiento medico"
+        : value.classification === "NEAR_MISS"
+        ? "Near miss"
+        : "Desconocido",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
+        >
+          Clasificación
+          <ArrowUpDown className="ml-2 h-3 w-3" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const name =
+        row.original?.classification === "FIRST_AID"
+          ? "Primeros auxilios"
+          : row.original?.classification === "LOST_WORKDAY"
+          ? "Incidente, dias perdidos"
+          : row.original?.classification === "MEDICAL_TREATMENT"
+          ? "Tratamiento medico"
+          : row.original?.classification === "NEAR_MISS"
+          ? "Near miss"
+          : "Desconocido";
       return <div className="">{name}</div>;
     },
   },

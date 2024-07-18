@@ -100,6 +100,9 @@ enum FindingTypeAction {
   IMPROVEMENT
 }
 
+
+
+
 model FindingReport {
   id String @id @default(uuid())
 
@@ -132,6 +135,19 @@ model FindingReport {
   @@index([controlReportId])
 }
 
+enum ControlTypeRisk {
+  CHEMICAL_RISK
+  ELECTRICAL_RISK
+  MECHANICAL_RISK
+  SAFE_TRANSIT
+  ORDER_AND_CLEANLINESS
+  ROAD_BEHAVIOR
+  PPE_USE
+  ERGONOMICS_AND_STORAGE
+  WASTE_MANAGEMENT
+  HIGH_RISK_TASKS
+}
+
 model ControlReport {
   id String @id @default(uuid())
 
@@ -160,6 +176,8 @@ model ControlReport {
   date DateTime?
 
   exactLocation String?
+
+  typeRisk ControlTypeRisk?
 
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
