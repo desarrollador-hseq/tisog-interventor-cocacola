@@ -94,6 +94,26 @@ export const findingReportColumns: ColumnDef<
     },
   },
   {
+    accessorKey: "findingDesc",
+    accessorFn: (value) => value.findingDesc,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-secondary/30 hover:text-secondary-foreground"
+        >
+          Descripción
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const turn = row.original?.findingDesc;
+      return <div className="text-[12px]">{turn}</div>;
+    },
+  },
+  {
     accessorKey: "date",
     enableColumnFilter: false,
     accessorFn: (value) =>

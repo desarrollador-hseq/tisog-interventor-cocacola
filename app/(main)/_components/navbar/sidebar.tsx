@@ -5,7 +5,6 @@ import {
   Building2,
   ClipboardCheck,
   ClipboardList,
-  Hammer,
   Home,
   ListTodo,
   TriangleAlert,
@@ -34,7 +33,11 @@ const adminRoutes = [
     label: "Analistas",
     href: "/admin/analistas",
   },
-
+  {
+    icon: ListTodo,
+    label: "Listas de chequeo",
+    href: "/admin/reportes",
+  },
   {
     icon: ClipboardList,
     label: "Reportes de hallazgos",
