@@ -159,7 +159,7 @@ export const ControlHeaderForm = ({
       } else {
         const { data } = await axios.post(`/api/controls/`, values);
         toast.info("Control Creado");
-        router.push(`/analista/reportes/${data.id}`);
+        router.push(`/admin/reportes/${data.id}`);
       }
       router.refresh();
     } catch (error) {

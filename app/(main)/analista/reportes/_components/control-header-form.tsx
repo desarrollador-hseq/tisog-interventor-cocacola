@@ -435,7 +435,7 @@ export const ControlHeaderForm = ({
                 label="Fecha"
                 name="date"
                 className="w-full"
-                // disabled={!isAdmin}
+                disabled={!isAdmin}
               />
             </div>
             <div className="md:col-span-2">
