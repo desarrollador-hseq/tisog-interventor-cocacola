@@ -35,6 +35,9 @@ const FindingReportPage = async () => {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    }
   });
 
   return (

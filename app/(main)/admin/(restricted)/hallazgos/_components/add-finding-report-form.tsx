@@ -48,9 +48,9 @@ interface AddFindingReportFormProps {
   contractors: Contractor[];
   businessAreas: BusinessAreas[];
   aspects: any[];
-  controllers: User[]
-  actualUserId?: string
-  isAdmin?: boolean
+  controllers: User[];
+  actualUserId?: string;
+  isAdmin?: boolean;
 }
 
 const formSchema = z.object({
@@ -77,7 +77,7 @@ export const AddFindingReportForm = ({
   aspects,
   actualUserId,
   controllers,
-  isAdmin
+  isAdmin,
 }: AddFindingReportFormProps) => {
   const router = useRouter();
   const [findingReportData, setFindingReportData] = useState(findingReport);
@@ -213,7 +213,7 @@ export const AddFindingReportForm = ({
                   label="Correción"
                   name="actionInmediate"
                 />
-          
+
                 <TextAreaForm
                   control={form.control}
                   label="Acción correctiva"
@@ -261,6 +261,18 @@ export const AddFindingReportForm = ({
       </div>
 
       {/* 2 Column */}
+      {findingReport?.status === "CLOSED" && (
+        <div className="space-y-4 mt-3">
+          <UploadImageForm
+            apiUrl="/api/upload/file"
+            field="closingEvidence"
+            file={`${findingReport?.closingEvidence}`}
+            label="Evidencia de cierre"
+            ubiPath="control/images"
+            update={`/api/finding-report/${findingReport?.id}/`}
+          />
+        </div>
+      )}
       <div className="space-y-4 mt-3">
         <div className="bg-blue-100 rounded-md  overflow-hidden">
           <h2 className="text-center py-2 font-bold text-md bg-slate-400 text-white">

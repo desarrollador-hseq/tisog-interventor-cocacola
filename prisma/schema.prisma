@@ -100,9 +100,6 @@ enum FindingTypeAction {
   IMPROVEMENT
 }
 
-
-
-
 model FindingReport {
   id String @id @default(uuid())
 
@@ -125,7 +122,8 @@ model FindingReport {
 
   status FindingStatus @default(OPEN)
 
-  imgUrl String?
+  imgUrl          String?
+  closingEvidence String?
 
   // active    Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -189,8 +187,8 @@ model ControlReport {
 }
 
 model SecurityCategory {
-  id String @id @default(uuid())
-  num Int? @default(0)
+  id  String @id @default(uuid())
+  num Int?   @default(0)
 
   name String @unique
 
