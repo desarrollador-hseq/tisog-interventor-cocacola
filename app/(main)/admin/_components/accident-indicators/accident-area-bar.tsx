@@ -58,7 +58,7 @@ export const AccidentAreaBar = ({ accidents, title, areas }: ControlAreaPieProps
       formatter: "{b}: {c} ({d}%)", // Mostrar valor y porcentaje en el tooltip
     },
     legend: {
-      show: true,
+      show: false,
       top: "0%",
       left: "center",
     },

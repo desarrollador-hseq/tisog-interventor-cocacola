@@ -51,7 +51,7 @@ export const ControlAreaBar = ({ controlReports, title, areas }: ControlAreaPieP
       formatter: "{b}: {c} ({d}%)", // Mostrar valor y porcentaje en el tooltip
     },
     legend: {
-      show: true,
+      show: false,
       top: "0%",
       left: "center",
     },

@@ -34,9 +34,9 @@ const AdminPage = async () => {
       },
       securityQuestion: {
         include: {
-          category: true
-        }
-      }
+          category: true,
+        },
+      },
     },
   });
 
@@ -47,6 +47,15 @@ const AdminPage = async () => {
     include: {
       contractor: true,
       businessArea: true,
+      generalAspects: {
+        include: {
+          securityQuestion: {
+            include: {
+              category: true,
+            },
+          },
+        },
+      },
     },
   });
   const areas = await db.businessAreas.findMany({
@@ -62,6 +71,10 @@ const AdminPage = async () => {
       contractor: true,
       area: true,
     },
+  });
+
+  console.log({
+    aspecss: controlReports.map((e) => JSON.stringify(e.generalAspects)),
   });
 
   return (

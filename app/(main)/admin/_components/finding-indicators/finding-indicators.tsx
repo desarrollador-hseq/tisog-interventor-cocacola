@@ -1,6 +1,11 @@
 "use client";
 
-import { FindingReport, ControlReport, SecurityQuestion, SecurityCategory } from "@prisma/client";
+import {
+  FindingReport,
+  ControlReport,
+  SecurityQuestion,
+  SecurityCategory,
+} from "@prisma/client";
 import { endOfDay } from "date-fns";
 import { useLoading } from "@/components/providers/loading-provider";
 import { FindingResumePie } from "./finding-resume-pie";
@@ -20,7 +25,6 @@ interface ControlWithAreaAndContractor extends FindingReport {
         controller: { name: string | null };
       })
     | null;
-    
 }
 
 interface FindingIndicatorsProps {
@@ -82,15 +86,17 @@ export const FindingIndicators = ({
 
           <TableDefault
             columns={findingReportColumns}
-            data={filteredReports}
+            data={filteredReports || []}
             deleteHref=""
           />
 
           <div className="">
-            <FindingReportExportExcel
-              columns={findingReportDescColumns}
-              data={filteredReports}
-            />
+            {filteredReports.length > 0 && (
+              <FindingReportExportExcel
+                columns={findingReportDescColumns}
+                data={filteredReports || []}
+              />
+            )}
           </div>
         </div>
       </div>

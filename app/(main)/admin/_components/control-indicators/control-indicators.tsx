@@ -10,6 +10,7 @@ import { useLoading } from "@/components/providers/loading-provider";
 import { ControlsContractorBar } from "./control-contractor-bar";
 import { ControlSourcePie } from "./control-source-pie";
 import { ControlAreaBar } from "./control-area-bar";
+import { ControlByCategory } from "./control-by-category";
 
 interface ControlIndicatorsProps {
   controlReports:
@@ -71,6 +72,12 @@ export const ControlIndicators = ({
               controlReports={filteredReports}
               areas={areas}
               title="Área del evento"
+            />
+          </div>
+          <div className="flex flex-col p-2 ">
+            <ControlByCategory 
+              controlReports={filteredReports}
+           
             />
           </div>
         </div>

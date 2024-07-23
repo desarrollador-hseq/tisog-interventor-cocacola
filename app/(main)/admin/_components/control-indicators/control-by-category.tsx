@@ -1,40 +1,42 @@
 import { Chart } from "@/components/chart";
-import {
-  FindingReport,
-  SecurityCategory,
-  SecurityQuestion,
-} from "@prisma/client";
-import React from "react";
 
-interface FindingIndicatorsProps {
-  findingReports: any[];
-}
+export const ControlByCategory = ({
+  controlReports,
+}: {
+  controlReports?: any[] | null;
+}) => {
+  // Función para contar controles por categoría
+  const countControlsByCategory = () => {
+    return controlReports?.reduce((acc, report) => {
+      // Usar un conjunto para rastrear categorías únicas en cada informe
+      const uniqueCategories = new Set();
+      const generalAspects = report.generalAspects ;
 
-export const FindingBySecurityCategory = ({
-  findingReports,
-}: FindingIndicatorsProps) => {
-  // Función para contar hallazgos por categoría de SecurityQuestion
-  const countFindingsByCategory = () => {
-    return findingReports?.reduce((acc, finding) => {
-      const category =
-        finding.securityQuestion?.category?.name || "Desconocido";
-      if (!acc[category]) {
-        acc[category] = 0;
-      }
-      acc[category]++;
+      generalAspects.forEach((aspect: any) => {
+        const category = aspect.securityQuestion?.category?.name || "Desconocido";
+        uniqueCategories.add(category); // Añadir la categoría al conjunto
+      });
+
+      uniqueCategories.forEach((category: any) => {
+        if (!acc[category]) {
+          acc[category] = 0;
+        }
+        acc[category]++;
+      });
+
       return acc;
     }, {} as Record<string, number>);
   };
 
-  const findingCountsByCategory = countFindingsByCategory() || {};
+  const controlCountsByCategory = countControlsByCategory() || {};
 
   // Excluir la categoría "Desconocido" si no se desea mostrar
-  delete findingCountsByCategory["Desconocido"];
+  delete controlCountsByCategory["Desconocido"];
 
   // Preparar datos para el gráfico
-  const categories = Object.keys(findingCountsByCategory);
+  const categories = Object.keys(controlCountsByCategory);
   const counts = categories.map(
-    (category) => findingCountsByCategory[category]
+    (category) => controlCountsByCategory[category]
   );
 
   // Definir un conjunto fijo de colores
@@ -95,14 +97,14 @@ export const FindingBySecurityCategory = ({
     },
     series: [
       {
-        name: "Hallazgos",
+        name: "Controles", // Nombre de la serie
         type: "bar",
         label: {
           show: true,
           position: "inside",
         },
         data: categories.map((category, index) => ({
-          value: findingCountsByCategory[category],
+          value: controlCountsByCategory[category],
           name: category,
           itemStyle: {
             color: colorPalette[index % colorPalette.length], // Asignar color secuencialmente
@@ -112,5 +114,5 @@ export const FindingBySecurityCategory = ({
     ],
   };
 
-  return <Chart title={"Hallazgos por peligros y/o riesgos"} option={option} />;
+  return <Chart title={"Controles por Categoría"} option={option} />;
 };
