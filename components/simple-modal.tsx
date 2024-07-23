@@ -104,7 +104,7 @@ export const SimpleModal = ({
         </AlertDialogHeader>
         <div className="w-full px-3 pt-3">{children}</div>
 
-        <AlertDialogFooter className="gap-3 border-slate-500 flex items-center h-full px-3">
+        <AlertDialogFooter className="gap-3 border-slate-500 flex flex-row items-center h-full px-3">
           {onAcept && (
             <Button
               className="bg-zinc-400 hover:bg-zinc-600"

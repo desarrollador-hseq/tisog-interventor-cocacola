@@ -50,7 +50,6 @@ export const ChangeStatusFinding = ({
     }
   };
 
-
   const handleConfirm = (confirm: boolean) => {
     setShowModal(false);
     if (confirm) {
@@ -134,6 +133,7 @@ export const ChangeStatusFinding = ({
 
       <SimpleModal
         title="Subir imagen"
+        btnClass="hidden"
         openDefault={showModalEvidence}
         onClose={handleUploadComplete}
         onAcept={handleUploadComplete}
