@@ -44,6 +44,7 @@ import { cn } from "@/lib/utils";
 
 import { CalendarInputForm } from "@/components/calendar-input-form";
 import { InputForm } from "@/components/input-form";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const formSchema = z.object({
   // source: z.string().min(1, { message: "Campo es requerido" }),
@@ -51,6 +52,7 @@ const formSchema = z.object({
   exactLocation: z.string().min(1, { message: "Campo es requerido" }),
   businessAreaId: z.string().min(1, { message: "Campo es requerido" }),
   contractorId: z.string().min(1, { message: "Campo es requerido" }),
+  projectAuditor: z.string().min(1, { message: "Campo es requerido" }),
   controllerId: z.string().min(1, { message: "Campo es requerido" }),
   typeRisk: z.string().min(1, { message: "Campo es requerido" }),
   date: z.date(),
@@ -86,6 +88,11 @@ const typeRisks = [
   },
 ];
 
+const projectInterveners = [
+  { value: "ECOHL", label: "ECOHL" },
+  { value: "GIRO", label: "GIRO" },
+];
+
 export const ControlHeaderForm = ({
   control,
   areas,
@@ -119,6 +126,7 @@ export const ControlHeaderForm = ({
       exactLocation: control?.exactLocation || "",
       contractorId: control?.contractorId || "",
       controllerId: control?.controllerId || actualUserId || "",
+      projectAuditor: control?.projectAuditor || "",
       typeRisk: control?.typeRisk || "",
       date: control?.date || new Date(),
     },
@@ -185,271 +193,324 @@ export const ControlHeaderForm = ({
             </div>
           )}
           <div className="w-full grid xl:grid-cols-2 items-start gap-1 space-y-0 p-0 my-0">
-            <div>
-              <FormField
-                control={form.control}
-                name="businessAreaId"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col w-full">
-                    <FormLabel className="font-semibold text-primary">
-                      Área
-                    </FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            disabled={disabled}
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value
-                              ? areas?.find((area) => area.id === field.value)
-                                  ?.name
-                              : "Selecciona un area"}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-full p-0">
-                        <Command className="w-full">
-                          <CommandInput placeholder="Buscar areas registradas" />
-                          <CommandEmpty>Area no encontrada!</CommandEmpty>
-                          <CommandGroup>
-                            <CommandList>
-                              {areas?.map((area, index) => (
-                                <CommandItem
-                                  value={`${area.name}`}
-                                  key={area.id + index}
-                                  onSelect={() => {
-                                    setValue("businessAreaId", area.id, {
-                                      shouldValidate: true,
-                                    });
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
-                                      area.id === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    )}
-                                  />
-                                  {area.name}
-                                </CommandItem>
-                              ))}
-                            </CommandList>
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div>
-              <InputForm
-                control={form.control}
-                label="Lugar exacto (breve descripción)"
-                name="exactLocation"
-                disabled={disabled}
-              />
-            </div>
-
-            <div>
-              <FormField
-                control={form.control}
-                name="typeRisk"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col w-full">
-                    <FormLabel className="font-semibold text-primary">
-                      Riesgo:
-                    </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      disabled={disabled}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona riesgo asociado" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {typeRisks.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div>
-              <FormField
-                control={form.control}
-                name="controllerId"
-                disabled={disabled}
-                render={({ field }) => (
-                  <FormItem className="flex flex-col w-full">
-                    <FormLabel className="font-semibold text-primary uppercase">
-                      Interventor / analista
-                    </FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            disabled={disabled}
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value
-                              ? controllers?.find(
-                                  (controller) => controller.id === field.value
-                                )?.name
-                              : "Selecciona un interventor"}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-full p-0">
-                        <Command className="w-full">
-                          <CommandInput placeholder="Buscar interventores registrados" />
-                          <CommandEmpty>
-                            Interventor no encontrado!
-                          </CommandEmpty>
-                          <CommandGroup>
-                            <CommandList>
-                              {controllers?.map((controller, index) => (
-                                <CommandItem
-                                  value={`${controller.name}`}
-                                  key={controller.id + index}
-                                  onSelect={() => {
-                                    setValue("controllerId", controller.id, {
-                                      shouldValidate: true,
-                                    });
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
+            <div className="space-y-2">
+              <div>
+                <FormField
+                  control={form.control}
+                  name="controllerId"
+                  disabled={disabled}
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col w-full">
+                      <FormLabel className="font-semibold text-primary">
+                        Interventor / analista
+                      </FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              disabled={disabled}
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "justify-between",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? controllers?.find(
+                                    (controller) =>
                                       controller.id === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    )}
-                                  />
-                                  {controller.name}
-                                </CommandItem>
-                              ))}
-                            </CommandList>
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                                  )?.name
+                                : "Selecciona un interventor"}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0">
+                          <Command className="w-full">
+                            <CommandInput placeholder="Buscar interventores registrados" />
+                            <CommandEmpty>
+                              Interventor no encontrado!
+                            </CommandEmpty>
+                            <ScrollArea className="max-h-[300px] h-fit w-[350px] p-1">
+                              <CommandGroup>
+                                <CommandList>
+                                  {controllers?.map((controller, index) => (
+                                    <CommandItem
+                                      value={`${controller.name}`}
+                                      key={controller.id + index}
+                                      onSelect={() => {
+                                        setValue(
+                                          "controllerId",
+                                          controller.id,
+                                          {
+                                            shouldValidate: true,
+                                          }
+                                        );
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          controller.id === field.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                      {controller.name}
+                                    </CommandItem>
+                                  ))}
+                                </CommandList>
+                              </CommandGroup>
+                            </ScrollArea>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-            <div>
-              {/* <FormField
-                control={form.control}
-                name="contractorId"
-                disabled={disabled}
-                render={({ field }) => (
-                  <FormItem className="flex flex-col w-full">
-                    <FormLabel className="font-semibold text-primary uppercase">
-                      Contratista
-                    </FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="contractorId"
+                  disabled={disabled}
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col w-full">
+                      <FormLabel className="font-semibold text-primary ">
+                        Contratista
+                      </FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              disabled={disabled}
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "justify-between",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? contractors?.find(
+                                    (contractor) =>
+                                      contractor.id === field.value
+                                  )?.name
+                                : "Selecciona un contratista"}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0">
+                          <Command className="w-full">
+                            <CommandInput placeholder="Buscar contratistas registrados" />
+                            <CommandEmpty>
+                              Contratista no encontrado!
+                            </CommandEmpty>
+                            <CommandGroup>
+                              <CommandList>
+                                {contractors?.map((contractor, index) => (
+                                  <CommandItem
+                                    value={`${contractor.name}`}
+                                    key={contractor.id + index}
+                                    onSelect={() => {
+                                      setValue("contractorId", contractor.id, {
+                                        shouldValidate: true,
+                                      });
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        contractor.id === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {contractor.name}
+                                  </CommandItem>
+                                ))}
+                              </CommandList>
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div>
+                <FormField
+                  control={form.control}
+                  name="typeRisk"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col w-full">
+                      <FormLabel className="font-semibold text-primary">
+                        Riesgo asociado:
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        disabled={disabled}
+                      >
                         <FormControl>
-                          <Button
-                            disabled={disabled}
-                            variant="outline"
-                            role="combobox"
+                          <SelectTrigger
                             className={cn(
-                              "justify-between",
-                              !field.value && "text-muted-foreground"
+                              "font-medium ",
+                              !!!field.value && "text-muted-foreground "
                             )}
                           >
-                            {field.value
-                              ? contractors?.find(
-                                  (contractor) => contractor.id === field.value
-                                )?.name
-                              : "Selecciona un contratista"}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
+                            <SelectValue placeholder="Selecciona el riesgo asociado" />
+                          </SelectTrigger>
                         </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-full p-0">
-                        <Command className="w-full">
-                          <CommandInput placeholder="Buscar contratistas registrados" />
-                          <CommandEmpty>
-                            Contratista no encontrado!
-                          </CommandEmpty>
-                          <CommandGroup>
-                            <CommandList>
-                              {contractors?.map((contractor, index) => (
-                                <CommandItem
-                                  value={`${contractor.name}`}
-                                  key={contractor.id + index}
-                                  onSelect={() => {
-                                    setValue("contractorId", contractor.id, {
-                                      shouldValidate: true,
-                                    });
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
-                                      contractor.id === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    )}
-                                  />
-                                  {contractor.name}
-                                </CommandItem>
-                              ))}
-                            </CommandList>
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
+                        <SelectContent>
+                          {typeRisks.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
 
-              <InputForm
-                control={form.control}
-                label="Contratista"
-                name="contractorId"
-                disabled={disabled}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div>
+                <FormField
+                  control={form.control}
+                  name="projectAuditor"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col w-full">
+                      <FormLabel className="font-semibold text-primary">
+                        Interventor del proyecto:
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        disabled={disabled}
+                      >
+                        <FormControl>
+                          <SelectTrigger
+                            className={cn(
+                              "font-medium ",
+                              !!!field.value && "text-muted-foreground "
+                            )}
+                          >
+                            <SelectValue placeholder="Selecciona un interventor del proyecto" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {projectInterveners.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-            <div>
-              <CalendarInputForm
-                control={form.control}
-                label="Fecha"
-                name="date"
-                className="w-full"
-                disabled={path !== "crear"}
-              />
+            {/* =========================================== */}
+            <div className="space-y-2">
+              <div>
+                <FormField
+                  control={form.control}
+                  name="businessAreaId"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col w-full">
+                      <FormLabel className="font-semibold text-primary">
+                        Área
+                      </FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                               disabled={disabled}
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "justify-between",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? areas?.find((area) => area.id === field.value)
+                                    ?.name
+                                : "Selecciona un area"}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0">
+                          <Command className="w-full">
+                            <CommandInput placeholder="Buscar areas registradas" />
+                            <CommandEmpty>Area no encontrada!</CommandEmpty>
+                            <ScrollArea className="max-h-[300px] h-fit w-[350px] p-1">
+                              <CommandGroup>
+                                <CommandList>
+                                  {areas?.map((area, index) => (
+                                    <CommandItem
+                                      value={`${area.name}`}
+                                      key={area.id + index}
+                                      onSelect={() => {
+                                        setValue("businessAreaId", area.id, {
+                                          shouldValidate: true,
+                                        });
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          area.id === field.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                      {area.name}
+                                    </CommandItem>
+                                  ))}
+                                </CommandList>
+                              </CommandGroup>
+                            </ScrollArea>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div>
+                <InputForm
+                  control={form.control}
+                  label="Lugar exacto (breve descripción)"
+                  name="exactLocation"
+                  disabled={disabled}
+                />
+              </div>
+              <div>
+                <CalendarInputForm
+                  control={form.control}
+                  label="Fecha"
+                  name="date"
+                  className="w-full"
+                  disabled={path !== "crear"}
+                />
+              </div>
             </div>
+
             <div className="md:col-span-2">
               <TextAreaForm
                 control={form.control}
@@ -470,3 +531,4 @@ export const ControlHeaderForm = ({
     </div>
   );
 };
+// path !== "crear"

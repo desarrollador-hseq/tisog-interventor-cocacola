@@ -167,6 +167,8 @@ model ControlReport {
   controllerId String?
   controller   User?   @relation(fields: [controllerId], references: [id])
 
+  projectAuditor String?
+
   generalAspects ChecklistItem[]
 
   personNameUnsafe String?
