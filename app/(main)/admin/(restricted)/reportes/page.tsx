@@ -8,7 +8,6 @@ import { CardPage } from "@/components/card-page";
 import { buttonVariants } from "@/components/ui/button";
 import { TitleOnPage } from "@/components/title-on-page";
 import { authOptions } from "@/lib/auth-options";
-import { TableDefault } from "@/components/table-default";
 import { controlReportColumns } from "./_components/control-report-columns";
 import { db } from "@/lib/db";
 import { ControlTable } from "./_components/control-table";
