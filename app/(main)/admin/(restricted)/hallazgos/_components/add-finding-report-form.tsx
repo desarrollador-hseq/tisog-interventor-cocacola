@@ -40,6 +40,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
+import { FieldUpdateForm } from "@/components/field-update-form";
+import { Separator } from "@/components/ui/separator";
 
 interface AddFindingReportFormProps {
   findingReport?:
@@ -170,7 +172,7 @@ export const AddFindingReportForm = ({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="items-center mt-1 w-full grid grid-cols-2 gap-2 bg-slate-100 rounded-md p-3 col-span-2 "
+            className="items-center mt-1 w-full grid grid-cols-2 gap-2 bg-slate-100 rounded-md p-3 col-span-3 "
           >
             <div className="col-span-2">
               <TextAreaForm
@@ -237,42 +239,55 @@ export const AddFindingReportForm = ({
                 disabled={false}
               />
             </div>
-
-            {/* <Button
-              disabled={isSubmitting || !isValid}
-              className="w-full max-w-[500px] gap-3"
-            >
-              {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-              Actualizar
-            </Button> */}
           </form>
         </Form>
-
-        <div>
-          <UploadImageForm
-            apiUrl="/api/upload/file"
-            field="imgUrl"
-            file={`${findingReport?.imgUrl}`}
-            label="Registro fotográfico"
-            ubiPath="control/images"
-            update={`/api/finding-report/${findingReport?.id}/`}
-          />
-        </div>
       </div>
 
-      {/* 2 Column */}
-      {findingReport?.status === "CLOSED" && (
-        <div className="space-y-4 mt-3">
-          <UploadImageForm
-            apiUrl="/api/upload/file"
-            field="closingEvidence"
-            file={`${findingReport?.closingEvidence}`}
-            label="Evidencia de cierre"
-            ubiPath="control/images"
-            update={`/api/finding-report/${findingReport?.id}/`}
+      <div className="grid md:grid-cols-2 p-4 gap-3 bg-slate-300 my-2 rounded-md">
+        <h2 className="text-center text-2xl md:col-span-2 text-primary font-bold ">Evidencia</h2>
+        <UploadImageForm
+          apiUrl="/api/upload/file"
+          field="imgUrl"
+          file={`${findingReport?.imgUrl}`}
+          label="Registro fotográfico"
+          ubiPath="control/images"
+          update={`/api/finding-report/${findingReport?.id}/`}
+        />
+        <div>
+          <FieldUpdateForm
+            field="imgDescription"
+            apiUrl={`/api/finding-report`}
+            label="Detalles del hallazgo"
+            id={findingReport?.id}
+            value={findingReport?.imgDescription}
+            defaultOpenUpdate={true}
+            isTextArea
           />
         </div>
+
+        {findingReport?.status === "CLOSED" && (
+         <>
+          
+          <Separator className="w-full md:col-span-2 h-2 bg-primary" />
+        
+          <div className="md:col-span-2">
+            <UploadImageForm
+              apiUrl="/api/upload/file"
+              field="closingEvidence"
+              file={`${findingReport?.closingEvidence}`}
+              label="Evidencia de cierre"
+              ubiPath="control/images"
+              update={`/api/finding-report/${findingReport?.id}/`}
+            />
+     
+        </div>
+        </>
       )}
+
+      </div>
+
+      
+      
       <div className="space-y-4 mt-3">
         <div className="bg-blue-100 rounded-md  overflow-hidden">
           <h2 className="text-center py-2 font-bold text-md bg-slate-400 text-white">

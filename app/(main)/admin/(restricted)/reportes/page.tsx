@@ -13,6 +13,9 @@ import { controlReportColumns } from "./_components/control-report-columns";
 import { db } from "@/lib/db";
 import { ControlTable } from "./_components/control-table";
 
+
+const bcrumb = [{ label: "Lista de chequeo", path: "/admin/reportes" }];
+
 const ControlPage = async () => {
   const session = await getServerSession(authOptions);
 
@@ -41,7 +44,7 @@ const ControlPage = async () => {
     <CardPage
       className="p-0"
       pageHeader={
-        <TitleOnPage text="Reportes de control">
+        <TitleOnPage text="Reportes de control" bcrumb={bcrumb}>
           <Link
             href={"/admin/reportes/crear"}
             className={cn(buttonVariants())}
@@ -50,6 +53,7 @@ const ControlPage = async () => {
           </Link>
         </TitleOnPage>
       }
+      
     >
       <ControlTable
         data={controlReports}
