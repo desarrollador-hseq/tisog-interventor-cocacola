@@ -19,6 +19,7 @@ import { differenceInCalendarDays, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import { SimpleModal } from "@/components/simple-modal";
 import { UploadImageForm } from "@/components/upload-image-form";
+import { FieldUpdateForm } from "@/components/field-update-form";
 
 export const AspectsList = ({
   aspects,
@@ -311,21 +312,33 @@ const DailyReport = ({
       </SimpleModal>
 
       <SimpleModal
-        title=""
-        large={false}
+        title="Evidencia"
+        large={true}
         textBtn=""
         openDefault={controlCheckId !== undefined}
         btnClass="hidden"
       >
-        <UploadImageForm
-          apiUrl="/api/upload/file"
-          field="imgUrl"
-          file={``}
-          label="Registro fotográfico"
-          ubiPath="control/images"
-          update={`/api/finding-report/${controlCheckId}/`}
-          defaultOpenUpload={true}
-        />
+        <div className="grid md:grid-cols-2 gap-1">
+          <UploadImageForm
+            apiUrl="/api/upload/file"
+            field="imgUrl"
+            file={``}
+            label="Registro fotográfico"
+            ubiPath="control/images"
+            update={`/api/finding-report/${controlCheckId}/`}
+            defaultOpenUpload={true}
+          />
+
+          <FieldUpdateForm
+            field="imgDescription"
+            apiUrl={`/api/finding-report`}
+            label="Detalles del hallazgo"
+            id={controlCheckId}
+            value={``}
+            defaultOpenUpdate={true}
+            isTextArea
+          />
+        </div>
       </SimpleModal>
     </>
   );

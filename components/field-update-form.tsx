@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { TextAreaForm } from "./textarea-form";
 
 interface FieldUpdateFormProps {
   value?: string | null;
@@ -23,6 +24,8 @@ interface FieldUpdateFormProps {
   disabled?: boolean;
   apiUrl: string;
   isAdd?: boolean;
+  defaultOpenUpdate?: boolean;
+  isTextArea?: boolean;
 }
 
 export const FieldUpdateForm = ({
@@ -32,9 +35,11 @@ export const FieldUpdateForm = ({
   apiUrl,
   label,
   disabled,
-  isAdd = false
+  isAdd = false,
+  defaultOpenUpdate = false,
+  isTextArea = false
 }: FieldUpdateFormProps) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(defaultOpenUpdate );
   const router = useRouter();
   const { setLoadingApp } = useLoading();
 
@@ -79,16 +84,16 @@ export const FieldUpdateForm = ({
   };
 
   return (
-    <Card className={`mt-1 border ${disabled ? "bg-slate-50" : "bg-blue-50"} p-1  relative`}>
+    <Card className={`mt-1 border ${disabled ? "bg-slate-50" : "bg-slate-200"} p-1  relative`}>
       <CardHeader className="p-1">
         <div className="font-medium flex items-center justify-center ">
-          <span className="font-bold">{label}</span>
+          <span className="font-semibold text-lg text-primary/80 ml-2">{label}</span>
           {!disabled && (
             <Button
               className={cn(
                 "text-white hover:text-white p-1 h-6 rounded-none absolute top-0 right-0 rounded-bl-md shadow-md",
                 isEditing
-                  ? "bg-red-600 hover:bg-red-700"
+                  ? "bg-slate-600 hover:bg-slate-700"
                   : "bg-secondary/80 hover:bg-secondary"
               )}
               onClick={toggleEdit}
@@ -116,7 +121,14 @@ export const FieldUpdateForm = ({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 mt-4"
           >
-            <InputForm control={form.control} label="" name={field} />
+
+            {
+              !isTextArea ? (
+                <InputForm control={form.control} label="" name={field} />
+              ) : (
+                <TextAreaForm control={form.control} label="" name={field} />
+              )
+            }
 
             <div className="flex items-center justify-end gap-x-2 w-full">
               <Button disabled={!isValid || isSubmitting} type="submit">

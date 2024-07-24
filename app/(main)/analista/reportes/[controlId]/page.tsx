@@ -76,13 +76,12 @@ const EditControlPage = async ({
           controlReportId: control.id,
         },
       },
-    
     },
     orderBy: {
       category: {
-        num: "asc"
-      }
-    }
+        num: "asc",
+      },
+    },
   });
 
   const controllers = await db.user.findMany({
@@ -90,11 +89,23 @@ const EditControlPage = async ({
       role: "USER",
       active: true,
     },
-  })
-
+  });
 
   return (
-    <CardPage pageHeader={<TitleOnPage text={`Reporte de control`} />}>
+    <CardPage
+      pageHeader={
+        <TitleOnPage
+          text={
+            <div className="">
+              <h1 className="text-3xl">Reporte de control</h1>
+              <div className="text-[10px] font-normal">
+                <span className="font-bold">Id:</span> {control.id}
+              </div>
+            </div>
+          }
+        ></TitleOnPage>
+      }
+    >
       <EditControlReport
         companyId=""
         control={control!}

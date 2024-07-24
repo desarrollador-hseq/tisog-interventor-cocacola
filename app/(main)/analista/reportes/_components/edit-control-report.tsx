@@ -74,7 +74,6 @@ export const EditControlReport = ({
   }, [control]);
 
   const canEdit = shouldControlBeManagedSameDay(controlData.date) || isAdmin;
-    console.log({firss: shouldControlBeManagedSameDay(controlData.date), daee: controlData.date})
 
 
   return (

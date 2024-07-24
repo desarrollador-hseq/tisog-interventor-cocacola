@@ -27,27 +27,27 @@ export const controlReportColumns: ColumnDef<
     findingReport?: { id?: string | null }[] | null;
   }
 >[] = [
-  {
-    accessorKey: "source",
-    accessorFn: (row) => row.source,
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="hover:bg-secondary/30 hover:text-secondary-foreground"
-        >
-          Fuente
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const turn = row.original?.source;
-      const sourceEsp = sourceOptions.find((d) => d.value === turn);
-      return <div className="">{sourceEsp ? sourceEsp.label : "Otro"}</div>;
-    },
-  },
+  // {
+  //   accessorKey: "source",
+  //   accessorFn: (row) => row.source,
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //         className="hover:bg-secondary/30 hover:text-secondary-foreground"
+  //       >
+  //         Fuente
+  //         <ArrowUpDown className="ml-2 h-4 w-4" />
+  //       </Button>
+  //     );
+  //   },
+  //   cell: ({ row }) => {
+  //     const turn = row.original?.source;
+  //     const sourceEsp = sourceOptions.find((d) => d.value === turn);
+  //     return <div className="">{sourceEsp ? sourceEsp.label : "Otro"}</div>;
+  //   },
+  // },
   {
     accessorKey: "description",
     accessorFn: (row) => row.description,

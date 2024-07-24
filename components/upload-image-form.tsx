@@ -157,8 +157,6 @@ export const UploadImageForm = ({
     return interval;
   };
 
-  console.log({ file });
-
   return (
     <Card className="bg-slate-200 rounded-md p-1 border border-primary/20  overflow-hidden">
       <CardHeader className="max-h-[200px] bg-slate-100 rounded-sm shadow-sm border border-slate-300">
@@ -166,25 +164,26 @@ export const UploadImageForm = ({
           <h3 className="font-semibold text-lg text-primary/80 ml-2">
             {label}
           </h3>
-          <Button
-            onClick={toggleEdit}
-            variant="secondary"
-            className={cn(
-              "text-white mr-2",
-              isEditing && "bg-slate-500 hover:bg-slate-700"
-            )}
-          >
-            {isEditing ? (
-              "Cancelar"
-            ) : file ? (
-              "Cambiar"
-            ) : (
-              <>
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Agregar
-              </>
-            )}
-          </Button>
+
+          {!isEditing && (
+            <Button
+              onClick={toggleEdit}
+              variant="secondary"
+              className={cn(
+                "text-white mr-2",
+                isEditing && "bg-slate-500 hover:bg-slate-700"
+              )}
+            >
+              {file && !isEditing ? (
+                "Cambiar"
+              ) : (
+                <>
+                  <PlusCircle className="h-4 w-4 mr-2" />
+                  Agregar
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </CardHeader>
 
@@ -211,7 +210,9 @@ export const UploadImageForm = ({
                       maxWidth: 400,
                     }}
                   />
-                ) : <div className="py-6 font-semibold">Sin imagen</div>}
+                ) : (
+                  <div className="py-6 font-semibold">Sin imagen</div>
+                )}
               </div>
             </div>
           ))}

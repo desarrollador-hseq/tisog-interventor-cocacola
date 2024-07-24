@@ -7,7 +7,6 @@ import {
   Contractor,
   ControlReport,
   DefaultTool,
-  SecurityCategory,
   SecurityQuestion,
   Tool,
   User,
@@ -15,13 +14,11 @@ import {
 import { ControlHeaderForm } from "./control-header-form";
 import { ToolsList } from "./toolList";
 import { AspectsList } from "./aspect-list";
-import { CheckPrimeOptions } from "crypto";
 import { UnsafeActForm } from "./unsafe-act-form";
 import {
-  shouldControlBeManaged,
   shouldControlBeManagedSameDay,
 } from "@/lib/utils";
-import { CloudLightning } from "lucide-react";
+
 
 export const EditControlReport = ({
   areas,
@@ -74,7 +71,7 @@ export const EditControlReport = ({
   }, [control]);
 
   const canEdit = shouldControlBeManagedSameDay(controlData.date) || isAdmin;
-    console.log({firss: shouldControlBeManagedSameDay(controlData.date), daee: controlData.date})
+   
 
 
   return (
@@ -84,7 +81,7 @@ export const EditControlReport = ({
           control={controlData}
           areas={areas}
           contractors={contractors}
-          disabled={!canEdit}
+          // disabled={!canEdit}
           controllers={controllers}
           isAdmin={isAdmin}
         />
@@ -100,7 +97,7 @@ export const EditControlReport = ({
           controlId={control.id}
           defaultsToolssWithType={toolDefaults}
           groupedToolsByType={groupedToolsByType}
-          disabled={!canEdit}
+          // disabled={!canEdit}
         />
       </div>
       <div className="bg-slate-200 rounded-lg overflow-hidden">

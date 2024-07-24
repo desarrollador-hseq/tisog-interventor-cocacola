@@ -195,7 +195,7 @@ export const ControlHeaderForm = ({
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
-                            disabled={disabled}
+                            // disabled={disabled}
                             variant="outline"
                             role="combobox"
                             className={cn(
@@ -219,7 +219,7 @@ export const ControlHeaderForm = ({
                             <CommandList>
                               {areas?.map((area, index) => (
                                 <CommandItem
-                                  value={`${area}`}
+                                  value={`${area.name}`}
                                   key={area.id + index}
                                   onSelect={() => {
                                     setValue("businessAreaId", area.id, {
@@ -251,7 +251,7 @@ export const ControlHeaderForm = ({
             <div>
               <InputForm
                 control={form.control}
-                label="Lugar exacto (opcional)"
+                label="Lugar exacto (breve descripción)"
                 name="exactLocation"
                 disabled={disabled}
               />
@@ -263,7 +263,9 @@ export const ControlHeaderForm = ({
                 name="typeRisk"
                 render={({ field }) => (
                   <FormItem className="flex flex-col w-full">
-                    <FormLabel className="font-semibold text-primary">Riesgo:</FormLabel>
+                    <FormLabel className="font-semibold text-primary">
+                      Riesgo:
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -271,7 +273,7 @@ export const ControlHeaderForm = ({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selecciona riesto asociado" />
+                          <SelectValue placeholder="Selecciona riesgo asociado" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -360,7 +362,7 @@ export const ControlHeaderForm = ({
             </div>
 
             <div>
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="contractorId"
                 disabled={disabled}
@@ -427,15 +429,23 @@ export const ControlHeaderForm = ({
                     <FormMessage />
                   </FormItem>
                 )}
+              /> */}
+
+              <InputForm
+                control={form.control}
+                label="Contratista"
+                name="contractorId"
+                disabled={disabled}
               />
             </div>
+
             <div>
               <CalendarInputForm
                 control={form.control}
                 label="Fecha"
                 name="date"
                 className="w-full"
-                // disabled={!isAdmin}
+                disabled={false}
               />
             </div>
             <div className="md:col-span-2">

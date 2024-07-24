@@ -123,6 +123,7 @@ model FindingReport {
   status FindingStatus @default(OPEN)
 
   imgUrl          String?
+  imgDescription  String? @db.Text
   closingEvidence String?
 
   // active    Boolean  @default(true)
@@ -173,7 +174,7 @@ model ControlReport {
 
   date DateTime?
 
-  exactLocation String?
+  exactLocation String? @db.Text
 
   typeRisk ControlTypeRisk?
 

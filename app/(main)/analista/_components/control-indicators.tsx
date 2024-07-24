@@ -44,18 +44,18 @@ export const ControlIndicators = ({
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 gap-1 lg:grid-cols-2 w-full min-w-full ">
-          <div className="flex flex-col p-2 ">
+        <div className="grid grid-cols-1 gap-1  w-full min-w-full ">
+          {/* <div className="flex flex-col p-2 ">
             <ControlSourcePie
               controlReports={controlReports}
               title={"Fuente"}
             />
-          </div>
+          </div> */}
           <div className="flex flex-col p-2 ">
             <ControlAreaBar
               areas={areas}
               controlReports={controlReports}
-              title="Áreas"
+              title="por áreas"
             />
           </div>
           <div className="col-span-2 px-2">
