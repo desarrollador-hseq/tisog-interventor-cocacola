@@ -273,7 +273,7 @@ export const ControlHeaderForm = ({
               </div>
 
               <div>
-                {/* <FormField
+                <FormField
                   control={form.control}
                   name="contractorId"
                   disabled={disabled}
@@ -341,14 +341,14 @@ export const ControlHeaderForm = ({
                       <FormMessage />
                     </FormItem>
                   )}
-                /> */}
+                />
 
-                <InputForm
+                {/* <InputForm
                   control={form.control}
                   label="Contratista"
                   name="contractorId"
                   disabled={disabled}
-                />
+                /> */}
               </div>
 
               <div>

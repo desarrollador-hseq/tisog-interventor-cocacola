@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useLoading } from "@/components/providers/loading-provider";
-import { differenceInCalendarDays, parseISO } from "date-fns";
+import { addDays, differenceInCalendarDays, format, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import { SimpleModal } from "@/components/simple-modal";
 import { UploadImageForm } from "@/components/upload-image-form";
@@ -92,6 +92,7 @@ export const AspectsList = ({
                   <DailyReport
                     controlId={controlId}
                     questionId={aspect.id}
+                    startDate={controlCreationDate}
                     isAdmin={isAdmin}
                     daily={
                       aspect.checklistItems.length > 0
@@ -131,6 +132,7 @@ interface DailyReportProps {
   controlId: string;
   questionId: string;
   isAdmin: boolean;
+  startDate: Date;
   negativeQuestion: string;
   numDateCreated: number; // Fecha de creación del control en formato ISO string
 }
@@ -146,6 +148,7 @@ const DailyReport = ({
   isAdmin,
   numDateCreated,
   negativeQuestion,
+  startDate,
 }: DailyReportProps) => {
   const router = useRouter();
   const { setLoadingApp } = useLoading();
@@ -243,6 +246,11 @@ const DailyReport = ({
     setControlCheckId(undefined);
   };
 
+  const formatDate = (dayIndex: number) => {
+    const date = addDays(new Date(startDate), dayIndex);
+    return format(date, "dd/MM/yyyy");
+  };
+
   return (
     <>
       {isClient && (
@@ -256,22 +264,23 @@ const DailyReport = ({
             <div
               key={index}
               className={cn(
-                "border px-1 py-1 flex gap-1 items-center bg-slate-400 my-0.5 ",
-                index > numDateCreated && "hidden"
+                "border px-1 py-1 flex flex-col gap- items-center bg-slate-400 my-0.5 ",
+                index > numDateCreated && "hidden", index == numDateCreated && "bg-slate-600"
               )}
             >
+              <span className="block col-span-2 text-[10px] text-white">{formatDate(index)}</span>
               <span
                 className={cn(
                   "text-xs text-white font-semibold capitalize",
                   numDateCreated === 0 && "hidden"
-                )}
+                  )}
               >
-                {translateDay(day)}
+                {`Día ${index + 1}`}
               </span>
               <Select
                 onValueChange={(value) => onChangeState(day, value, questionId)}
-                value={dayValues[day]} // Usar el estado individual para cada día
-                disabled={!isAdmin && index !== numDateCreated} // Deshabilitar selectores de días futuros
+                value={dayValues[day]} 
+                disabled={!isAdmin && index !== numDateCreated} 
               >
                 <SelectTrigger
                   className={cn(

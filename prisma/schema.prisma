@@ -38,6 +38,8 @@ model User {
 
   isMaster Boolean @default(false)
 
+  phone String?
+
   receiveNotifications Boolean @default(true)
 
   passwordResetTokens PasswordResetToken[]

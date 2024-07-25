@@ -71,8 +71,6 @@ export async function POST(req: Request,
             } catch (error) {
                 return new NextResponse("Error al enviar el correo con el link, por favor intentelo nuevamente" + error, { status: 400 });
             }
-
-
         }
 
         return NextResponse.json({ ok: true })

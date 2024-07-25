@@ -28,7 +28,20 @@ const CreateControllerPage = async ({
       // active: true,
     },
     include: {
-      controlReport: true,
+      controlReport: {
+        include: {
+          contractor: {
+            select: {
+              name: true,
+            },
+          },
+          businessArea: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -60,7 +73,7 @@ const CreateControllerPage = async ({
       checklistItems: {
         where: {
           controlReportId: findingReport.controlReport?.id,
-        }
+        },
       },
     },
   });
@@ -94,6 +107,7 @@ const CreateControllerPage = async ({
             <ChangeLevelFinding
               id={findingReport.id}
               level={findingReport.findingLevel || "LOW"}
+              findingReport={findingReport}
             />
           </div>
         </TitleOnPage>

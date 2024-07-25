@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useLoading } from "@/components/providers/loading-provider";
 import {
@@ -9,7 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { formatDate } from "@/lib/utils";
+import { ControlReport, FindingReport } from "@prisma/client";
 import axios from "axios";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -17,22 +21,50 @@ export const ChangeLevelFinding = ({
   id,
   level,
   disabled,
+  findingReport,
 }: {
   id: string;
   level: "LOW" | "MEDIUM" | "HIGH";
   disabled?: boolean;
+  findingReport: FindingReport & {
+    controlReport:
+      | (ControlReport & {
+          contractor: { name: string | null } | null;
+          businessArea: { name: string | null } | null;
+        })
+      | null;
+  };
 }) => {
   const { setLoadingApp } = useLoading();
   const router = useRouter();
-
 
   const onChange = async (e: string) => {
     setLoadingApp(true);
     try {
       await axios.patch(`/api/finding-report/${id}`, { findingLevel: e });
 
-      if(e === "HIGH") {
-        await axios.post(`/api/finding-report/${id}/mail`, {})
+      if (e === "HIGH") {
+        try {
+          await axios.post(`/api/finding-report/${id}/mail`, {});
+        } catch (error) {
+          toast.error("Error al enviar el email");
+        }
+        try {
+          const {data} = await axios.post(`/api/messages/`, {
+            message: `Se acaba de registrar un hallazgo critico en [CC FEMSA]. Contratista: ${
+              findingReport.controlReport?.contractor?.name
+            }, área: ${
+              findingReport.controlReport?.businessArea?.name
+            } fecha: ${
+              findingReport.controlReport?.date
+                ? format(findingReport.controlReport.date, "P", {locale: es})
+                : "-"
+            }. ver: https://bit.ly/3Sm4SAB`,
+          });
+          console.log({sms: data})
+        } catch (error) {
+          toast.error("Error al enviar el SMS");
+        }
       }
 
       toast.info("nivel de criticidad cambiado correctamente");
