@@ -178,6 +178,7 @@ model ControlReport {
 
   date DateTime?
 
+  releasePermit    Boolean  @default(false)
   exactLocation String? @db.Text
 
   typeRisk ControlTypeRisk?

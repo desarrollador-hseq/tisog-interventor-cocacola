@@ -4,7 +4,7 @@ import { Chart } from "@/components/chart";
 import { Contractor, ControlReport } from "@prisma/client";
 
 interface controlWithContractor extends ControlReport {
-  contractor: Contractor  | null
+  contractor: Contractor | null;
 }
 
 interface controlByContractorBarChartProps {
@@ -14,21 +14,47 @@ interface controlByContractorBarChartProps {
 
 export const ControlsContractorBar = ({
   controlReports,
-  title
+  title,
 }: controlByContractorBarChartProps) => {
   // Agrupar controles por contratista
-  const contractorData = controlReports?.reduce((acc, controlReport) => {
-    const contractorName = controlReport?.contractor?.name || "Desconocido";
-    if (!acc[contractorName]) {
-      acc[contractorName] = 0;
-    }
-    acc[contractorName]++;
-    return acc;
-  }, {} as Record<string, number>) || {};
+  const contractorData =
+    controlReports?.reduce((acc, controlReport) => {
+      const contractorName = controlReport?.contractor?.name || "Desconocido";
+      if (!acc[contractorName]) {
+        acc[contractorName] = 0;
+      }
+      acc[contractorName]++;
+      return acc;
+    }, {} as Record<string, number>) || {};
 
   // Preparar datos para el gráfico
   const contractors = Object.keys(contractorData);
-  const controlCounts = contractors.map((contractor) => contractorData[contractor]);
+  const controlCounts = contractors.map(
+    (contractor) => contractorData[contractor]
+  );
+
+  const colorPalette = [
+    "#FFD700", // 2
+    "#1E90FF", // 3
+    "#32CD32", // 4
+    "#FF4500", // 1
+    "#8A2BE2", // 5
+    "#FF69B4", // 6
+    "#A52A2A", // 7
+    "#5F9EA0", // 8
+    "#D2691E", // 9
+    "#2E8B57", // 10
+    "#FF4500", // 1
+    "#FFD700", // 2
+    "#1E90FF", // 3
+    "#32CD32", // 4
+    "#8A2BE2", // 5
+    "#FF69B4", // 6
+    "#A52A2A", // 7
+    "#5F9EA0", // 8
+    "#D2691E", // 9
+    "#2E8B57", // 10
+  ];
 
   const option = {
     tooltip: {
@@ -44,6 +70,11 @@ export const ControlsContractorBar = ({
     xAxis: {
       type: "category",
       data: contractors,
+      axisLabel: {
+        rotate: 45,
+        fontWeight: "bold",
+        fontSize: 11
+      },
     },
     yAxis: {
       type: "value",
@@ -57,10 +88,12 @@ export const ControlsContractorBar = ({
           position: "inside",
           formatter: "{c}",
         },
-        data: controlCounts,
-        itemStyle: {
-          color: "#4e71b1",
-        },
+        data: controlCounts.map((control, index) => ({
+          value: control,
+          itemStyle: {
+            color: colorPalette[index % colorPalette.length], // Asignar color secuencialmente
+          },
+        })),
       },
     ],
     title: {
@@ -73,7 +106,7 @@ export const ControlsContractorBar = ({
       left: "center",
       top: "center",
     },
-  };  
+  };
 
   return <Chart title={title} option={option} />;
 };

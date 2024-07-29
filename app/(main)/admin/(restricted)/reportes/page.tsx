@@ -12,7 +12,6 @@ import { controlReportColumns } from "./_components/control-report-columns";
 import { db } from "@/lib/db";
 import { ControlTable } from "./_components/control-table";
 
-
 const bcrumb = [{ label: "Lista de chequeo", path: "/admin/reportes" }];
 
 const ControlPage = async () => {
@@ -33,6 +32,9 @@ const ControlPage = async () => {
           id: true,
         },
       },
+      controller: {
+        select: { name: true },
+      },
     },
     orderBy: {
       date: "desc",
@@ -44,15 +46,11 @@ const ControlPage = async () => {
       className="p-0"
       pageHeader={
         <TitleOnPage text="Reportes de control" bcrumb={bcrumb}>
-          <Link
-            href={"/admin/reportes/crear"}
-            className={cn(buttonVariants())}
-          >
+          <Link href={"/admin/reportes/crear"} className={cn(buttonVariants())}>
             Crear
           </Link>
         </TitleOnPage>
       }
-      
     >
       <ControlTable
         data={controlReports}
@@ -61,6 +59,7 @@ const ControlPage = async () => {
           btnText: "editar",
           href: `/admin/reportes/`,
         }}
+        nameDocument="reportes-control"
       />
     </CardPage>
   );

@@ -15,10 +15,8 @@ import { ControlHeaderForm } from "./control-header-form";
 import { ToolsList } from "./toolList";
 import { AspectsList } from "./aspect-list";
 import { UnsafeActForm } from "./unsafe-act-form";
-import {
-  shouldControlBeManagedSameDay,
-} from "@/lib/utils";
-
+import { shouldControlBeManagedSameDay } from "@/lib/utils";
+import { ReleasePermit } from "./release-permit";
 
 export const EditControlReport = ({
   areas,
@@ -71,8 +69,6 @@ export const EditControlReport = ({
   }, [control]);
 
   const canEdit = shouldControlBeManagedSameDay(controlData.date) || isAdmin;
-   
-
 
   return (
     <div className="w-full flex flex-col gap-3 relative m-3">
@@ -98,6 +94,14 @@ export const EditControlReport = ({
           defaultsToolssWithType={toolDefaults}
           groupedToolsByType={groupedToolsByType}
           // disabled={!canEdit}
+        />
+      </div>
+
+      <div className="border rounded-lg overflow-hidden p-2">
+        <ReleasePermit
+          controlId={controlData.id}
+          disabled={false}
+          permission={controlData.releasePermit}
         />
       </div>
       <div className="bg-slate-200 rounded-lg overflow-hidden">

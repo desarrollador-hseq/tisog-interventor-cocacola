@@ -25,23 +25,23 @@ const ControlPage = async () => {
       active: true,
       controllerId: session.user.id,
     },
-    // include: {
-    // businessArea: {
-    //   select: {
-    //     name: true,
-    //   },
-    // },
-    // contractor: {
-    //   select: {
-    //     name: true,
-    //   },
-    // },
-    // findingReport: {
-    //   select: {
-    //     id: true,
-    //   },
-    // },
-    // },
+    include: {
+      businessArea: {
+        select: {
+          name: true,
+        },
+      },
+      contractor: {
+        select: {
+          name: true,
+        },
+      },
+      findingReport: {
+        select: {
+          id: true,
+        },
+      },
+    },
     orderBy: {
       date: "desc",
     },
@@ -68,6 +68,7 @@ const ControlPage = async () => {
           btnText: "editar",
           href: `/analista/reportes/`,
         }}
+        nameDocument="mis-reportes"
       />
     </CardPage>
   );

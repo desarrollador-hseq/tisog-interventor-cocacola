@@ -22,6 +22,7 @@ import {
   shouldControlBeManagedSameDay,
 } from "@/lib/utils";
 import { CloudLightning } from "lucide-react";
+import { ReleasePermit } from "./release-permit";
 
 export const EditControlReport = ({
   areas,
@@ -75,7 +76,6 @@ export const EditControlReport = ({
 
   const canEdit = shouldControlBeManagedSameDay(controlData.date) || isAdmin;
 
-
   return (
     <div className="w-full flex flex-col gap-3 relative m-3">
       <div className="bg-white rounded-lg overflow-hidden">
@@ -100,6 +100,13 @@ export const EditControlReport = ({
           defaultsToolssWithType={toolDefaults}
           groupedToolsByType={groupedToolsByType}
           disabled={!canEdit}
+        />
+      </div>
+      <div className="border rounded-lg overflow-hidden p-2">
+        <ReleasePermit
+          controlId={controlData.id}
+          disabled={false}
+          permission={controlData.releasePermit}
         />
       </div>
       <div className="bg-slate-200 rounded-lg overflow-hidden">

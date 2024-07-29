@@ -24,30 +24,30 @@ export const controlReportColumns: ColumnDef<
   ControlReport & {
     businessArea?: { name?: string | null } | null;
     contractor?: { name?: string | null } | null;
+    controller?: { name?: string | null } | null;
     findingReport?: { id?: string | null }[] | null;
   }
 >[] = [
-  // {
-  //   accessorKey: "source",
-  //   accessorFn: (row) => row.source,
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button
-  //         variant="ghost"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //         className="hover:bg-secondary/30 hover:text-secondary-foreground"
-  //       >
-  //         Fuente
-  //         <ArrowUpDown className="ml-2 h-4 w-4" />
-  //       </Button>
-  //     );
-  //   },
-  //   cell: ({ row }) => {
-  //     const turn = row.original?.source;
-  //     const sourceEsp = sourceOptions.find((d) => d.value === turn);
-  //     return <div className="">{sourceEsp ? sourceEsp.label : "Otro"}</div>;
-  //   },
-  // },
+  {
+    accessorKey: "controller",
+    accessorFn: (row) => row.controller?.name,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-secondary/30 hover:text-secondary-foreground"
+        >
+          Interventor
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const turn = row.original?.controller?.name;
+      return <div className="">{turn}</div>;
+    },
+  },
   {
     accessorKey: "description",
     accessorFn: (row) => row.description,

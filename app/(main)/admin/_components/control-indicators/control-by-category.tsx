@@ -114,5 +114,5 @@ export const ControlByCategory = ({
     ],
   };
 
-  return <Chart title={"Controles por Categoría"} option={option} />;
+  return <Chart title={"Controles por peligros y/o riesgos"} option={option} />;
 };

@@ -64,7 +64,7 @@ export const SelectCompanyFilter = ({
 
   return (
     <Form {...form}>
-      <form className="max-w-[200px] w-full mx-auto relative">
+      <form className="max-w-[300px] w-full mx-auto relative">
         <Button
           onClick={handleClearInput}
           variant="default"
@@ -88,7 +88,7 @@ export const SelectCompanyFilter = ({
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "justify-between font-bold text-base pr-7",
+                        "justify-between font-bold text-base pr-7 overflow-hidden max-w-[300px] w-auto",
                         !field.value && "text-muted-foreground"
                       )}
                     >

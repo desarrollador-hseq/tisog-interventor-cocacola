@@ -1,20 +1,20 @@
 "use client";
 
 import { Chart } from "@/components/chart";
-import { FindingReport } from "@prisma/client";
+import { ControlReport, FindingReport } from "@prisma/client";
 
-interface FindingResumePieProps {
-  findingReports: FindingReport[];
+interface ControlPermissionPieProps {
+  controlReports: ControlReport[];
   title: string;
 }
 
-export const FindingResumePie = ({
-  findingReports,
+export const ControlPermissionPie = ({
+  controlReports,
   title,
-}: FindingResumePieProps) => {
+}: ControlPermissionPieProps) => {
   const countExecutedInspections = () => {
-    return findingReports.reduce((count, inspection) => {
-      if (inspection.status === "OPEN") {
+    return controlReports.reduce((count, inspection) => {
+      if (inspection.releasePermit) {
         return count + 1;
       }
       return count;
@@ -22,12 +22,12 @@ export const FindingResumePie = ({
   };
 
   const openCount = countExecutedInspections();
-  const totalCount = findingReports.length;
+  const totalCount = controlReports.length;
   const closedCount = totalCount - openCount;
 
   const chartData = [
-    { value: openCount, name: "Abiertas" },
-    { value: closedCount, name: "Cerradas" },
+    { value: openCount, name: "Sí" },
+    { value: closedCount, name: "No" },
   ];
 
   const option = {
@@ -65,7 +65,7 @@ export const FindingResumePie = ({
         labelLine: {
           show: true,
         },
-        data: findingReports.length !== 0 ? chartData : [],
+        data: controlReports.length !== 0 ? chartData : [],
         color: ["#54b265", "#ff0023"],
       },
     ],
@@ -81,5 +81,16 @@ export const FindingResumePie = ({
     },
   };
 
-  return <Chart option={option} title={title} />;
+  return (
+    <Chart
+      option={option}
+      title={
+        <div className="flex gap-2 w-full">
+          <span className="w-1/5" />
+          <span className="w-3/5">{title}</span>{" "}
+          <span className="w-1/5 text-base place-content-center">Total: {controlReports.length}</span>
+        </div>
+      }
+    />
+  );
 };

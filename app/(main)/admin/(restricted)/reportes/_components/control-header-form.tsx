@@ -218,7 +218,7 @@ export const ControlHeaderForm = ({
                             <CommandEmpty>
                               Interventor no encontrado!
                             </CommandEmpty>
-                            <ScrollArea className="max-h-[300px] h-fit w-[350px] p-1">
+                            <ScrollArea className="h-[300px] w-[350px] p-1">
                               <CommandGroup>
                                 <CommandList>
                                   {controllers?.map((controller, index) => (
@@ -449,7 +449,7 @@ export const ControlHeaderForm = ({
                           <Command className="w-full">
                             <CommandInput placeholder="Buscar areas registradas" />
                             <CommandEmpty>Area no encontrada!</CommandEmpty>
-                            <ScrollArea className="max-h-[300px] h-fit w-[350px] p-1">
+                            <ScrollArea className="h-[300px] w-[350px] p-1">
                               <CommandGroup>
                                 <CommandList>
                                   {areas?.map((area, index) => (
