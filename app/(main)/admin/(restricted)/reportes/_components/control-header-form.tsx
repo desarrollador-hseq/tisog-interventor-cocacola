@@ -296,31 +296,37 @@ export const ControlHeaderForm = ({
                             <CommandEmpty>
                               Contratista no encontrado!
                             </CommandEmpty>
-                            <CommandGroup>
-                              <CommandList>
-                                {contractors?.map((contractor, index) => (
-                                  <CommandItem
-                                    value={`${contractor.name}`}
-                                    key={contractor.id + index}
-                                    onSelect={() => {
-                                      setValue("contractorId", contractor.id, {
-                                        shouldValidate: true,
-                                      });
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        contractor.id === field.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {contractor.name}
-                                  </CommandItem>
-                                ))}
-                              </CommandList>
-                            </CommandGroup>
+                            <ScrollArea className="h-[300px] w-[350px] p-1">
+                              <CommandGroup>
+                                <CommandList>
+                                  {contractors?.map((contractor, index) => (
+                                    <CommandItem
+                                      value={`${contractor.name}`}
+                                      key={contractor.id + index}
+                                      onSelect={() => {
+                                        setValue(
+                                          "contractorId",
+                                          contractor.id,
+                                          {
+                                            shouldValidate: true,
+                                          }
+                                        );
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          contractor.id === field.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                      {contractor.name}
+                                    </CommandItem>
+                                  ))}
+                                </CommandList>
+                              </CommandGroup>
+                            </ScrollArea>
                           </Command>
                         </PopoverContent>
                       </Popover>

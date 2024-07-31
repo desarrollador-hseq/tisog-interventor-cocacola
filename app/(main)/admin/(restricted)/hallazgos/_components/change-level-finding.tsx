@@ -51,15 +51,15 @@ export const ChangeLevelFinding = ({
         }
         try {
           const {data} = await axios.post(`/api/messages/`, {
-            message: `Se acaba de registrar un hallazgo critico en [CC FEMSA]. Contratista: ${
+            message: `[TISOG] Se acaba de registrar un evento critico en CC FEMSA. Contratista: ${
               findingReport.controlReport?.contractor?.name
-            }, área: ${
+            }, area: ${
               findingReport.controlReport?.businessArea?.name
             } fecha: ${
               findingReport.controlReport?.date
-                ? format(findingReport.controlReport.date, "P", {locale: es})
+                ? format(findingReport.controlReport.date, "dd-MM-yyyy", {locale: es})
                 : "-"
-            }. ver: https://bit.ly/3Sm4SAB`,
+            }. https://bit.ly/3Sm4SAB`,
           });
           console.log({sms: data})
         } catch (error) {
