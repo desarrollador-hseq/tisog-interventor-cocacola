@@ -1,10 +1,11 @@
 import React from "react";
 import ExcelJS from "exceljs";
-import { saveAs } from "file-saver";
-import { format } from "date-fns";
+import { saveAs } from "file-saver";;
 import { es } from "date-fns/locale";
 import { useLoading } from "@/components/providers/loading-provider";
 import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+
 
 const getBase64ImageFromUrl = async (imageUrl: string) => {
   const response = await fetch(imageUrl);
@@ -128,7 +129,7 @@ const FindingExcelEvidence = async (findingReport: any[]) => {
   const blob = new Blob([buffer], {
     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
-  saveAs(blob, "finding_report.xlsx");
+  saveAs(blob, `hallazgos-${format(new Date(), "dd-MM-yyyy")}.xlsx`);
 };
 
 export const ButtonFindingExcelEvidence = ({
@@ -148,5 +149,5 @@ export const ButtonFindingExcelEvidence = ({
     }
   };
 
-  return <Button className="w-fit" onClick={handleExport}>Exportar a Excel</Button>;
+  return <Button className="w-fit non-print" onClick={handleExport}>Exportar a Excel</Button>;
 };
