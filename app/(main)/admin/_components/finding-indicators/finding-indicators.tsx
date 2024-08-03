@@ -16,6 +16,7 @@ import { findingReportDescColumns } from "../../(restricted)/hallazgos/_componen
 import { FindingReportExportExcel } from "../../(restricted)/hallazgos/_components/finding-report-export-excel";
 import { FindingLevelBar } from "./finding-level-bar";
 import { FindingBySecurityCategory } from "./finding-security-category-pie";
+import { ButtonFindingExcelEvidence } from "../../(restricted)/hallazgos/_components/button-finding-excel-evidences";
 
 interface ControlWithAreaAndContractor extends FindingReport {
   controlReport:
@@ -80,24 +81,17 @@ export const FindingIndicators = ({
           </div>
         </div>
         <div className="flex flex-col p-2 page-break ">
-          <h4 className="text-2xl font-bold text-blue-900 ml-2 mb-2">
-            Resumen de hallazgos
-          </h4>
+          <div className="flex justify-between mb-3">
+            <h4 className="text-2xl font-bold text-blue-900 ml-2 mb-2">
+              Resumen de hallazgos
+            </h4>
+            <ButtonFindingExcelEvidence findingReport={filteredReports} />
+          </div>
 
           <TableDefault
             columns={findingReportColumns}
             data={filteredReports || []}
-            deleteHref=""
           />
-
-          <div className="">
-            {filteredReports.length > 0 && (
-              <FindingReportExportExcel
-                columns={findingReportDescColumns}
-                data={filteredReports || []}
-              />
-            )}
-          </div>
         </div>
       </div>
     </div>
