@@ -51,7 +51,7 @@ export const ChangeLevelFinding = ({
         }
         try {
           const {data} = await axios.post(`/api/messages/`, {
-            message: `[TISOG] Se acaba de registrar un evento critico en CC FEMSA. Contratista: ${
+            message: `[TISOG] Se acaba de registrar una condicion critica en CC FEMSA. Contratista: ${
               findingReport.controlReport?.contractor?.name
             }, area: ${
               findingReport.controlReport?.businessArea?.name
