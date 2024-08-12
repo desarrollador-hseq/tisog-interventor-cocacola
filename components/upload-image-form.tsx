@@ -70,7 +70,7 @@ export const UploadImageForm = ({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => {
-      compressImage(acceptedFiles[0]);
+      compressAndResizeImage(acceptedFiles[0]);
     },
     accept: { "image/*": [".jpeg", ".jpg", ".png"] },
   });
@@ -122,23 +122,73 @@ export const UploadImageForm = ({
     }
   };
 
-  const compressImage = (file: File) => {
-    new Compressor(file, {
-      quality: 0.6, // (0.6 = 60%)
-      success: (compressedBlob) => {
-        // Convertir el Blob comprimido a un File
-        const compressedFile = new File([compressedBlob], file.name, {
-          type: file.type,
-          lastModified: Date.now(),
-        });
-        setSelectedFile(compressedFile);
-      },
-      error: (err) => {
-        console.error("Error al comprimir la imagen:", err);
-        toast.error(
-          "Error al comprimir la imagen, por favor intente de nuevo."
-        );
-      },
+  const resizeImage = (file: File, callback: (file: File) => void) => {
+    const MAX_WIDTH = 1280;
+    const MAX_HEIGHT = 720;
+    const img = document.createElement("img") as HTMLImageElement; // Crear la imagen usando document.createElement
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      img.src = e.target?.result as string;
+
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                callback(new File([blob], file.name, { type: file.type }));
+              }
+            },
+            file.type,
+            1
+          ); // 1 significa máxima calidad
+        }
+      };
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const compressAndResizeImage = (file: File) => {
+    resizeImage(file, (resizedFile) => {
+      new Compressor(resizedFile, {
+        quality: 0.8,
+        success: (compressedBlob) => {
+          const compressedFile = new File([compressedBlob], file.name, {
+            type: file.type,
+            lastModified: Date.now(),
+          });
+          setSelectedFile(compressedFile);
+        },
+        error: (err) => {
+          console.error("Error al comprimir la imagen:", err);
+          toast.error(
+            "Error al comprimir la imagen, por favor intente de nuevo."
+          );
+        },
+      });
     });
   };
 
