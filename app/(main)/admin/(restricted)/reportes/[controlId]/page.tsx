@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth-options";
 import { EditControlReport } from "../_components/edit-control-report";
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
+import { ModalDeleteReport } from "../_components/modal-delete-report";
 
 const EditControlPage = async ({
   params,
@@ -24,11 +25,18 @@ const EditControlPage = async ({
   const control = await db.controlReport.findUnique({
     where: {
       id: controlId,
+      active: true,
     },
   });
 
   if (!control) {
-    return <div>no analisis</div>;
+    return (
+      <div className="min-h-screen w-full flex justify-center items-center">
+        <h2 className="text-lg text-center text-red-600">
+          Reporte no encontrado
+        </h2>
+      </div>
+    );
   }
 
   const tools = await db.tool.findMany({
@@ -76,13 +84,12 @@ const EditControlPage = async ({
           controlReportId: control.id,
         },
       },
-    
     },
     orderBy: {
       category: {
-        num: "asc"
-      }
-    }
+        num: "asc",
+      },
+    },
   });
 
   const controllers = await db.user.findMany({
@@ -90,11 +97,22 @@ const EditControlPage = async ({
       role: "USER",
       active: true,
     },
-  })
-
+  });
 
   return (
-    <CardPage pageHeader={<TitleOnPage text={`Reporte de control`} />}>
+    <CardPage
+      pageHeader={
+        <TitleOnPage text={`Reporte de control`}>
+          {session.user?.email === "desarrollador1@grupohseq.com" ||
+          session.user?.email === "liderdeservicios3@grupohseq.com" ||
+          session.user?.email === "gerencia@grupohseq.com" ? (
+            <ModalDeleteReport report={control} />
+          ) : (
+            <div></div>
+          )}
+        </TitleOnPage>
+      }
+    >
       <EditControlReport
         companyId=""
         control={control!}
