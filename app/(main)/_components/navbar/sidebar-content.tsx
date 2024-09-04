@@ -53,6 +53,16 @@ export const SidebarContent = ({
             </AccordionTrigger>
             <AccordionContent className="bg-blue-900 p-0">
               <>
+              <SidebarItems
+                  href={`/admin/analistas`}
+                  label={`Analistas`}
+                  icon={MapPinned}
+                />
+                <SidebarItems
+                  href={`/admin/contratistas`}
+                  label={`Contratistas`}
+                  icon={MapPinned}
+                />
                 <SidebarItems
                   href={`/admin/aspectos`}
                   label={`Aspectos`}
@@ -68,6 +78,7 @@ export const SidebarContent = ({
                   label={`Áreas`}
                   icon={MapPinned}
                 />
+                
               </>
             </AccordionContent>
           </AccordionItem>

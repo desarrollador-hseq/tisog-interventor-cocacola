@@ -46,33 +46,43 @@ import { CalendarInputForm } from "@/components/calendar-input-form";
 import { InputForm } from "@/components/input-form";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const formSchema = z.object({
-  // source: z.string().min(1, { message: "Campo es requerido" }),
-  description: z.string().min(1, { message: "Campo es requerido" }),
-  exactLocation: z.string().min(1, { message: "Campo es requerido" }),
-  businessAreaId: z.string().min(1, { message: "Campo es requerido" }),
-  contractorId: z.string().min(1, { message: "Campo es requerido" }),
-  projectAuditor: z.string().min(1, { message: "Campo es requerido" }),
-  controllerId: z.string().min(1, { message: "Campo es requerido" }),
-  typeRisk: z.string().min(1, { message: "Campo es requerido" }),
-  date: z.date(),
-});
+const formSchema = z
+  .object({
+    source: z.string().min(1, { message: "Campo es requerido" }),
+    description: z.string().nullable(),
+    exactLocation: z.string().min(1, { message: "Campo es requerido" }),
+    businessAreaId: z.string().min(1, { message: "Campo es requerido" }),
+    contractorId: z.string().optional(),
+    projectAuditor: z.string().min(1, { message: "Campo es requerido" }),
+    controllerId: z.string().min(1, { message: "Campo es requerido" }),
+    typeRisk: z.string().min(1, { message: "Campo es requerido" }),
+    date: z.date(),
+  })
+  .refine(
+    (data) => {
+      // Si el tipo es "checklist", contractorId debe ser obligatorio
+      if (data.source === "checklist" && !data.contractorId) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message:
+        "Contratista es requerido cuando el tipo es una lista de chequeo.",
+      path: ["contractorId"],
+    }
+  );
 
-const selectOptions = [
-  { value: "inspeccion", label: "Inspección" },
-  // { value: "inspeccion-preoperacional", label: "Insp. Preoperacional" },
-  // {
-  //   value: "reporte-condicion-insegura",
-  //   label: "Reporte de condiciones inseguras",
-  // },
-  // { value: "reporte-acto-inseguro", label: "Reporte de actos inseguros" },
-  { value: "observacion-en-campo", label: "Observaciones en campo" },
-  // { value: "sugerencia", label: "Sugerencia" },
+const selectType = [
+  { value: "checklist", label: "Lista de chequeo" },
+  { value: "findingReport", label: "Reporte de hallazgo" },
 ];
+
 const typeRisks = [
   { value: "CHEMICAL_RISK", label: "Riesgo Químico" },
   { value: "ELECTRICAL_RISK", label: "Riesgo eléctrico" },
   { value: "MECHANICAL_RISK", label: "Riesgo mecánico" },
+  { value: "LOCATIVE_RISK", label: "Riesgo locativo" },
   {
     value: "SAFE_TRANSIT",
     label: "Tránsito seguro y acceso a zonas restringidas",
@@ -120,7 +130,7 @@ export const ControlHeaderForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      // source: control?.source || "",
+      source: control?.source || "",
       description: control?.description || "",
       businessAreaId: control?.businessAreaId || "",
       exactLocation: control?.exactLocation || "",
@@ -193,6 +203,46 @@ export const ControlHeaderForm = ({
             </div>
           )}
           <div className="w-full grid xl:grid-cols-2 items-start gap-1 space-y-0 p-0 my-0">
+            <div className="col-span-1 md:col-span-2 flex justify-center ">
+              <div className="max-w-[400px] w-full mb-3 bg-slate-200 p-2 rounded-sm">
+                <FormField
+                  control={form.control}
+                  name="source"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col w-full">
+                      <FormLabel className="font-semibold text-primary">
+                        Tipo:
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        disabled={disabled || !!control}
+                      >
+                        <FormControl>
+                          <SelectTrigger
+                            className={cn(
+                              "font-medium ",
+                              !!!field.value && "text-muted-foreground "
+                            )}
+                          >
+                            <SelectValue placeholder="Selecciona el tipo" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {selectType.map((type) => (
+                            <SelectItem key={type.value} value={`${type.value}`}>
+                              {type.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
             <div className="space-y-2">
               <div>
                 <FormField
@@ -283,10 +333,10 @@ export const ControlHeaderForm = ({
                         Contratista
                       </FormLabel>
                       <Popover>
-                        <PopoverTrigger asChild>
+                        <PopoverTrigger asChild disabled={watch("source") !== "checklist"}>
                           <FormControl>
                             <Button
-                              disabled={disabled}
+                              disabled={watch("source") !== "checklist" || disabled}
                               variant="outline"
                               role="combobox"
                               className={cn(

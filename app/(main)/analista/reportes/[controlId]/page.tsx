@@ -7,6 +7,8 @@ import { authOptions } from "@/lib/auth-options";
 import { EditControlReport } from "../_components/edit-control-report";
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
+import { EditFindingReportForm } from "../_components/edit-finding-report";
+import { ControlHeaderForm } from "../_components/control-header-form";
 
 const EditControlPage = async ({
   params,
@@ -24,6 +26,13 @@ const EditControlPage = async ({
   const control = await db.controlReport.findUnique({
     where: {
       id: controlId,
+    },
+    include: {
+      findingReport: {
+        include: {
+          controlReport: true,
+        },
+      },
     },
   });
 
@@ -106,20 +115,40 @@ const EditControlPage = async ({
         ></TitleOnPage>
       }
     >
-      <EditControlReport
-        companyId=""
-        control={control!}
-        contractors={contractors}
-        controllers={controllers}
-        aspects={aspects}
-        areas={businessAreas}
-        //   areas={businessAreas.map((area) => area)}
-        tools={tools}
-        toolDefaults={toolDefaults}
-        defaultsToolsWithType={toolDefaults}
-        disabled={false}
-        isAdmin={session.user.role === "ADMIN"}
-      />
+      {control.source === "checklist" ? (
+        <EditControlReport
+          companyId=""
+          control={control!}
+          contractors={contractors}
+          controllers={controllers}
+          aspects={aspects}
+          areas={businessAreas}
+          //   areas={businessAreas.map((area) => area)}
+          tools={tools}
+          toolDefaults={toolDefaults}
+          defaultsToolsWithType={toolDefaults}
+          disabled={false}
+          isAdmin={session.user.role === "ADMIN"}
+        />
+      ) : (
+        <>
+          <ControlHeaderForm
+            contractors={contractors}
+            control={control}
+            isAdmin={false}
+            areas={businessAreas}
+            controllers={controllers}
+            disabled={false}
+          />
+          {control.findingReport[0] ? (
+            <EditFindingReportForm findingReport={control.findingReport[0]} />
+          ) : (
+            <div className="text-lg font-bold text-red-600">
+              Reporte de hallazgo asociado no encontrado!
+            </div>
+          )}
+        </>
+      )}
     </CardPage>
   );
 };

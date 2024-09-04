@@ -36,10 +36,10 @@ export const ControlAreaBar = ({ controlReports, title, areas }: ControlAreaPieP
   const chartData = Object.entries(controlCountsByAreaId).map(
     ([areaId, count]) => {
       const area = areas.find((a) => a.id === areaId);
-      const percentage = ((count / totalControls) * 100).toFixed(2); // Calcular porcentaje
       return {
         value: count,
-        name: area ? `${area.name} ` : `Desconocido`, // Añadir porcentaje al nombre
+        name: area ? `${area.name}` : `Desconocido`,
+        percentage: ((count / totalControls) * 100).toFixed(2), // Calcular porcentaje
       };
     }
   );
@@ -48,7 +48,11 @@ export const ControlAreaBar = ({ controlReports, title, areas }: ControlAreaPieP
     tooltip: {
       trigger: "axis",
       axisPointer: { type: 'shadow' },
-      formatter: "{b}: {c} ({d}%)", // Mostrar valor y porcentaje en el tooltip
+      formatter: (params: any) => {
+        const { name, value } = params[0];
+        const percentage = ((value / totalControls) * 100).toFixed(2);
+        return `${name}: ${value} (${percentage}%)`;
+      },
     },
     legend: {
       show: false,
@@ -80,7 +84,7 @@ export const ControlAreaBar = ({ controlReports, title, areas }: ControlAreaPieP
           fontWeight: "bold",
           formatter(param: any) {
             const percentage = ((param.value / totalControls) * 100).toFixed(2);
-            return `${param.value} (${percentage}%)`; // Mostrar cantidad y porcentaje
+            return `${param.value} (${percentage}%)`;
           },
         },
         emphasis: {
@@ -115,3 +119,4 @@ export const ControlAreaBar = ({ controlReports, title, areas }: ControlAreaPieP
 
   return <Chart option={option} title={title} />;
 };
+

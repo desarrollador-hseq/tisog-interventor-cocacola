@@ -8,6 +8,8 @@ import { EditControlReport } from "../_components/edit-control-report";
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
 import { ModalDeleteReport } from "../_components/modal-delete-report";
+import { ControlHeaderForm } from "../_components/control-header-form";
+import { EditFindingReportForm } from "@/app/(main)/analista/reportes/_components/edit-finding-report";
 
 const EditControlPage = async ({
   params,
@@ -25,7 +27,13 @@ const EditControlPage = async ({
   const control = await db.controlReport.findUnique({
     where: {
       id: controlId,
-      active: true,
+    },
+    include: {
+      findingReport: {
+        include: {
+          controlReport: true,
+        },
+      },
     },
   });
 
@@ -102,7 +110,7 @@ const EditControlPage = async ({
   return (
     <CardPage
       pageHeader={
-        <TitleOnPage text={`Reporte de control`}>
+        <TitleOnPage text={`${control.source === "checklist" ? "Reporte de control" : "Reporte de hallazgo"}`}>
           {session.user?.email === "desarrollador1@grupohseq.com" ||
           session.user?.email === "liderdeservicios3@grupohseq.com" ||
           session.user?.email === "gerencia@grupohseq.com" ? (
@@ -113,7 +121,7 @@ const EditControlPage = async ({
         </TitleOnPage>
       }
     >
-      <EditControlReport
+      {/* <EditControlReport
         companyId=""
         control={control!}
         contractors={contractors}
@@ -126,7 +134,41 @@ const EditControlPage = async ({
         defaultsToolsWithType={toolDefaults}
         disabled={false}
         isAdmin={session.user.role === "ADMIN"}
-      />
+      /> */}
+       {control.source === "checklist" ? (
+        <EditControlReport
+          companyId=""
+          control={control!}
+          contractors={contractors}
+          controllers={controllers}
+          aspects={aspects}
+          areas={businessAreas}
+          //   areas={businessAreas.map((area) => area)}
+          tools={tools}
+          toolDefaults={toolDefaults}
+          defaultsToolsWithType={toolDefaults}
+          disabled={false}
+          isAdmin={session.user.role === "ADMIN"}
+        />
+      ) : (
+        <>
+          <ControlHeaderForm
+            contractors={contractors}
+            control={control}
+            isAdmin={false}
+            areas={businessAreas}
+            controllers={controllers}
+            disabled={false}
+          />
+          {control.findingReport[0] ? (
+            <EditFindingReportForm findingReport={control.findingReport[0]} />
+          ) : (
+            <div className="text-lg font-bold text-red-600">
+              Reporte de hallazgo asociado no encontrado!
+            </div>
+          )}
+        </>
+      )}
     </CardPage>
   );
 };

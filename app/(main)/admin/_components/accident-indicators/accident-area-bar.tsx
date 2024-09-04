@@ -55,7 +55,11 @@ export const AccidentAreaBar = ({ accidents, title, areas }: ControlAreaPieProps
     tooltip: {
       trigger: "axis",
       axisPointer: { type: 'shadow' },
-      formatter: "{b}: {c} ({d}%)", // Mostrar valor y porcentaje en el tooltip
+      formatter: (params: any) => {
+        const { name, value } = params[0];
+        const percentage = ((value / totalAccidents) * 100).toFixed(2);
+        return `${name}: ${value} (${percentage}%)`;
+      },
     },
     legend: {
       show: false,
@@ -86,7 +90,7 @@ export const AccidentAreaBar = ({ accidents, title, areas }: ControlAreaPieProps
           position: 'inside',
           fontWeight: "bold",
           formatter(param: any) {
-            const percentage = ((param.value / totalAccidents) * 100).toFixed();
+            const percentage = ((param.value / totalAccidents) * 100).toFixed(2);
             return `${param.value} (${percentage}%)`; // Mostrar cantidad y porcentaje
           },
         },

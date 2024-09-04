@@ -29,6 +29,28 @@ export const controlReportColumns: ColumnDef<
   }
 >[] = [
   {
+    accessorKey: "source",
+    accessorFn: (row) =>
+      row?.source === "checklist" ? "lista chequeo" : "hallazgo",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-secondary/30 hover:text-secondary-foreground"
+        >
+          Tipo
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const turn =
+        row.original?.source === "checklist" ? "lista chequeo" : "hallazgo";
+      return <div className="">{turn}</div>;
+    },
+  },
+  {
     accessorKey: "controller",
     accessorFn: (row) => row.controller?.name,
     header: ({ column }) => {
@@ -51,6 +73,7 @@ export const controlReportColumns: ColumnDef<
   {
     accessorKey: "description",
     accessorFn: (row) => row.description,
+    size: 300,
     header: ({ column }) => {
       return (
         <Button
@@ -64,7 +87,9 @@ export const controlReportColumns: ColumnDef<
       );
     },
     cell: ({ row }) => (
-      <div className=" truncate">{row.getValue("description")}</div>
+      <div className=" truncate max-w-[300px]">
+        {row.getValue("description")}
+      </div>
     ),
   },
   {
@@ -120,7 +145,7 @@ export const controlReportColumns: ColumnDef<
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hover:bg-secondary/30 hover:text-secondary-foreground"
         >
-          # de hallazgos
+          # hallazgos
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );

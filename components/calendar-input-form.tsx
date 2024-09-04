@@ -68,7 +68,7 @@ export const CalendarInputForm: React.FC<CalendarInputFormProps<any>> = ({
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
-              locale={es}
+                locale={es}
                 mode="single"
                 selected={field.value}
                 onSelect={field.onChange}
@@ -77,7 +77,6 @@ export const CalendarInputForm: React.FC<CalendarInputFormProps<any>> = ({
                 fromYear={2000}
                 toYear={2050}
                 captionLayout="dropdown-buttons"
-
               />
             </PopoverContent>
           </Popover>

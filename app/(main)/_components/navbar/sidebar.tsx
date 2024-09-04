@@ -23,24 +23,24 @@ const dashRoutes = [
 ];
 const adminRoutes = [
   { icon: Home, label: "Dashboard", href: "/admin" },
-  {
-    icon: Building2,
-    label: "Contratistas",
-    href: "/admin/contratistas",
-  },
-  {
-    icon: Users,
-    label: "Analistas",
-    href: "/admin/analistas",
-  },
+  // {
+  //   icon: Building2,
+  //   label: "Contratistas",
+  //   href: "/admin/contratistas",
+  // },
+  // {
+  //   icon: Users,
+  //   label: "Analistas",
+  //   href: "/admin/analistas",
+  // },
   {
     icon: ListTodo,
-    label: "Listas de chequeo",
+    label: "Reportes",
     href: "/admin/reportes",
   },
   {
     icon: ClipboardList,
-    label: "Reportes de hallazgos",
+    label: "Hallazgos",
     href: "/admin/hallazgos",
   },
   {

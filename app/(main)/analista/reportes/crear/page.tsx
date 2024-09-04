@@ -1,5 +1,4 @@
 import React from "react";
-import { AtSign } from "lucide-react";
 import { CardPage } from "@/components/card-page";
 
 import { db } from "@/lib/db";

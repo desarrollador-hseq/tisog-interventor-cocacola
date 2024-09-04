@@ -67,8 +67,9 @@ export const findingReportColumns: ColumnDef<
       );
     },
     cell: ({ row }) => {
-      const turn = row.original?.controlReport?.contractor?.name;
-      return <div className="">{turn}</div>;
+      const contractorname = row.original?.controlReport?.contractor?.name;
+      const name = contractorname ? contractorname : "Sin especificar"
+      return <div className="text-xs">{name}</div>;
     },
   },
   {

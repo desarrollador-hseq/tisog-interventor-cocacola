@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   BusinessAreas,
   ChecklistItem,
@@ -23,6 +23,21 @@ import {
 } from "@/lib/utils";
 import { CloudLightning } from "lucide-react";
 import { ReleasePermit } from "./release-permit";
+import { Button } from "@/components/ui/button";
+
+import { Toggle } from "@/components/ui/toggle";
+import { Form, useFormField } from "@/components/ui/form";
+import { debounce } from "lodash";
+import { z } from "zod";
+import { usePathname, useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+
+const formSchema = z.object({
+  isCondition: z.boolean(),
+});
 
 export const EditControlReport = ({
   areas,
@@ -74,7 +89,54 @@ export const EditControlReport = ({
     setControlData(control);
   }, [control]);
 
+  const handleSource = () => {};
+
   const canEdit = shouldControlBeManagedSameDay(controlData.date) || isAdmin;
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+  const isEdit = useMemo(() => !!control, [control]);
+
+  const pathArray = usePathname().split("/");
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      isCondition: control?.isCondition || false,
+    },
+  });
+
+  const { setValue, getValues, watch } = form;
+
+  const debouncedSave = useMemo(
+    () =>
+      debounce(async (values: z.infer<typeof formSchema>) => {
+        setIsLoading(true);
+        try {
+          if (isEdit) {
+            await axios.patch(`/api/controls/${control?.id}`, values);
+          }
+          router.refresh();
+        } catch (error) {
+          toast.error("Ocurrió un error");
+        } finally {
+          setIsLoading(false);
+        }
+      }, 1000),
+    [control, isEdit, router]
+  );
+
+  useEffect(() => {
+    const subscription = watch((values) => {
+      if (isEdit) {
+        debouncedSave(values as any);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, debouncedSave, isEdit]);
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {};
 
   return (
     <div className="w-full flex flex-col gap-3 relative m-3">

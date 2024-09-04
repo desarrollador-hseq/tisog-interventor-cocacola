@@ -110,8 +110,8 @@ model FindingReport {
   controlReportId String?
   controlReport   ControlReport? @relation(fields: [controlReportId], references: [id])
 
-  securityQuestionId String
-  securityQuestion   SecurityQuestion @relation(fields: [securityQuestionId], references: [id])
+  securityQuestionId String?
+  securityQuestion   SecurityQuestion? @relation(fields: [securityQuestionId], references: [id])
 
   proposedClosureDate DateTime?
   actualClosureDate   DateTime?
@@ -152,7 +152,7 @@ enum ControlTypeRisk {
 model ControlReport {
   id String @id @default(uuid())
 
-  source String?
+  source String? @default("checklist")
 
   description String? @db.Text
 
@@ -178,8 +178,10 @@ model ControlReport {
 
   date DateTime?
 
-  releasePermit    Boolean  @default(false)
+  releasePermit Boolean @default(false)
   exactLocation String? @db.Text
+
+  isCondition Boolean @default(false)
 
   typeRisk ControlTypeRisk?
 

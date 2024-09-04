@@ -21,8 +21,11 @@ export const FindingsContractorBar = ({
 }: FindingIndicatorsProps) => {
   // Agrupar hallazgos por contratista y estado
   const contractorData = findingReports.reduce((acc, finding) => {
-    const contractorId = finding.controlReport?.contractor?.name;
-    if (!contractorId) return acc;
+    if (finding.controlReport?.source !== "checklist") {
+      return acc; // Saltar si el source no es "checklist"
+    }
+    const contractorId =
+      finding.controlReport?.contractor?.name || "Desconocido";
 
     if (!acc[contractorId]) {
       acc[contractorId] = { open: 0, closed: 0 };
@@ -64,6 +67,18 @@ export const FindingsContractorBar = ({
     },
     xAxis: {
       type: "category",
+      axisLabel: {
+        rotate: 45,
+        fontWeight: "bold",
+        fontSize: 10,
+        formatter: function (value: string) {
+          const maxWidth = 17; // Define el número máximo de caracteres
+          if (value.length > maxWidth) {
+            return value.slice(0, maxWidth) + "..."; // Recorta y añade "..."
+          }
+          return value;
+        },
+      },
       data: contractors,
     },
     yAxis: {

@@ -58,13 +58,13 @@ export const ControlIndicators = ({
               title="Tipo de fuente"
             />
           </div> */}
-          <div className="flex flex-col p-2 ">
+          <div className="flex flex-col p-2 lg:col-span-2">
             <ControlsContractorBar
               controlReports={filteredReports}
               title="Contratistas"
             />
           </div>
-          <div className="flex flex-col p-2 ">
+          <div className="flex flex-col p-2 lg:col-span-2">
             <ControlAreaBar
               controlReports={filteredReports}
               areas={areas}

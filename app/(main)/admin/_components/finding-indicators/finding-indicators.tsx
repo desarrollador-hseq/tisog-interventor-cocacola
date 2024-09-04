@@ -73,7 +73,7 @@ export const FindingIndicators = ({
           <div className="flex flex-col p-2">
             <FindingLevelBar findingReports={filteredReports} />
           </div>
-          <div className="flex flex-col p-2">
+          <div className="flex flex-col p-2 lg:col-span-2">
             <FindingsContractorBar findingReports={filteredReports || []} />
           </div>
           <div className="flex flex-col p-2">

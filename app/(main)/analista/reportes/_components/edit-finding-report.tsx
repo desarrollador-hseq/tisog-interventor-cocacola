@@ -26,10 +26,7 @@ import {
 } from "@/components/ui/form";
 
 import { CalendarInputForm } from "@/components/calendar-input-form";
-import { ControlHeaderForm } from "@/app/(main)/analista/reportes/_components/control-header-form";
-import { UnsafeActForm } from "@/app/(main)/analista/reportes/_components/unsafe-act-form";
 import { TextAreaForm } from "@/components/textarea-form";
-import { AspectsList } from "@/app/(main)/analista/reportes/_components/aspect-list";
 import { UploadImageForm } from "@/components/upload-image-form";
 
 import {
@@ -47,12 +44,6 @@ interface AddFindingReportFormProps {
   findingReport?:
     | (FindingReport & { controlReport: ControlReport | null })
     | null;
-  contractors: Contractor[];
-  businessAreas: BusinessAreas[];
-  aspects: any[];
-  controllers: User[];
-  actualUserId?: string;
-  isAdmin?: boolean;
 }
 
 const formSchema = z.object({
@@ -72,14 +63,8 @@ const formSchema = z.object({
   actualClosureDate: z.date().nullable(),
 });
 
-export const AddFindingReportForm = ({
+export const EditFindingReportForm = ({
   findingReport,
-  contractors,
-  businessAreas,
-  aspects,
-  actualUserId,
-  controllers,
-  isAdmin,
 }: AddFindingReportFormProps) => {
   const router = useRouter();
   const [findingReportData, setFindingReportData] = useState(findingReport);
@@ -163,7 +148,6 @@ export const AddFindingReportForm = ({
 
   return (
     <div className=" max-w-[1500px] w-full h-full mx-auto bg-white rounded-md shadow-sm overflow-y-hidden">
-   
       <div className="relative grid lg:grid-cols-3 gap-1 max-h-fit">
         {isLoading && (
           <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center backdrop-blur-sm bg-white/30">
@@ -176,6 +160,9 @@ export const AddFindingReportForm = ({
             className="items-center mt-1 w-full grid grid-cols-2 gap-2 bg-slate-100 rounded-md p-3 col-span-3 "
           >
             <div className="col-span-2">
+      <span className="text-xs text-slate-400">
+        id: {findingReportData?.id}
+      </span>
               <TextAreaForm
                 control={form.control}
                 label="Descripción del Hallazgo"
@@ -268,53 +255,17 @@ export const AddFindingReportForm = ({
           />
         </div>
 
-        {findingReport?.status === "CLOSED" && (
-          <>
-            <Separator className="w-full md:col-span-2 h-2 bg-primary" />
+        <Separator className="w-full md:col-span-2 h-2 bg-primary" />
 
-            <div className="md:col-span-2">
-              <UploadImageForm
-                apiUrl="/api/upload/file"
-                field="closingEvidence"
-                file={`${findingReport?.closingEvidence}`}
-                label="Evidencia de cierre"
-                ubiPath="control/images"
-                update={`/api/finding-report/${findingReport?.id}/`}
-              />
-            </div>
-          </>
-        )}
-      </div>
-
-      <div className="space-y-4 mt-3">
-        <div className="bg-blue-100 rounded-md  overflow-hidden">
-          <h2 className="text-center py-2 font-bold text-md bg-slate-400 text-white">
-            Datos del control
-          </h2>
-          {/* <InputForm control={form.control} label="" name="" /> */}
-          <div className="">
-            <ControlHeaderForm
-              control={findingReport?.controlReport!}
-              contractors={contractors}
-              areas={businessAreas}
-              controllers={controllers}
-              actualUserId={actualUserId}
-              isAdmin={isAdmin || false}
-            />
-
-            {findingReport?.controlReport?.source === "checklist" && (
-              <>
-                <UnsafeActForm control={findingReport?.controlReport!} />
-                <AspectsList
-                  aspects={aspects}
-                  controlId={findingReport?.controlReport?.id || ""}
-                  controlCreationDate={findingReport?.controlReport?.createdAt!}
-                  isAdmin={true}
-                  disabled={!isAdmin || false}
-                />
-              </>
-            )}
-          </div>
+        <div className="md:col-span-2">
+          <UploadImageForm
+            apiUrl="/api/upload/file"
+            field="closingEvidence"
+            file={`${findingReport?.closingEvidence}`}
+            label="Evidencia de cierre"
+            ubiPath="control/images"
+            update={`/api/finding-report/${findingReport?.id}/`}
+          />
         </div>
       </div>
     </div>

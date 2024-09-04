@@ -16,10 +16,16 @@ export const ControlsContractorBar = ({
   controlReports,
   title,
 }: controlByContractorBarChartProps) => {
-  // Agrupar controles por contratista
+  // Agrupar controles por contratista solo si el source es "checklist"
   const contractorData =
     controlReports?.reduce((acc, controlReport) => {
-      const contractorName = controlReport?.contractor?.name || "Desconocido";
+      if (controlReport.source !== "checklist") {
+        return acc; // Saltar si el source no es "checklist"
+      }
+
+      // Verificar si existe el nombre del contratista, de lo contrario usar "Desconocido"
+      const contractorName = controlReport.contractor?.name || "Desconocido";
+
       if (!acc[contractorName]) {
         acc[contractorName] = 0;
       }
@@ -73,7 +79,14 @@ export const ControlsContractorBar = ({
       axisLabel: {
         rotate: 45,
         fontWeight: "bold",
-        fontSize: 11
+        fontSize: 11,
+        formatter: function (value: string) {
+          const maxWidth = 17; // Define el número máximo de caracteres
+          if (value.length > maxWidth) {
+            return value.slice(0, maxWidth) + "..."; // Recorta y añade "..."
+          }
+          return value;
+        },
       },
     },
     yAxis: {

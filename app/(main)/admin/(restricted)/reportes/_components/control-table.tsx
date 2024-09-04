@@ -170,13 +170,13 @@ export function ControlTable<TData, TValue>({
                   className={cn(
                     "text-slate-900",
                     beManaged(row.original.date)
-                      ? "bg-red-100 hover:bg-red-200"
+                      ? "bg-blue-50 hover:bg-blue-100"
                       : "bg-slate-200 hover:bg-slate-400"
                   )}
                 >
                   <TableCell>
                     {beManaged(row.original.date) && (
-                      <Clock className="w-5 h-5 animate-spin text-primary" />
+                      <Clock className="w-3 h-3 animate-spin text-primary" />
                     )}
                   </TableCell>
                   {row.getVisibleCells().map((cell) => (
