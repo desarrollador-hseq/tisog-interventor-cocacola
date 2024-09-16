@@ -68,10 +68,10 @@ export const LoadingProvider = ({ children }: Props) => {
   const [userRole, setUserRole] = useState<Role | undefined>();
 
   const { data: session, status, update } = useSession();
-  useEffect(() => {
-    const interval = setInterval(() => update(), 1000 * 60 * 60);
-    return () => clearInterval(interval);
-  }, [update]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => update(), 1000 * 60 * 60);
+  //   return () => clearInterval(interval);
+  // }, [update]);
 
   useEffect(() => {
     async function fetchUserAndCompany() {
@@ -95,10 +95,6 @@ export const LoadingProvider = ({ children }: Props) => {
     }
   }, []);
 
-  useEffect(() => {
-   console.log({userRole})
-  }, [userRole])
-  
 
   return (
     <LoadingContext.Provider
@@ -120,7 +116,7 @@ export const LoadingProvider = ({ children }: Props) => {
         className={cn(loadingApp && "overflow-hidden")}
         id="layout-main"
         style={{
-          background: `url('/tisog-bg-blue.png')`,
+          background: `url('/tisog-bg-blue-white.png')`,
           backgroundAttachment: "fixed",
           backgroundSize: "cover",
           backgroundPosition: 0 ,

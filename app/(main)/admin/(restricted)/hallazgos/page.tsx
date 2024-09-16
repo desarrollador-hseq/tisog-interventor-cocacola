@@ -4,6 +4,7 @@ import { TitleOnPage } from "@/components/title-on-page";
 import { db } from "@/lib/db";
 import { CardPage } from "@/components/card-page";
 import { findingReportColumns } from "./_components/finding-report-columns";
+import { ButtonFindingExcelEvidence } from "./_components/button-finding-excel-evidences";
 
 const bcrumb = [{ label: "Hallazgos", path: "/admin/hallazgos" }];
 
@@ -59,6 +60,7 @@ const FindingReportPage = async () => {
         editHref={{ btnText: "Editar", href: `/admin/hallazgos` }}
         nameDocument="hallazgos"
       />
+      <ButtonFindingExcelEvidence findingReport={findingReports} />
     </CardPage>
   );
 };

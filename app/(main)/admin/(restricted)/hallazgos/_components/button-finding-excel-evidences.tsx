@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";;
@@ -149,5 +151,5 @@ export const ButtonFindingExcelEvidence = ({
     }
   };
 
-  return <Button className="w-fit non-print" onClick={handleExport}>Exportar a Excel</Button>;
+  return <Button className="w-fit non-print" onClick={handleExport}>Exportar hallazgos a Excel</Button>;
 };

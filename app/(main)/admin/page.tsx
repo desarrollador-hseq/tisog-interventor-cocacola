@@ -18,6 +18,46 @@ const AdminPage = async () => {
     },
   });
 
+  const controlReports = await db.controlReport.findMany({
+    where: {
+      active: true,
+    },
+    select: {
+      releasePermit: true,
+      source: true,
+      controller: {
+        select: {
+          name: true,
+        },
+      },
+      businessAreaId: true,
+      contractor: {
+        select: {
+          name: true,
+        },
+      },
+      businessArea: {
+        select: {
+          name: true,
+        },
+      },
+      generalAspects: {
+        select: {
+          securityQuestion: {
+            select: {
+              // negativeQuestion: true,
+              category: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
   const findingReports = await db.findingReport.findMany({
     where: {
       NOT: {
@@ -27,37 +67,35 @@ const AdminPage = async () => {
     include: {
       controlReport: {
         include: {
-          contractor: true,
-          businessArea: true,
-          controller: true,
+          contractor: {
+            select: {
+              name: true,
+            },
+          },
+          // businessArea: {
+          //   select: {
+          //     name: true,
+          //   },
+          // },
+          // controller: {
+          //   select: {
+          //     name: true,
+          //   },
+          // },
         },
       },
       securityQuestion: {
-        include: {
-          category: true,
-        },
-      },
-    },
-  });
-
-  const controlReports = await db.controlReport.findMany({
-    where: {
-      active: true,
-    },
-    include: {
-      contractor: true,
-      businessArea: true,
-      generalAspects: {
-        include: {
-          securityQuestion: {
-            include: {
-              category: true,
+        select: {
+          category: {
+            select: {
+              name: true,
             },
           },
         },
       },
     },
   });
+
   const areas = await db.businessAreas.findMany({
     where: {
       active: true,
@@ -71,10 +109,6 @@ const AdminPage = async () => {
       contractor: true,
       area: true,
     },
-  });
-
-  console.log({
-    aspecss: controlReports.map((e) => JSON.stringify(e.generalAspects)),
   });
 
   return (

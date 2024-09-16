@@ -82,16 +82,16 @@ export const FindingIndicators = ({
         </div>
         <div className="flex flex-col p-2 page-break ">
           <div className="flex justify-between mb-3">
-            <h4 className="text-2xl font-bold text-blue-900 ml-2 mb-2">
-              Resumen de hallazgos
-            </h4>
+            {/* <h4 className="text-2xl font-bold text-blue-900 ml-2 mb-2">
+              Resumen de hallazgos:
+            </h4> */}
             <ButtonFindingExcelEvidence findingReport={filteredReports} />
           </div>
 
-          <TableDefault
+          {/* <TableDefault
             columns={findingReportColumns}
             data={filteredReports || []}
-          />
+          /> */}
         </div>
       </div>
     </div>
