@@ -21,12 +21,13 @@ const sourceOptions = [
 ];
 
 export const controlReportColumns: ColumnDef<
-  ControlReport & {
-    businessArea?: { name?: string | null } | null;
-    contractor?: { name?: string | null } | null;
-    controller?: { name?: string | null } | null;
-    findingReport?: { id?: string | null }[] | null;
-  }
+  // ControlReport & {
+  //   businessArea?: { name?: string | null } | null;
+  //   contractor?: { name?: string | null } | null;
+  //   controller?: { name?: string | null } | null;
+  //   findingReport?: { id?: string | null }[] | null;
+  // }
+  any
 >[] = [
   {
     accessorKey: "source",

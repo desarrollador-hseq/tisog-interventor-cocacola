@@ -25,8 +25,15 @@ const ControlPage = async () => {
     where: {
       active: true,
     },
-    include: {
-      businessArea: true,
+    select: {
+      id: true,
+      date: true,
+      description: true,
+      businessArea: {
+        select: {
+          name: true,
+        },
+      },
       findingReport: {
         select: {
           id: true,

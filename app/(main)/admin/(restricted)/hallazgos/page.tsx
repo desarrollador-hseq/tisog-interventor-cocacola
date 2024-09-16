@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { CardPage } from "@/components/card-page";
 import { findingReportColumns } from "./_components/finding-report-columns";
 import { ButtonFindingExcelEvidence } from "./_components/button-finding-excel-evidences";
+import { FindingTable } from "./_components/finding-table";
 
 const bcrumb = [{ label: "Hallazgos", path: "/admin/hallazgos" }];
 
@@ -54,7 +55,7 @@ const FindingReportPage = async () => {
         </TitleOnPage>
       }
     >
-      <TableDefault
+      <FindingTable
         data={findingReports}
         columns={findingReportColumns}
         editHref={{ btnText: "Editar", href: `/admin/hallazgos` }}
