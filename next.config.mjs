@@ -17,6 +17,7 @@ const nextConfig = {
         hostname: "grupohseq.sfo2.digitaloceanspaces.com",
         pathname: "**",
       },
+      
     ],
   },
 };

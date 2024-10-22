@@ -46,6 +46,9 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { TextAreaForm } from "@/components/textarea-form";
+import { es } from "date-fns/locale";
+import { format } from "path";
+import { formatDate } from "date-fns";
 
 interface AddAccidentFormProps {
   accident?: Accidents | null;
@@ -138,6 +141,23 @@ export const AddAccidentForm = ({
         toast.success("Accidente actualizado");
       } else {
         const { data } = await axios.post(`/api/accidents/`, values);
+        try {
+          await axios.post(`/api/accidents/${data?.id}/mail`, {});
+        } catch (error) {
+          toast.error("Error al enviar el email");
+        }
+        try {
+           await axios.post(`/api/messages/`, {
+            message: `[TISOG] Se acaba de registrar una ${data?.type === "ACCIDENT" ? "accidente" : "incidente"} en CC FEMSA. fecha: ${
+              accident?.date
+                ? formatDate(data?.date, "dd-MM-yyyy", {locale: es})
+                : "-"
+            }. https://bit.ly/4eQbD6X`,
+          });
+          console.log({sms: data})
+        } catch (error) {
+          toast.error("Error al enviar el SMS");
+        }
         router.push(`/admin/accidents/`);
         toast.success("Accidente guardado correctamente");
       }
