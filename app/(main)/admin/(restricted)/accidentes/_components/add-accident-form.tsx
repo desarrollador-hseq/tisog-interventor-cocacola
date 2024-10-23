@@ -1,11 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Accidents,
-  BusinessAreas,
-  Contractor,
-} from "@prisma/client";
+import { Accidents, BusinessAreas, Contractor } from "@prisma/client";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
@@ -141,22 +137,49 @@ export const AddAccidentForm = ({
         toast.success("Accidente actualizado");
       } else {
         const { data } = await axios.post(`/api/accidents/`, values);
+
+        // send email
+        let accident = null;
         try {
-          await axios.post(`/api/accidents/${data?.id}/mail`, {});
+          const { data: accidentNotify } = await axios.post(
+            `/api/accidents/${data?.id}/mail`,
+            {}
+          );
+          accident = accidentNotify;
         } catch (error) {
           toast.error("Error al enviar el email");
         }
-        try {
-           await axios.post(`/api/messages/`, {
-            message: `[TISOG] Se acaba de registrar una ${data?.type === "ACCIDENT" ? "accidente" : "incidente"} en CC FEMSA. fecha: ${
-              accident?.date
-                ? formatDate(data?.date, "dd-MM-yyyy", {locale: es})
-                : "-"
-            }. https://bit.ly/4eQbD6X`,
-          });
-          console.log({sms: data})
-        } catch (error) {
-          toast.error("Error al enviar el SMS");
+
+        // send sms
+        if (accident) {
+          const classification =
+            accident.classification === "FIRST_AID"
+              ? "Primeros auxilios"
+              : accident.classification === "MEDICAL_TREATMENT"
+              ? "Tratamiento médico"
+              : accident.classification === "LOST_WORKDAY"
+              ? "Incidente, dias perdidos"
+              : accident.classification === "NEAR_MISS"
+              ? "Near miss"
+              : "--";
+          try {
+            await axios.post(`/api/messages/`, {
+              message: `TISOG informa que se ha registrado un ${
+                accident?.type === "ACCIDENT" ? "accidente" : "incidente"
+              } en CC FEMSA. Clase: (${classification}), contratista: ${
+                accident.contractor.name ? accident.contractor.name : "--"
+              }, Area: ${
+                accident.area.name ? accident.area.name : "--"
+              }, fecha: ${
+                accident?.date
+                  ? formatDate(data?.date, "dd-MM-yyyy", { locale: es })
+                  : "-"
+              }. https://bit.ly/4eQbD6X`,
+            });
+            console.log({ sms: data });
+          } catch (error) {
+            toast.error("Error al enviar el SMS");
+          }
         }
         router.push(`/admin/accidents/`);
         toast.success("Accidente guardado correctamente");
@@ -191,7 +214,10 @@ export const AddAccidentForm = ({
   return (
     <div className="max-w-[1500px]  h-full mx-auto bg-slate-100 border overflow-y-hidden p-3 rounded-md shadow-sm">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-center">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col justify-center"
+        >
           <div className="grid grid-cols-2 items-center mt-2 p-2 w-full gap-4">
             <CalendarInputForm
               control={form.control}
@@ -497,7 +523,9 @@ export const AddAccidentForm = ({
               name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-primary">Estado de la investigación</FormLabel>
+                  <FormLabel className="text-primary">
+                    Estado de la investigación
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}

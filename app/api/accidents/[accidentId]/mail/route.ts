@@ -78,7 +78,7 @@ export async function POST(req: Request,
             }
         }
 
-        return NextResponse.json({ ok: true })
+        return NextResponse.json(existingAccident)
 
     } catch (error) {
         console.log("[MAIL-ACCIDENT]", error)

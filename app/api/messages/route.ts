@@ -30,7 +30,6 @@ export async function POST(req: Request) {
             const admin = adminsAndViewers[index];
             try {
                 if (!!admin.phone) {
-                    console.log(JSON.stringify(admin))
                     const { data } = await axios.get('https://api.labsmobile.com/get/send.php', {
                         params: {
                             username: process.env.LABSMOBILEUSERNAME,
@@ -39,7 +38,6 @@ export async function POST(req: Request) {
                             message: message,
                         },
                     })
-                    console.log({dataSMS: data})
                 }
 
             } catch (error) {
