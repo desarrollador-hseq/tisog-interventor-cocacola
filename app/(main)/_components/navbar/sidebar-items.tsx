@@ -51,13 +51,13 @@ export const SidebarItems = ({ icon: Icon, label, href }: SidebarItemProps) => {
         >
           <div className="flex items-center gap-x-2 py-4">
             <Icon
-              size={22}
+              size={18}
               className={cn("text-slate-200", isActive && "text-white w-6 h-6")}
             />
 
             <span
               className={cn(
-                "text-slate-200 leading-4 text-left",
+                "text-slate-200 leading-4 text-left text-base",
                 isActive && "text-white font-[700]"
               )}
             >

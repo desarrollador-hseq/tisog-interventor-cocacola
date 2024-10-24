@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { RedirectAfterLogin } from "./_components/redirect-after-login";
 import { authOptions } from "@/lib/auth-options";
 import { Navbar } from "./_components/navbar/navbar";
-import { Footer } from "@/components/footer";
+
 
 export default async function MainLayout({
   children,
@@ -57,7 +57,12 @@ export default async function MainLayout({
           </div>
         </div>
         <ScrollUp />
-        <Footer />
+        <footer className={cn("footer h-10 w-full bg-blue-900 flex items-center z-30 md:ps-[95px] mt-3",  user.role === "VIEWER" && "md:ps-0" )}>
+          <div className={cn("w-full mx-auto flex justify-center gap-1 text-white text-sm md:ps-[95px]", user.role === "VIEWER" && "md:ps-0" )}>
+            <span>2024</span>
+            <p className="text-sm">&copy; Todos los derechos reservados.</p>
+          </div>
+        </footer>
       </main>
     </div>
   );

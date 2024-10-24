@@ -1,4 +1,13 @@
-import { FileSliders, Hammer, ListTodo, LucideIcon, MapPinned, User } from "lucide-react";
+import {
+  Building,
+  FileSliders,
+  Hammer,
+  ListTodo,
+  LucideIcon,
+  MapPinned,
+  User,
+  Users2,
+} from "lucide-react";
 import { SidebarItems } from "./sidebar-items";
 import { LogoMain } from "@/components/logo-main";
 
@@ -46,48 +55,45 @@ export const SidebarContent = ({
                 <div className="flex items-center gap-x-2">
                   <FileSliders size={22} className={cn("text-slate-200")} />
                   <span className={cn("text-slate-200 leading-4 text-left")}>
-                    Items
+                    Configuración
                   </span>
                 </div>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="bg-blue-900 p-0">
-              <>
+            <AccordionContent className="bg-primary/70 p-0 pl-4">
               <SidebarItems
-                  href={`/admin/analistas`}
-                  label={`Analistas`}
-                  icon={MapPinned}
-                />
-                <SidebarItems
-                  href={`/admin/contratistas`}
-                  label={`Contratistas`}
-                  icon={MapPinned}
-                />
-                <SidebarItems
-                  href={`/admin/aspectos`}
-                  label={`Aspectos`}
-                  icon={ListTodo}
-                />
-                <SidebarItems
-                  href={`/admin/herramientas`}
-                  label={`Herramientas`}
-                  icon={Hammer}
-                />
-                <SidebarItems
-                  href={`/admin/areas`}
-                  label={`Áreas`}
-                  icon={MapPinned}
-                />
-                
-              </>
+                href={`/admin/analistas`}
+                label={`Analistas`}
+                icon={Users2}
+              />
+              <SidebarItems
+                href={`/admin/contratistas`}
+                label={`Contratistas`}
+                icon={Building}
+              />
+              <SidebarItems
+                href={`/admin/aspectos`}
+                label={`Aspectos`}
+                icon={ListTodo}
+              />
+              <SidebarItems
+                href={`/admin/herramientas`}
+                label={`Herramientas`}
+                icon={Hammer}
+              />
+              <SidebarItems
+                href={`/admin/areas`}
+                label={`Áreas`}
+                icon={MapPinned}
+              />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
       )}
     </div>
 
-    <div className="w-full flex justify-center bg-white">
-      <span className="font-extrabold  text-slate-600 p-2 text-base">
+    <div className="w-full flex justify-center bg-blue-900">
+      <span className="font-extrabold  text-white p-2 text-base">
         {isAdmin ? "Administrador" : "Interventor / Analista"}
       </span>
     </div>

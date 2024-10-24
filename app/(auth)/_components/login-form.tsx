@@ -145,12 +145,12 @@ export const LoginForm = () => {
                       )}
                       <FormMessage />
                       <FormDescription>
-                        <Link
+                        {/* <Link
                           href="/recuperar-contrasena"
                           className="w-full block text-sm text-blue-200 decoration-2 hover:underline font-medium text-end"
                         >
                           Olvidé la contraseña
-                        </Link>
+                        </Link> */}
                       </FormDescription>
                     </FormItem>
                   )}
