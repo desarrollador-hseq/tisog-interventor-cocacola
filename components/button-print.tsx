@@ -37,7 +37,7 @@ export const ButtonPrint = () => {
   return (
     <Button
       onClick={handlePrint}
-      className={cn("non-print  w-[70px] bottom-1 right-3 shadow-sm rounded-full p-1 px-2.5 bg-blue-800 hover:bg-blue-900 text-white", visible && "fixed")}
+      className={cn("non-print z-50  w-[70px] bottom-1 right-3 shadow-sm rounded-full p-1 px-2.5 bg-blue-800 hover:bg-blue-900 text-white border border-white", visible && "fixed")}
     >
       <Printer className="w-5 h-5" />
     </Button>

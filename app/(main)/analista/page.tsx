@@ -17,6 +17,7 @@ const UserControllerPage = async () => {
   const controls = await db.controlReport.findMany({
     where: {
       controllerId: user.id,
+      active: true,
     },
     include: {
       contractor: true,
@@ -27,6 +28,9 @@ const UserControllerPage = async () => {
         }
       }
     },
+    orderBy: {
+      date: "desc"
+    }
   });
 
   const areas = await db.businessAreas.findMany({

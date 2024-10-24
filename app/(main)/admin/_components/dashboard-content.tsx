@@ -33,7 +33,6 @@ export const DashboardContent = ({
 
   const { setCompanyFilter, setDateFilter } = useLoading();
   const today = new Date();
-  console.log({accidents, areas, controlReport, findingReports, numContractors, numControllers})
   useEffect(() => {
     if (!companyFilter) return;
     const getContractor = async () => {
@@ -47,6 +46,12 @@ export const DashboardContent = ({
     setCompanyFilter(undefined);
     setDateFilter(undefined);
   };
+
+
+  useEffect(() => {
+    console.log({findingReportsdash: findingReports})
+  }, [findingReports])
+  
 
   return (
     <div className="w-full">

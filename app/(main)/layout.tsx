@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { RedirectAfterLogin } from "./_components/redirect-after-login";
 import { authOptions } from "@/lib/auth-options";
 import { Navbar } from "./_components/navbar/navbar";
+import { Footer } from "@/components/footer";
 
 export default async function MainLayout({
   children,
@@ -56,7 +57,7 @@ export default async function MainLayout({
           </div>
         </div>
         <ScrollUp />
-        {/* <Footer /> */}
+        <Footer />
       </main>
     </div>
   );

@@ -8,6 +8,7 @@ import { ControlSourcePie } from "./control-source-pie";
 import { ControlAreaBar } from "./control-area-bar";
 import { ControlByCategory } from "./control-by-category";
 import { ControlPermissionPie } from "./control-permission-pie";
+import { useEffect } from "react";
 
 interface ControlIndicatorsProps {
   controlReports:
@@ -42,6 +43,10 @@ export const ControlIndicators = ({
       (report) => report?.contractorId === companyFilter
     );
   }
+
+  useEffect(() => {
+    console.log({filteredReportsdash: filteredReports, companyFilter, dateFilter, controlReports})
+  }, [filteredReports])
 
   return (
     <div className="border-4 border-primary shadow-lg w-full page-break ">

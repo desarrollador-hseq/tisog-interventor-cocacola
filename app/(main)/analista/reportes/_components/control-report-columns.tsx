@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { format, formatDate } from "date-fns";
 import { es } from "date-fns/locale";
 import { BusinessAreas, ControlReport } from "@prisma/client";
 
@@ -92,9 +92,9 @@ export const controlReportColumns: ColumnDef<
   },
   {
     accessorKey: "date",
-    enableColumnFilter: false,
-    accessorFn: (value) =>
-      value.date ? format(value.date, "P", { locale: es }) : null,
+    enableColumnFilter: true,
+    accessorFn: (value) => value.createdAt ? format(value.createdAt, "P", { locale: es }) : "--",
+    enableSorting: false,
     maxSize: 100,
     header: ({ column }) => {
       return (
@@ -106,6 +106,14 @@ export const controlReportColumns: ColumnDef<
           Fecha
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const date = row.original?.createdAt;
+      return (
+        <div className="">
+          {date ? format(date, "P", { locale: es }) : "sin datos"}
+        </div>
       );
     },
   },

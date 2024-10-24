@@ -17,6 +17,7 @@ import { FindingReportExportExcel } from "../../(restricted)/hallazgos/_componen
 import { FindingLevelBar } from "./finding-level-bar";
 import { FindingBySecurityCategory } from "./finding-security-category-pie";
 import { ButtonFindingExcelEvidence } from "../../(restricted)/hallazgos/_components/button-finding-excel-evidences";
+import { useEffect } from "react";
 
 interface ControlWithAreaAndContractor extends FindingReport {
   controlReport:

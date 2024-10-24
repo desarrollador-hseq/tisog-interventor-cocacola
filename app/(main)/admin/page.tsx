@@ -25,6 +25,8 @@ const AdminPage = async () => {
     select: {
       releasePermit: true,
       source: true,
+      date: true,
+      contractorId: true,
       controller: {
         select: {
           name: true,
@@ -70,6 +72,7 @@ const AdminPage = async () => {
           contractor: {
             select: {
               name: true,
+              id: true,
             },
           },
           // businessArea: {

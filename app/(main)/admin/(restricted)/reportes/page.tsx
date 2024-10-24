@@ -28,6 +28,7 @@ const ControlPage = async () => {
     select: {
       id: true,
       date: true,
+      source: true,
       description: true,
       businessArea: {
         select: {

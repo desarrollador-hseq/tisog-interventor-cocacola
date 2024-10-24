@@ -27,6 +27,7 @@ const FindingReportPage = async () => {
           contractor: {
             select: {
               name: true,
+              id: true,
             },
           },
           controller: {
